@@ -78,7 +78,7 @@ The build brief, covering stack, design rules, data model, business rules, scree
 ## Conventions established in step 4 (money screens)
 - Screens live in `features/<area>/` (`finance/`, `salary/`, `savings/`, `shop_credit/`).
 - Money data comes from `features/finance/money_providers.dart`: one `StreamProvider` per DAO stream, `.family` per month or id.
-  - `selectedMonthProvider` is the month Finance shows. Home (step 5) should use it too, like the prototype's shared `month`. It goes back at most 11 months and never past the current month.
+  - `selectedMonthProvider` is the month Finance and Home show, like the prototype's shared `month`. It goes back at most 11 months and never past the current month.
   - `finFilterProvider` holds the Finance tab, search and filters.
   - "This month" and "today" come from `clockProvider` (`currentMonthFrom(ref)`, `todayFrom(ref)`).
 - Categories on screen: `categoryBookProvider` plus `categoryInfo(t, book, type, id)` in `finance/categories.dart`. A built-in shows `cat_<id>`; an unknown or deleted id shows "Other" with the tag icon.
@@ -113,12 +113,50 @@ The build brief, covering stack, design rules, data model, business rules, scree
   - Split-bar colours follow each row's index.
   - Editing a shop payment's amount doesn't change the shop entry, as in the prototype.
 
+## Conventions established in step 5 (Home)
+- Home lives in `features/home/`:
+  - `home_screen.dart` is the tab. Each section is its own `ConsumerWidget`.
+  - `home_providers.dart` holds today's tasks, events, reminders, water, meals and habits, plus the 5 newest transactions, the inbox and `homeChartProvider`.
+  - `customize_sheet.dart` is the customize sheet.
+  - `notifications_screen.dart` is the notifications page (`Routes.notifications`).
+- Month:
+  - Home and Finance share `selectedMonthProvider` and `showMonthSheet` (`features/finance/month_sheet.dart`).
+  - Home's chart is separate (`homeChartProvider`): 6 or 12 months up to the current one, plus the tapped bar.
+- Dashboard layout: `core/prefs/dashboard_layout.dart` (`dashboardLayoutProvider`, `DashSection`).
+  - Stored as section names under `pref.dash.order` and `pref.dash.hidden`. Every change is saved at once.
+  - Unknown names are dropped; missing sections are added at the end.
+- New preferences:
+  - `AppSettings.displayName` (`pref.displayName`). Onboarding (step 7) sets it. While it is empty, the greeting has no name and the avatar shows the user icon.
+  - `waterTargetProvider` (`core/prefs/health_prefs.dart`): default 3000 ml, clamped to 500–6000. Health (step 6) sets it.
+- Repeating events: `eventOccursOn` and `eventsOn` in `features/calendar/event_rules.dart` (prototype `occurs`/`evOn`). Calendar (step 6) uses these; don't write a second version.
+- Step 6 must rewire these placeholder taps to the real screens:
+  - Home tiles and quick actions:
+    - Tasks and "add work" go to the Work tab.
+    - Meetings, events and "Agenda" go to the Calendar tab.
+    - Reminders, water, meals, habits, "write note" and "add reminder" go to the More tab.
+  - `inboxDestination()` in `notifications_screen.dart`: reminders, health, notes, goals and documents go to More.
+- Routing: `Routes.tabs` lists the 5 root tabs. Open those with `go` and everything else with `push`.
+- Shared widgets added:
+  - `DLAppBar.root(titleWidget:)` takes a custom title block (Home's date lines). `title` then only names the bar for screen readers.
+  - `TxRow(relativeDate: true)` shows "category · আজ/গতকাল/৪ নভে".
+  - `DLBarChart` bars narrow below 10px when a group is too thin for them, like the prototype's flex items. Twelve two-bar months on a phone need this.
+  - `DLIcons` gained `sun`, `moon`, `bell`, `sliders`, `users`, `drop`, `flame` and `chevronUp`. `byKey` now knows the inbox icon keys too.
+- ARB: added `savMonthTag` ("{a} এ মাসে" / "{a} this month"), because the prototype wrote this text inline. It is the second deliberate change to kit files, after `BanglaDate`.
+- Tests:
+  - Widget tests render with the FlutterTest font: every glyph is 1 em wide, so text is much wider than on a phone.
+    - In a row, a trailing tag or link needs a width cap. Home's `_CardRow` caps it at 45 %.
+    - Long text should wrap or ellipsize, never sit in a fixed-width spot.
+  - `test/home/`:
+    - `kWholeHome` (393×3000) builds the whole dashboard without scrolling.
+    - `home_layout_test.dart` covers 360 dp in English + Dark, Bengali + Light, and Bengali with no data.
+  - Journey 3 now ends on Home: the totals and the recent list update.
+
 ## Build-order progress
 - [x] 1. Setup, fonts, theme, l10n, DLFormat + tests, router shell + bottom nav, language/digit/theme settings (done 2026-11-06)
 - [x] 2. Shared DL widgets (done 2026-11-06)
 - [x] 3. Drift schema + DAOs + seeder (done 2026-11-06)
 - [x] 4. Finance → Salary/Allocation → Savings → Shop credit (done 2026-11-06)
-- [ ] 5. Home dashboard
+- [x] 5. Home dashboard (done 2026-11-06)
 - [ ] 6. Work/timer → Calendar → Reminders → Notes → Health → Goals → Documents → Reports
 - [ ] 7. Privacy, backup/restore/export, onboarding
 - [ ] 8. Journeys, goldens, prototype comparison, small-screen fixes
