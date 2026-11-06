@@ -175,7 +175,9 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
               if (_error != null) setState(() => _error = null);
             },
           ),
-          if (_error != null) ...[const SizedBox(height: DLSpace.s1), DLErrorText(_error!)],
+          // One fixed slot, so showing or clearing the error never shifts the
+          // body field to a new place in the list (which would rebuild it).
+          _error == null ? const SizedBox.shrink() : Padding(padding: const EdgeInsets.only(top: DLSpace.s1), child: DLErrorText(_error!)),
           const SizedBox(height: DLSpace.s3),
           ConstrainedBox(
             constraints: const BoxConstraints(minHeight: 360),
