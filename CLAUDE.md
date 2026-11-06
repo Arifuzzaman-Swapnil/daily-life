@@ -87,7 +87,7 @@ The build brief, covering stack, design rules, data model, business rules, scree
   - Sub-pages are top-level `GoRoute`s on the root navigator, made with `page()` in `router.dart`.
   - Paths come from `Routes`, e.g. `Routes.tx(id)`, `Routes.newTx(type)`, `Routes.shop(id)`.
   - Back and close use `popOr(context, fallback)`, so a page opened directly still has somewhere to go.
-  - `/reports` is a titled placeholder until step 6.
+  - `/reports` was a placeholder until step 6 built Reports.
 - Forms:
   - Errors are a map keyed by field. On a failed save, show `DLToast.show(context, t.errForm, error: true)`. Typing in a field clears that field's error.
   - Amounts go through `DLFormat.parseAmount(...)?.round()`, which accepts Bengali digits; ≤ 0 is `errAmount`.
@@ -129,12 +129,7 @@ The build brief, covering stack, design rules, data model, business rules, scree
   - `AppSettings.displayName` (`pref.displayName`). Onboarding (step 7) sets it. While it is empty, the greeting has no name and the avatar shows the user icon.
   - `waterTargetProvider` (`core/prefs/health_prefs.dart`): default 3000 ml, clamped to 500–6000. Health (step 6) sets it.
 - Repeating events: `eventOccursOn` and `eventsOn` in `features/calendar/event_rules.dart` (prototype `occurs`/`evOn`). Calendar (step 6) uses these; don't write a second version.
-- Step 6 must rewire these placeholder taps to the real screens:
-  - Home tiles and quick actions:
-    - Tasks and "add work" go to the Work tab.
-    - Meetings, events and "Agenda" go to the Calendar tab.
-    - Reminders, water, meals, habits, "write note" and "add reminder" go to the More tab.
-  - `inboxDestination()` in `notifications_screen.dart`: reminders, health, notes, goals and documents go to More.
+- Step 6 rewired Home's tiles and quick actions and `inboxDestination()` to the real screens (see step 6 below).
 - Routing: `Routes.tabs` lists the 5 root tabs. Open those with `go` and everything else with `push`.
 - Shared widgets added:
   - `DLAppBar.root(titleWidget:)` takes a custom title block (Home's date lines). `title` then only names the bar for screen readers.
@@ -151,12 +146,52 @@ The build brief, covering stack, design rules, data model, business rules, scree
     - `home_layout_test.dart` covers 360 dp in English + Dark, Bengali + Light, and Bengali with no data.
   - Journey 3 now ends on Home: the totals and the recent list update.
 
+## Conventions established in step 6 (planner, lifestyle, records)
+- Screens live in `features/work/`, `calendar/`, `reminders/`, `notes/`, `health/`, `goals/`, `documents/`, `reports/`; `features/notifications/` plans device notifications; `features/more/` is the More tab. Each area keeps its providers in `<area>_providers.dart`.
+- Routes (all in `Routes`):
+  - Work: `newTask({projectId})`, `task(id)`, `editTask(id)`, `timer`, `workHistory`, `projects`, `project(id)`.
+  - Calendar: `newEvent` (starts on the Calendar's selected day), `event(id)`, `editEvent(id)`.
+  - `reminders`, `newReminder({landOnList})`, `reminder(id)`, `editReminder(id)`; `notes`, `newNote`, `note(id)`, `editNote(id)`.
+  - `health`, `healthTab(HealthTab)`, `newMeal(type)`, `editMeal(id)`, `habit(id)`; `goals`, `newGoal`, `goal(id)`, `editGoal(id)`.
+  - `documents`, `importDoc`, `document(id)`, `viewDocument(id)`; `reportsTab(ReportTab)`.
+  - A new event, note or goal replaces its form with its details (`pushReplacement`); edits pop back.
+- Work timer: the rules live in `work/work_timer.dart` (`workTimerProvider`) on the single `TimerSessions` row. Elapsed = accumulated + time since `startedAt`, both from `clockProvider`. `Ticking` rebuilds every second only while the timer runs. The task can't change while running or paused, also from a task's "Start timer".
+- `WeekHoursChart` (`work_ui.dart`) is the week's hours on the Work tab and in the productivity report.
+- Calendar state is `calendarProvider` (view, selected day, shown month). Home's meeting/event tiles call `showToday(CalView.day)`, "Agenda" `setView(CalView.agenda)`. The day view starts at 7 AM, or earlier when an event starts earlier.
+- Reminders: `remTabProvider`; saving moves the list to the tab the reminder now belongs to. Home's "Add reminder" uses `newReminder(landOnList: true)`, so saving shows the list.
+- Health: the tab comes from the route. Streak, best streak and month completion are in `health_providers.dart`. Water entries are removed without asking, as in the prototype.
+- Documents: `FileService` (`core/files/file_service.dart`, `fileServiceProvider`) picks (file_picker), stores the copy as `<app documents>/documents/<id>.<ext>`, reads PDF pages (pdfx), deletes and shares (share_plus). Sample documents have no file: they show only the paper preview.
+- Reports: `ReportPeriod` (a month back to 11 months, or this year / last). Its data providers are families per period, so the skeleton shows while a new period loads; there is no artificial delay. Export writes a CSV and opens the share sheet.
+- Notifications:
+  - Toggles: `notificationPrefsProvider` (`pref.notif.<kind>`); defaults as the prototype (all on except meals). Settings shows all five; Health's water and meal switches are the same values.
+  - `planNotifications()` (`notification_planner.dart`) is pure: reminders (once/daily/weekly/monthly; custom = one weekly per weekday; General vs Office toggle by category), event reminders for 30 days ahead (all-day at 9 AM), water every 2 h 8 AM–10 PM, meals at 08:00 / 13:30 / 17:00 / 21:00.
+  - `notificationSyncProvider` (watched in `app.dart`) replaces every pending notification when the plan changes and when the app resumes. Ids are the plan's order. Exact alarms when Android allows, else inexact. A tap opens the notification's route.
+  - flutter_local_notifications stays on 22.x: 23.0 needs AGP 9.1.1 and compileSdk 37, newer than Flutter 3.47's template (AGP 9.1.0, compileSdk 36).
+- Committed Android files (Flutter 3.47 template copies plus changes; re-check them when Flutter's template changes):
+  - `app/android/app/build.gradle.kts`: core library desugaring.
+  - `app/android/app/src/main/AndroidManifest.xml`: `RECEIVE_BOOT_COMPLETED`, `SCHEDULE_EXACT_ALARM`, the plugin's two receivers, app label "Daily Life".
+- Shared widgets added: `DLAvatar`, `DLLogo`, `DLChip.leading` (category dots), `DLProgressBar.trackColor`, `DLBarGroup.colors`, and more `DLIcons` (`byKey` knows the habit icons).
+- Formats added (`dl_format_more.dart`): `duration`, `oneDecimal`, `dateShort`, `weekdayShort`, `stopwatch`, `banglaMonthSpan`, `fileSize`; plus `weekStartOf()` and `minutesBetween()`.
+- ARB additions (kit changes 3–6): `noProjects` (the prototype had no empty projects list), `noResults` (the prototype reused Finance's "No transactions match" for notes and documents), `notifWater`, `msPerLine` (the prototype wrote it inline).
+- Tests:
+  - Never `await` a drift `watch…().first` in a widget test or in widget code: it doesn't complete under fake async and hangs the run. Use one-shot queries (`db.select(…).get()`, `…ById`).
+  - `tester.enterText` doesn't pump after typing. If typing triggers a rebuild that inserts or removes list children (an error line), the next field can be rebuilt mid-focus and get the wrong text. Keep conditional rows in one fixed slot (`cond ? widget : const SizedBox.shrink()`).
+  - Toasts sit over the lower screen for 2.4 s: wait them out before tapping a field under them.
+  - `pumpApp` installs `FakeNotificationScheduler` (`notificationsOf(tester)`) and `FakeFileService` (`filesOf(tester)`), and takes a `clock`; `TestClock` drives the timer.
+  - `export` doesn't import: a file that re-exports a provider and also uses it must import it too.
+  - Records compare sets by identity: check a `Set` field with its own `expect`.
+- Deliberate differences from the prototype:
+  - "Start timer" on a task doesn't move a running or paused timer to it.
+  - The habit calendar shows the current month (the prototype hard-coded November).
+  - The day view shows hours before 7 AM when an event starts then.
+  - The Android app label is "Daily Life".
+
 ## Build-order progress
 - [x] 1. Setup, fonts, theme, l10n, DLFormat + tests, router shell + bottom nav, language/digit/theme settings (done 2026-11-06)
 - [x] 2. Shared DL widgets (done 2026-11-06)
 - [x] 3. Drift schema + DAOs + seeder (done 2026-11-06)
 - [x] 4. Finance → Salary/Allocation → Savings → Shop credit (done 2026-11-06)
 - [x] 5. Home dashboard (done 2026-11-06)
-- [ ] 6. Work/timer → Calendar → Reminders → Notes → Health → Goals → Documents → Reports
+- [x] 6. Work/timer → Calendar → Reminders → Notes → Health → Goals → Documents → Reports (done 2026-11-06)
 - [ ] 7. Privacy, backup/restore/export, onboarding
 - [ ] 8. Journeys, goldens, prototype comparison, small-screen fixes

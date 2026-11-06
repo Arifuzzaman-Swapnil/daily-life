@@ -25,10 +25,8 @@ import 'home_providers.dart';
 
 /// Home tab (prototype `home`, screenshot 05; empty state 90): the date bar with
 /// theme, notifications and settings, a greeting, the dashboard sections in the
-/// person's order (customize sheet 07), and the customize button.
-///
-/// Work, calendar, reminder, health and notes screens arrive in build step 6;
-/// until then their tiles and quick actions open the tab they will live under.
+/// person's order (customize sheet 07), and the customize button. Tiles and
+/// quick actions open their screens (Work, Calendar, Reminders, Health, notes).
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 

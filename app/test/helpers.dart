@@ -125,8 +125,7 @@ class FakeFileService implements FileService {
   Future<void> share({String? path, required String text}) async => shared.add(text);
 
   @override
-  Future<void> shareTextFile(String fileName, String content, {required String subject}) async => shared.add('$fileName
-$content');
+  Future<void> shareTextFile(String fileName, String content, {required String subject}) async => shared.add('$fileName: $content');
 }
 
 /// The fake file service [pumpApp] installs.
