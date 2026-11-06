@@ -42,12 +42,43 @@ The build brief, covering stack, design rules, data model, business rules, scree
   - Charts (`DLBarChart`, `DLDonut`) are plain widgets and painters matching the prototype's CSS bars and SVG ring; `fl_chart` isn't used.
   - `DLSkeleton` repeats forever, so tests that show it must `pump`, not `pumpAndSettle` (or enable reduced motion).
 - Widget tests for the components live in `test/widgets/`; `harness.dart` → `pumpDL()` pumps one widget in the DL theme.
-- Tests: `test/helpers.dart` → `pumpApp()` pumps the whole app on a 393×852 phone with mock prefs and the pinned clock.
+- Tests: `test/helpers.dart` → `pumpApp()` pumps the whole app on a 393×852 phone with mock prefs, an empty in-memory database and the pinned clock.
+
+## Conventions established in step 3 (database)
+- Drift lives in `core/db/`:
+  - `tables.dart` holds all 23 tables, `enums.dart` the enums (stored by `.name`), `converters.dart` the storage helpers.
+  - `app_database.dart` is `AppDatabase`. `daos/` has one DAO per area.
+- No `sqlite3_flutter_libs`: it's end-of-life. drift's `sqlite3` 3.x bundles SQLite for Android and the CI test host.
+- Code generation runs only in CI (step "Generate code (drift)", about 45 s). `*.g.dart` is gitignored and excluded from analyze. After changing tables or DAOs, just push.
+- Storage:
+  - Ids are text: `newId()` (uuid v4). Seeded rows keep the sample ids.
+  - Amounts are int taka.
+  - Date-only columns use `DateOnlyConverter`: text `yyyy-MM-dd`, read back as local midnight. Filter with `DayRange` (half-open day keys), e.g. `t.date.isBiggerOrEqualValue(r.start)`.
+  - Times of day are text `HH:mm`, the format `DLFormat.time` takes. Timestamps are ISO text (`build.yaml`).
+- Raw SQL in `customSelect` uses snake_case names and enum names (`'income'`, `'deposit'`). List every table it reads in `readsFrom`, or streams won't update.
+- Providers are in `db_providers.dart`: `appDatabaseProvider` (overridden in `main()` and in tests) and one `…DaoProvider` per DAO. Tests use `memoryDatabase()` from `test/helpers.dart`.
+- Business rules live in the DAOs:
+  - `FinanceDao.monthTotals`: available = income − expenses − max(0, net savings deposits).
+  - `ShopDao.pay`: throws `ShopOverpayException`, otherwise writes the pay entry plus an expense in category `shop` with `shopId`.
+  - `SavingsDao.addEntry`: throws `SavingsOverdrawException`.
+  - `SalaryDao.addSalary`: writes the record, the income transaction and the new monthly amount.
+  - Text a DAO writes for the user, such as "Payment to …" or "November salary", is passed in by the caller in the current language.
+- Categories:
+  - Built-ins have a null `name`; show `cat_<id>`. Their key is (type, id), since `other` exists for both types.
+  - `shop` is `isSystem` and left out of pickers.
+- Deleting a shop payment's expense deletes the payment entry (FK cascade). Deleting a shop keeps its expenses, unlinked.
+- Schema changes before the first real release: bump `schemaVersion`, and `onUpgrade` drops and recreates every table. From the first release, write real migrations.
+- Sample data:
+  - `assets/sample_data.json` is the kit file, unchanged; a test checks this.
+  - `SampleSeeder.seed(lang)` writes the current language. `relocalize` runs on language switch (wired in `app.dart`, only while `pref.sampleData` is true) and swaps only untouched text.
+  - CI builds with `--dart-define=DL_SAMPLE_DATA=true` (`kSampleDataBuild`), so an empty database is seeded once at startup. `pref.sampleData` = false means the person turned it off.
+  - Step 7's "Show sample data" toggle uses `SampleDataService.load` and `clear`.
+  - Seeded dates are absolute, anchored to 2026-11-06.
 
 ## Build-order progress
 - [x] 1. Setup, fonts, theme, l10n, DLFormat + tests, router shell + bottom nav, language/digit/theme settings (done 2026-11-06)
 - [x] 2. Shared DL widgets (done 2026-11-06)
-- [ ] 3. Drift schema + DAOs + seeder
+- [x] 3. Drift schema + DAOs + seeder (done 2026-11-06)
 - [ ] 4. Finance → Salary/Allocation → Savings → Shop credit
 - [ ] 5. Home dashboard
 - [ ] 6. Work/timer → Calendar → Reminders → Notes → Health → Goals → Documents → Reports
