@@ -18,6 +18,8 @@ class DLEmptyState extends StatelessWidget {
     this.onAction,
     this.actionIcon,
     this.actionVariant = DLButtonVariant.primary,
+    this.secondaryLabel,
+    this.onSecondary,
     this.inCard = false,
   });
 
@@ -28,6 +30,10 @@ class DLEmptyState extends StatelessWidget {
   final VoidCallback? onAction;
   final IconData? actionIcon;
   final DLButtonVariant actionVariant;
+
+  /// A second, outlined button beside the first (Finance: Add income · Add expense).
+  final String? secondaryLabel;
+  final VoidCallback? onSecondary;
   final bool inCard;
 
   @override
@@ -55,13 +61,28 @@ class DLEmptyState extends StatelessWidget {
           ],
           if (actionLabel != null) ...[
             const SizedBox(height: DLSpace.s4),
-            DLButton(
-              label: actionLabel!,
-              icon: actionIcon,
-              onPressed: onAction,
-              variant: actionVariant,
-              size: DLButtonSize.md,
-              expand: false,
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: DLSpace.s2,
+              runSpacing: DLSpace.s2,
+              children: [
+                DLButton(
+                  label: actionLabel!,
+                  icon: actionIcon,
+                  onPressed: onAction,
+                  variant: actionVariant,
+                  size: DLButtonSize.md,
+                  expand: false,
+                ),
+                if (secondaryLabel != null)
+                  DLButton(
+                    label: secondaryLabel!,
+                    onPressed: onSecondary,
+                    variant: DLButtonVariant.secondary,
+                    size: DLButtonSize.md,
+                    expand: false,
+                  ),
+              ],
             ),
           ],
         ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/dl_tokens.dart';
+import 'dl_chip.dart';
 import 'dl_icons.dart';
 import 'dl_motion.dart';
 
@@ -206,6 +207,27 @@ class DLFab extends StatelessWidget {
           child: Center(child: Icon(icon, size: DLSize.icon, color: c.onAccent)),
         ),
       ),
+    );
+  }
+}
+
+/// Dashed "add another" button (prototype `.btn.bt` with a dashed `borderStrong`
+/// outline): full width, 52 tall, `accentSoft` ground, `accentText` plus icon and
+/// label. Adds a budget row, a savings goal.
+class DLAddButton extends StatelessWidget {
+  const DLAddButton({super.key, required this.label, required this.onPressed});
+
+  final String label;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      foregroundPainter: DLDashedBorderPainter(
+        color: context.dl.borderStrong,
+        borderRadius: const BorderRadius.all(Radius.circular(DLRadius.md)),
+      ),
+      child: DLButton(label: label, icon: DLIcons.plus, onPressed: onPressed, variant: DLButtonVariant.tonal),
     );
   }
 }

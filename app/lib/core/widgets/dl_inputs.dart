@@ -126,6 +126,7 @@ class DLTextField extends StatelessWidget {
     this.obscureText = false,
     this.maxLength,
     this.suffixIcon,
+    this.prefixText,
     this.bottomGap = DLSpace.s4,
   });
 
@@ -154,6 +155,9 @@ class DLTextField extends StatelessWidget {
 
   /// 20px icon at the end of the field (calendar, clock).
   final IconData? suffixIcon;
+
+  /// Fixed text before the input, e.g. `৳` on a budget amount.
+  final String? prefixText;
   final double bottomGap;
 
   @override
@@ -199,6 +203,8 @@ class DLTextField extends StatelessWidget {
         focusedBorder: focused,
         disabledBorder: _border(c.divider, 1),
         suffixIcon: suffixIcon == null ? null : Icon(suffixIcon, size: 20, color: c.textSecondary),
+        prefixText: prefixText,
+        prefixStyle: style.copyWith(color: c.textPrimary),
       ),
     );
     return DLField(
@@ -324,6 +330,79 @@ class _DLSelectState<T> extends State<DLSelect<T>> {
       helper: widget.helper,
       bottomGap: widget.bottomGap,
       child: box,
+    );
+  }
+}
+
+/// Read-only field that opens a picker (date, time). Looks like [DLSelect]
+/// with a 20px [icon] at the end and shows the picked value, already formatted.
+class DLPickerField extends StatelessWidget {
+  const DLPickerField({
+    super.key,
+    required this.value,
+    required this.onTap,
+    this.icon = DLIcons.chevronDown,
+    this.label,
+    this.optionalLabel,
+    this.hint,
+    this.error,
+    this.helper,
+    this.bottomGap = DLSpace.s4,
+  });
+
+  final String? value;
+  final VoidCallback? onTap;
+  final IconData icon;
+  final String? label;
+  final String? optionalLabel;
+  final String? hint;
+  final String? error;
+  final String? helper;
+  final double bottomGap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.dl;
+    final enabled = onTap != null;
+    final text = value ?? hint ?? '';
+    final border = error != null ? Border.all(color: c.danger, width: 2) : Border.all(color: enabled ? c.borderStrong : c.divider);
+    return DLField(
+      label: label,
+      optionalLabel: optionalLabel,
+      error: error,
+      helper: helper,
+      bottomGap: bottomGap,
+      child: DLPressable(
+        onTap: onTap,
+        scaleOnPress: false,
+        semanticLabel: [if (label != null) label!, text].join(', '),
+        excludeSemantics: true,
+        borderRadius: _controlRadius,
+        decoration: BoxDecoration(color: enabled ? c.surface : c.surfaceSunken, borderRadius: _controlRadius),
+        child: CustomPaint(
+          foregroundPainter: _BorderPainter(border: border),
+          child: SizedBox(
+            height: DLSize.controlLg,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      text,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: DLText.textBodyLg.copyWith(color: !enabled ? c.textDisabled : (value == null ? c.textSecondary : c.textPrimary)),
+                    ),
+                  ),
+                  const SizedBox(width: DLSpace.s2),
+                  Icon(icon, size: 20, color: c.textSecondary),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

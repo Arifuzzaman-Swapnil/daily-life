@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../theme/dl_tokens.dart';
+import 'dl_icons.dart';
 import 'dl_motion.dart';
+import 'dl_tone.dart';
 
 const _cardRadius = BorderRadius.all(Radius.circular(DLRadius.lg));
 
 /// `surface` card with radius 16 and the resting card shadow (prototype `.card`).
-/// With [onTap] it is the prototype's `button.card`.
+/// With [onTap] it is the prototype's `button.card`. `outlined` swaps the
+/// shadow for a 1px `divider` border (cards inside a sheet).
 class DLCard extends StatelessWidget {
   const DLCard({
     super.key,
@@ -14,6 +17,7 @@ class DLCard extends StatelessWidget {
     this.padding = const EdgeInsets.all(DLSpace.s4),
     this.onTap,
     this.color,
+    this.outlined = false,
   });
 
   final Widget child;
@@ -22,13 +26,15 @@ class DLCard extends StatelessWidget {
 
   /// Ground override, e.g. `surfaceRaised` for a card that floats.
   final Color? color;
+  final bool outlined;
 
   @override
   Widget build(BuildContext context) {
     final decoration = BoxDecoration(
       color: color ?? context.dl.surface,
       borderRadius: _cardRadius,
-      boxShadow: DLShadows.card(Theme.of(context).brightness),
+      border: outlined ? Border.all(color: context.dl.divider) : null,
+      boxShadow: outlined ? null : DLShadows.card(Theme.of(context).brightness),
     );
     if (onTap == null) {
       return DecoratedBox(decoration: decoration, child: Padding(padding: padding, child: child));
@@ -43,11 +49,13 @@ class DLCard extends StatelessWidget {
 }
 
 /// List group (prototype `.lst`): a card with no padding whose rows are split by
-/// `divider` hairlines (`.li + .li { border-top }`).
+/// `divider` hairlines (`.li + .li { border-top }`). `outlined` swaps the shadow
+/// for a 1px `divider` border (lists inside a sheet).
 class DLList extends StatelessWidget {
-  const DLList({super.key, required this.children});
+  const DLList({super.key, required this.children, this.outlined = false});
 
   final List<Widget> children;
+  final bool outlined;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +65,8 @@ class DLList extends StatelessWidget {
       decoration: BoxDecoration(
         color: c.surface,
         borderRadius: _cardRadius,
-        boxShadow: DLShadows.card(Theme.of(context).brightness),
+        border: outlined ? Border.all(color: c.divider) : null,
+        boxShadow: outlined ? null : DLShadows.card(Theme.of(context).brightness),
       ),
       child: ClipRRect(
         borderRadius: _cardRadius,
@@ -257,6 +266,36 @@ class DLSectionTitle extends StatelessWidget {
             ),
           ),
           if (trailing != null) ...[const SizedBox(width: DLSpace.s2), trailing!],
+        ],
+      ),
+    );
+  }
+}
+
+/// Tinted note (prototype `.card.row` with a soft ground): a 20px icon beside
+/// `textBodySm` words in the tone's text colour, e.g. the allocation and
+/// shop-credit explanations.
+class DLNote extends StatelessWidget {
+  const DLNote(this.text, {super.key, this.tone = DLTone.accent, this.icon = DLIcons.info});
+
+  final String text;
+  final DLTone tone;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.dl;
+    final fg = tone.text(c);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(DLSpace.s4),
+      decoration: BoxDecoration(color: tone.soft(c), borderRadius: _cardRadius),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(padding: const EdgeInsets.only(top: 1), child: Icon(icon, size: 20, color: fg)),
+          const SizedBox(width: DLSpace.s3),
+          Expanded(child: Text(text, style: DLText.textBodySm.copyWith(color: fg))),
         ],
       ),
     );

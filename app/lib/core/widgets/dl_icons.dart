@@ -8,6 +8,7 @@ abstract final class DLIcons {
   static const IconData home = LucideIcons.house;
   static const IconData wallet = LucideIcons.wallet;
   static const IconData calendar = LucideIcons.calendar;
+  static const IconData clock = LucideIcons.clock;
   static const IconData briefcase = LucideIcons.briefcase;
   static const IconData grid = LucideIcons.layoutGrid;
   static const IconData gear = LucideIcons.settings;
@@ -19,7 +20,61 @@ abstract final class DLIcons {
   static const IconData info = LucideIcons.info;
   static const IconData trash = LucideIcons.trash;
   static const IconData plus = LucideIcons.plus;
+  static const IconData minus = LucideIcons.minus;
   static const IconData search = LucideIcons.search;
+  static const IconData chevronLeft = LucideIcons.chevronLeft;
   static const IconData chevronRight = LucideIcons.chevronRight;
   static const IconData chevronDown = LucideIcons.chevronDown;
+  static const IconData edit = LucideIcons.pencil;
+  static const IconData filter = LucideIcons.funnel;
+  static const IconData tag = LucideIcons.tag;
+  static const IconData chart = LucideIcons.chartColumn;
+  static const IconData pie = LucideIcons.chartPie;
+  static const IconData target = LucideIcons.target;
+
+  // Money.
+  /// Income (prototype `inc`): arrow into the wallet.
+  static const IconData income = LucideIcons.arrowDownLeft;
+
+  /// Expense (prototype `exp`): arrow out.
+  static const IconData expense = LucideIcons.arrowUpRight;
+  static const IconData cash = LucideIcons.banknote;
+  static const IconData piggy = LucideIcons.piggyBank;
+  static const IconData store = LucideIcons.store;
+  static const IconData bag = LucideIcons.shoppingBag;
+
+  // Category icons (the `icon` key stored on a category).
+  static const IconData gift = LucideIcons.gift;
+  static const IconData laptop = LucideIcons.laptop;
+  static const IconData dots = LucideIcons.ellipsis;
+  static const IconData food = LucideIcons.utensils;
+  static const IconData bus = LucideIcons.bus;
+  static const IconData heart = LucideIcons.heart;
+  static const IconData user = LucideIcons.user;
+  static const IconData medical = LucideIcons.pill;
+  static const IconData film = LucideIcons.film;
+  static const IconData wifi = LucideIcons.wifi;
+
+  /// A stored icon key (prototype `I` name, e.g. `food`, `cash`) → icon.
+  /// Unknown keys fall back to [tag], the custom-category icon.
+  static IconData byKey(String key) => switch (key) {
+        'cash' => cash,
+        'gift' => gift,
+        'laptop' => laptop,
+        'brief' => briefcase,
+        'store' => store,
+        'dots' => dots,
+        'food' => food,
+        'bus' => bus,
+        'home' => home,
+        'bag' => bag,
+        'heart' => heart,
+        'user' => user,
+        'med' => medical,
+        'film' => film,
+        'wifi' => wifi,
+        'piggy' => piggy,
+        'wallet' => wallet,
+        _ => tag,
+      };
 }
