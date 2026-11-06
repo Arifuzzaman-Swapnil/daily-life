@@ -12,6 +12,14 @@ abstract final class DLIcons {
   static const IconData grid = LucideIcons.layoutGrid;
   static const IconData gear = LucideIcons.settings;
   static const IconData back = LucideIcons.arrowLeft;
+  static const IconData close = LucideIcons.x;
   static const IconData check = LucideIcons.check;
+  static const IconData checkCircle = LucideIcons.circleCheckBig;
+  static const IconData alert = LucideIcons.circleAlert;
+  static const IconData info = LucideIcons.info;
+  static const IconData trash = LucideIcons.trash;
+  static const IconData plus = LucideIcons.plus;
+  static const IconData search = LucideIcons.search;
   static const IconData chevronRight = LucideIcons.chevronRight;
+  static const IconData chevronDown = LucideIcons.chevronDown;
 }

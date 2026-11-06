@@ -1,7 +1,7 @@
 import 'package:dailylife/app.dart';
 import 'package:dailylife/core/format/format_provider.dart';
 import 'package:dailylife/core/prefs/app_settings.dart';
-import 'package:dailylife/core/widgets/dl_basics.dart';
+import 'package:dailylife/core/widgets/dl_app_bar.dart';
 import 'package:dailylife/core/widgets/dl_bottom_nav.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,4 +37,4 @@ ProviderContainer containerOf(WidgetTester tester) => ProviderScope.containerOf(
 Finder navLabel(String text) => find.descendant(of: find.byType(DLBottomNav), matching: find.text(text));
 
 /// The title of the visible root tab.
-Finder titleBar(String text) => find.descendant(of: find.byType(DLRootTitleBar), matching: find.text(text));
+Finder titleBar(String text) => find.descendant(of: find.byType(DLAppBar), matching: find.text(text));

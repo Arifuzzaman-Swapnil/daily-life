@@ -6,8 +6,7 @@ import '../../core/format/dl_format.dart';
 import '../../core/format/format_provider.dart';
 import '../../core/prefs/app_settings.dart';
 import '../../core/theme/dl_tokens.dart';
-import '../../core/widgets/dl_basics.dart';
-import '../../core/widgets/dl_icons.dart';
+import '../../core/widgets/dl_widgets.dart';
 import '../../l10n/app_localizations.dart';
 import '../../router.dart';
 
@@ -31,28 +30,21 @@ class SettingsScreen extends ConsumerWidget {
     Widget sample(String text) => Text(text, style: DLText.textBodySm.copyWith(color: c.textSecondary));
 
     return Scaffold(
-      appBar: AppBar(
-        leading: Center(
-          child: DLIconButton(
-            icon: DLIcons.back,
-            tooltip: t.back,
-            onPressed: () {
-              if (context.canPop()) {
-                context.pop();
-              } else {
-                context.go(Routes.home);
-              }
-            },
-          ),
-        ),
-        titleSpacing: DLSpace.s1,
-        title: Text(t.settings),
+      appBar: DLAppBar(
+        title: t.settings,
+        onLeading: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go(Routes.home);
+          }
+        },
       ),
       body: ListView(
         padding: EdgeInsets.fromLTRB(DLSpace.s4, DLSpace.s1, DLSpace.s4, DLSpace.s12 + MediaQuery.paddingOf(context).bottom),
         children: [
           DLSectionHeader(t.langRegion, first: true),
-          DLCardBox(
+          DLCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -85,7 +77,7 @@ class SettingsScreen extends ConsumerWidget {
                 const SizedBox(height: DLSpace.s4),
                 label(t.numFormat),
                 const SizedBox(height: DLSpace.s2),
-                _Segmented<DigitStyle>(
+                DLSegmentedTabs<DigitStyle>(
                   value: s.digits,
                   options: [(DigitStyle.bn, t.bnDigits), (DigitStyle.en, t.enDigits)],
                   onChanged: ctl.setDigits,
@@ -95,7 +87,7 @@ class SettingsScreen extends ConsumerWidget {
                 const SizedBox(height: DLSpace.s4),
                 label(t.dateFmt),
                 const SizedBox(height: DLSpace.s2),
-                _Segmented<DateStyle>(
+                DLSegmentedTabs<DateStyle>(
                   value: s.dateStyle,
                   options: [(DateStyle.written, t.dfLong), (DateStyle.numeric, t.dfNum)],
                   onChanged: ctl.setDateStyle,
@@ -106,39 +98,19 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: DLSpace.s3),
-          DLCardBox(
-            padding: EdgeInsets.zero,
-            child: Column(
-              children: [
-                _KeyValueRow(label: t.currency, value: t.bdt),
-                const DLRowDivider(),
-                _KeyValueRow(label: t.timezone, value: t.dhaka),
-                const DLRowDivider(),
-                _KeyValueRow(label: t.weekStart, value: t.saturday),
-                const DLRowDivider(),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(minHeight: 56),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: DLSpace.s4, vertical: DLSpace.s3),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(t.banglaCal, style: DLText.textBody.copyWith(color: c.textPrimary)),
-                              sample(f.bangla(today)),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: DLSpace.s3),
-                        Switch(value: s.banglaDate, onChanged: ctl.setBanglaDate),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          DLList(
+            children: [
+              DLKeyValueRow(label: t.currency, value: t.bdt),
+              DLKeyValueRow(label: t.timezone, value: t.dhaka),
+              DLKeyValueRow(label: t.weekStart, value: t.saturday),
+              DLListRow(
+                minHeight: 56,
+                title: t.banglaCal,
+                subtitle: f.bangla(today),
+                onTap: () => ctl.setBanglaDate(!s.banglaDate),
+                trailing: DLSwitch(value: s.banglaDate, onChanged: ctl.setBanglaDate, semanticLabel: t.banglaCal),
+              ),
+            ],
           ),
           DLSectionHeader(t.appearance),
           IntrinsicHeight(
@@ -170,43 +142,6 @@ class SettingsScreen extends ConsumerWidget {
   }
 }
 
-/// Selectable card with a 2px border (prototype `.lng`).
-class _SelectableCard extends StatelessWidget {
-  const _SelectableCard({required this.selected, required this.onTap, required this.padding, required this.child, this.selectedFill});
-
-  final bool selected;
-  final VoidCallback onTap;
-  final EdgeInsetsGeometry padding;
-  final Color? selectedFill;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.dl;
-    const shape = BorderRadius.all(Radius.circular(DLRadius.lg));
-    return Semantics(
-      button: true,
-      selected: selected,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        decoration: BoxDecoration(
-          color: selected ? (selectedFill ?? c.surface) : c.surface,
-          borderRadius: shape,
-          border: Border.all(color: selected ? c.accent : c.divider, width: 2),
-        ),
-        child: Material(
-          type: MaterialType.transparency,
-          child: InkWell(
-            onTap: onTap,
-            borderRadius: shape,
-            child: Padding(padding: padding, child: child),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _LanguageCard extends StatelessWidget {
   const _LanguageCard({required this.title, required this.subtitle, required this.selected, required this.onTap});
 
@@ -218,7 +153,7 @@ class _LanguageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.dl;
-    return _SelectableCard(
+    return DLSelectableCard(
       selected: selected,
       onTap: onTap,
       selectedFill: c.accentSoft,
@@ -273,7 +208,7 @@ class _ThemeCard extends StatelessWidget {
           widthFactor: widthFactor,
           child: Container(height: height, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(4))),
         );
-    return _SelectableCard(
+    return DLSelectableCard(
       selected: selected,
       onTap: onTap,
       padding: const EdgeInsets.all(DLSpace.s2),
@@ -318,85 +253,6 @@ class _ThemeCard extends StatelessWidget {
           ),
           const SizedBox(height: DLSpace.s2),
           Text(label, textAlign: TextAlign.center, style: DLText.textLabel.copyWith(color: c.textPrimary)),
-        ],
-      ),
-    );
-  }
-}
-
-/// Two-or-more option segmented control (prototype `.seg`).
-class _Segmented<T> extends StatelessWidget {
-  const _Segmented({required this.value, required this.options, required this.onChanged});
-
-  final T value;
-  final List<(T, String)> options;
-  final ValueChanged<T> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.dl;
-    final brightness = Theme.of(context).brightness;
-    return Container(
-      padding: const EdgeInsets.all(DLSpace.s1),
-      decoration: BoxDecoration(color: c.surfaceSunken, borderRadius: BorderRadius.circular(DLRadius.md)),
-      child: Row(
-        children: [
-          for (final (i, (v, text)) in options.indexed) ...[
-            if (i > 0) const SizedBox(width: DLSpace.s1),
-            Expanded(
-              child: Semantics(
-                button: true,
-                selected: v == value,
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () => onChanged(v),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 150),
-                    constraints: const BoxConstraints(minHeight: 40),
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: v == value ? c.surfaceRaised : c.surfaceRaised.withValues(alpha: 0),
-                      borderRadius: BorderRadius.circular(DLRadius.sm),
-                      boxShadow: v == value ? DLShadows.card(brightness) : const [],
-                    ),
-                    child: Text(
-                      text,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: DLText.textLabel.copyWith(color: v == value ? c.textPrimary : c.textSecondary),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-/// Read-only key/value row (prototype `.kv`).
-class _KeyValueRow extends StatelessWidget {
-  const _KeyValueRow({required this.label, required this.value});
-
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.dl;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: DLSpace.s4, vertical: DLSpace.s3),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: DLText.textLabel.copyWith(fontWeight: FontWeight.w400, height: 22 / 14, color: c.textSecondary)),
-          const SizedBox(width: DLSpace.s4),
-          Expanded(
-            child: Text(value, textAlign: TextAlign.right, style: DLText.textBody.copyWith(height: 22 / 15, color: c.textPrimary)),
-          ),
         ],
       ),
     );

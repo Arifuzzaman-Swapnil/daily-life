@@ -35,7 +35,13 @@ The build brief, covering stack, design rules, data model, business rules, scree
   - "Today" comes from `clockProvider`. Tests pin it to 2026-11-06.
 - Routing: `router.dart` (`routerProvider`, `Routes`), using a `StatefulShellRoute.indexedStack` for the 5 tabs. Full-screen pages go on the root navigator.
 - Icons: always use `DLIcons` (`core/widgets/dl_icons.dart`, from `lucide_icons_flutter`), never `Icons.*`.
-- `core/widgets/dl_basics.dart` holds provisional step-1 widgets. Step 2 replaces them with the shared DL components.
+- Shared components: import `core/widgets/dl_widgets.dart` (step 2). Build screens from these; don't hand-roll cards, rows, chips, fields or overlays.
+  - Every tappable component goes through `DLPressable` (`dl_motion.dart`): 97 % press scale, pressed fill, keyboard focus ring. Durations go through `DLMotion.of(context, …)`, which returns zero under reduced motion.
+  - Overlays: `showDLSheet`, `showDLConfirm` (resolves to `bool`), `DLToast.show`. They use the root navigator/overlay so they cover the bottom nav.
+  - Chips, the switch and the checkbox are drawn at prototype size but lay out 48dp tall for touch. In a chip `Wrap`, use `spacing: 8, runSpacing: 0`.
+  - Charts (`DLBarChart`, `DLDonut`) are plain widgets and painters matching the prototype's CSS bars and SVG ring; `fl_chart` isn't used.
+  - `DLSkeleton` repeats forever, so tests that show it must `pump`, not `pumpAndSettle` (or enable reduced motion).
+- Widget tests for the components live in `test/widgets/`; `harness.dart` → `pumpDL()` pumps one widget in the DL theme.
 - Tests: `test/helpers.dart` → `pumpApp()` pumps the whole app on a 393×852 phone with mock prefs and the pinned clock.
 
 ## Build-order progress
