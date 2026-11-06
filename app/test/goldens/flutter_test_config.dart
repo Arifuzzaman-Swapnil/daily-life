@@ -53,17 +53,31 @@ Future<void> _loadLucideIfFound() async {
   // Isolate.resolvePackageUri is unsupported in the Flutter test VM. Read
   // the package's lib directory from .dart_tool/package_config.json instead.
   final config = File('.dart_tool/package_config.json');
-  if (!config.existsSync()) return;
+  if (!config.existsSync()) {
+    debugPrint('[goldens] .dart_tool/package_config.json missing at ${Directory.current.path}');
+    return;
+  }
   final decoded = jsonDecode(await config.readAsString()) as Map<String, Object?>;
   final packages = (decoded['packages'] as List).cast<Map<String, Object?>>();
   final pkg = packages.firstWhere((p) => p['name'] == 'lucide_icons_flutter', orElse: () => const <String, Object?>{});
-  if (pkg.isEmpty) return;
-  final rootUri = Uri.parse(pkg['rootUri'] as String);
-  final root = rootUri.isAbsolute ? Directory.fromUri(rootUri) : Directory.fromUri(config.parent.uri.resolveUri(rootUri));
-  final libDir = Directory.fromUri(root.uri.resolveUri(Uri.parse(pkg['packageUri'] as String? ?? 'lib/')));
-  if (!libDir.existsSync()) return;
+  if (pkg.isEmpty) {
+    debugPrint('[goldens] lucide_icons_flutter not in package_config.json');
+    return;
+  }
+  final rootField = pkg['rootUri'] as String;
+  final rootUri = Uri.parse(rootField);
+  final configDirUri = config.absolute.parent.uri;
+  final absRoot = rootUri.isAbsolute ? rootUri : configDirUri.resolveUri(rootUri);
+  final libDir = Directory.fromUri(absRoot.resolve(pkg['packageUri'] as String? ?? 'lib/'));
+  if (!libDir.existsSync()) {
+    debugPrint('[goldens] lucide lib dir missing: ${libDir.path}');
+    return;
+  }
   final fontFiles = libDir.listSync(recursive: true).whereType<File>().where((f) => f.path.toLowerCase().endsWith('.ttf')).toList();
-  if (fontFiles.isEmpty) return;
+  if (fontFiles.isEmpty) {
+    debugPrint('[goldens] no .ttf under ${libDir.path}');
+    return;
+  }
   // IconData from the package carries `fontPackage: lucide_icons_flutter`;
   // the loader family for a packaged font is `packages/<pkg>/<family>`.
   final lucide = FontLoader('packages/lucide_icons_flutter/LucideIcons');
@@ -71,6 +85,7 @@ Future<void> _loadLucideIfFound() async {
     lucide.addFont(_fontFromFile(f.path));
   }
   await lucide.load();
+  debugPrint('[goldens] loaded Lucide: ${fontFiles.map((f) => f.path).join(", ")}');
 }
 
 class _TolerantComparator extends LocalFileComparator {
