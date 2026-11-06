@@ -1,6 +1,6 @@
 // GENERATED from design/tokens.json (Daily Life design system). Do not edit by hand —
 // re-run tools/gen_assets.js if tokens change.
-// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: lines_longer_than_80_chars, unnecessary_import
 import 'dart:ui' show FontFeature;
 import 'package:flutter/material.dart';
 
