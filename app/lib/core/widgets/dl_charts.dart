@@ -290,7 +290,7 @@ class DLChartLegend extends StatelessWidget {
             children: [
               DLDot(color: color),
               const SizedBox(width: 6),
-              Text(label, style: DLText.textCaption.copyWith(color: c.textSecondary)),
+              Flexible(child: Text(label, style: DLText.textCaption.copyWith(color: c.textSecondary))),
             ],
           ),
       ],

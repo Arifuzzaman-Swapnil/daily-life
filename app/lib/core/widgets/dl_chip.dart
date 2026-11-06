@@ -58,7 +58,8 @@ class DLChip extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (icon != null) ...[Icon(icon, size: 16, color: fg), const SizedBox(width: 6)],
-          Text(label, maxLines: 1, style: DLText.textLabel.copyWith(color: fg)),
+          // User-typed category names can be long: shrink and ellipsize rather than overflow.
+          Flexible(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: DLText.textLabel.copyWith(color: fg))),
           if (trailingIcon != null) ...[const SizedBox(width: 6), Icon(trailingIcon, size: 16, color: fg)],
         ],
       ),
@@ -135,7 +136,7 @@ class DLTag extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (icon != null) ...[Icon(icon, size: 14, color: fg), const SizedBox(width: DLSpace.s1)],
-          Text(label, maxLines: 1, style: DLText.textCaption.copyWith(color: fg)),
+          Flexible(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: DLText.textCaption.copyWith(color: fg))),
         ],
       ),
     );

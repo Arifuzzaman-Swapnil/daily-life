@@ -95,6 +95,7 @@ Widget gallery(AppLocalizations t) {
               DLChip(label: t.expense, onTap: noop),
               DLChip(label: t.newCat, icon: DLIcons.plus, dashed: true, onTap: noop),
               DLChip(label: t.income, trailingIcon: DLIcons.close, selected: true, onTap: noop),
+              DLChip(label: '${t.noTx} ${t.noTxSub}', icon: DLIcons.wallet, onTap: noop),
             ],
           ),
           Wrap(

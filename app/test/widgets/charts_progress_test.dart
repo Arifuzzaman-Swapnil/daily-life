@@ -109,7 +109,7 @@ void main() {
   });
 
   testWidgets('DLProgressRing sizes and centres its content', (tester) async {
-    await pumpDL(tester, const DLProgressRing(value: 0.4, size: 240, radius: 104, child: Text('০২:১৫')));
+    await pumpDL(tester, const Center(child: DLProgressRing(value: 0.4, size: 240, radius: 104, child: Text('০২:১৫'))));
     expect(tester.getSize(find.byType(DLProgressRing)), const Size.square(240));
     expect(tester.getCenter(find.text('০২:১৫')), tester.getCenter(find.byType(DLProgressRing)));
   });
