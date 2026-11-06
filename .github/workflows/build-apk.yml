@@ -113,25 +113,13 @@ jobs:
             flutter test --tags golden
           fi
 
-      - name: Find generated goldens
-        if: ${{ always() && inputs.goldens == 'update' }}
-        run: |
-          echo "--- _baselines directories: ---"
-          find . -type d -name '_baselines' -not -path '*/build/*' 2>/dev/null || true
-          echo "--- generated golden PNGs: ---"
-          find . -type f -name '*.png' -path '*/_baselines/*' -not -path '*/build/*' 2>/dev/null || true
-        working-directory: ${{ github.workspace }}
-
       - name: Upload golden baselines (update run)
         if: ${{ always() && inputs.goldens == 'update' }}
         uses: actions/upload-artifact@v7
         with:
           name: goldens
-          # Capture wherever the comparator wrote them (test dir, or cwd).
-          path: |
-            app/test/goldens/_baselines/**
-            app/_baselines/**
-          if-no-files-found: warn
+          path: app/test/goldens/_baselines/
+          if-no-files-found: error
           retention-days: 30
 
       - name: Upload golden failure diffs (check run)

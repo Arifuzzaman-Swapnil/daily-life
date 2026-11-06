@@ -94,9 +94,12 @@ void main() {
         await tester.pump(const Duration(seconds: 1));
         await tester.pumpAndSettle();
 
+        // Flutter resolves this path against `test/`, not the test's own
+        // folder — hence the `goldens/` prefix so baselines land next to this
+        // file at `test/goldens/_baselines/`.
         await expectLater(
           find.byType(MaterialApp),
-          matchesGoldenFile('_baselines/${screen.slug}-$variant.png'),
+          matchesGoldenFile('goldens/_baselines/${screen.slug}-$variant.png'),
         );
       }, tags: ['golden']);
     }
