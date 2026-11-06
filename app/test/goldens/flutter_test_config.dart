@@ -83,14 +83,24 @@ Future<void> _loadLucideIfFound() async {
     debugPrint('[goldens] no .ttf under ${root.path}');
     return;
   }
-  // IconData from the package carries `fontPackage: lucide_icons_flutter`;
-  // the loader family for a packaged font is `packages/<pkg>/<family>`.
-  final lucide = FontLoader('packages/lucide_icons_flutter/LucideIcons');
+  // The TTF filename is the family name the IconData expects; the package
+  // declares each weight as its own family (LucideVariable-w100..900, etc.).
+  // Register each file under its own family, with the `packages/<pkg>/`
+  // prefix that a packaged font needs.
+  final fonts = <String, List<File>>{};
   for (final f in fontFiles) {
-    lucide.addFont(_fontFromFile(f.path));
+    final name = f.uri.pathSegments.last;
+    final family = name.substring(0, name.length - 4); // strip .ttf
+    fonts.putIfAbsent(family, () => []).add(f);
   }
-  await lucide.load();
-  debugPrint('[goldens] loaded Lucide: ${fontFiles.map((f) => f.path).join(", ")}');
+  for (final e in fonts.entries) {
+    final loader = FontLoader('packages/lucide_icons_flutter/${e.key}');
+    for (final f in e.value) {
+      loader.addFont(_fontFromFile(f.path));
+    }
+    await loader.load();
+  }
+  debugPrint('[goldens] loaded Lucide families: ${fonts.keys.join(", ")}');
 }
 
 class _TolerantComparator extends LocalFileComparator {
