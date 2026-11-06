@@ -6,6 +6,7 @@ import 'core/db/app_database.dart';
 import 'features/calendar/calendar_screen.dart';
 import 'features/calendar/event_detail_screen.dart';
 import 'features/calendar/event_form_screen.dart';
+import 'features/documents/documents_screen.dart';
 import 'features/finance/categories_screen.dart';
 import 'features/finance/finance_screen.dart';
 import 'features/finance/tx_detail_screen.dart';
@@ -25,6 +26,7 @@ import 'features/notes/notes_screen.dart';
 import 'features/reminders/reminder_detail_screen.dart';
 import 'features/reminders/reminder_form_screen.dart';
 import 'features/reminders/reminders_screen.dart';
+import 'features/reports/reports_providers.dart';
 import 'features/reports/reports_screen.dart';
 import 'features/salary/add_salary_screen.dart';
 import 'features/salary/allocation_screen.dart';
@@ -105,6 +107,13 @@ abstract final class Routes {
   static const newGoal = '/goals/new';
   static String goal(String id) => '/goals/$id';
   static String editGoal(String id) => '/goals/edit/$id';
+
+  // Documents and reports.
+  static const documents = '/documents';
+  static const importDoc = '/documents/new';
+  static String document(String id) => '/documents/$id';
+  static String viewDocument(String id) => '/documents/$id/view';
+  static String reportsTab(ReportTab tab) => '/reports?tab=${tab.name}';
 }
 
 /// Built once for the app's lifetime, so locale/theme changes never reset navigation.
@@ -149,7 +158,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       page(Routes.savings, (_) => const SavingsScreen()),
       page('/shops/:id', (s) => ShopDetailScreen(id: s.pathParameters['id']!)),
       page(Routes.shops, (_) => const ShopsScreen()),
-      page(Routes.reports, (_) => const ReportsScreen()),
+      page(Routes.reports, (s) => ReportsScreen(tab: ReportTab.values.asNameMap()[s.uri.queryParameters['tab']] ?? ReportTab.fin)),
       // `/tasks/new` and `/tasks/edit/:id` come before `/tasks/:id`.
       page('/tasks/new', (s) => TaskFormScreen(projectId: s.uri.queryParameters['project'])),
       page('/tasks/edit/:id', (s) => TaskFormScreen.edit(id: s.pathParameters['id']!)),
@@ -178,6 +187,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       page(Routes.newGoal, (_) => const GoalFormScreen()),
       page('/goals/edit/:id', (s) => GoalFormScreen.edit(id: s.pathParameters['id']!)),
       page('/goals/:id', (s) => GoalDetailScreen(id: s.pathParameters['id']!)),
+      page(Routes.documents, (_) => const DocumentsScreen()),
+      page(Routes.importDoc, (_) => const ImportDocumentScreen()),
+      page('/documents/:id/view', (s) => DocumentViewerScreen(id: s.pathParameters['id']!)),
+      page('/documents/:id', (s) => DocumentDetailScreen(id: s.pathParameters['id']!)),
     ],
   );
   ref.onDispose(router.dispose);

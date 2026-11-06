@@ -13,6 +13,7 @@ import '../../core/format/format_provider.dart';
 import '../../core/theme/dl_tokens.dart';
 import '../../core/widgets/dl_widgets.dart';
 import '../../l10n/app_localizations.dart';
+import 'work_providers.dart';
 
 /// Status label (prototype `stInfo`).
 String statusLabel(AppLocalizations t, TaskStatus s) => switch (s) {
@@ -242,6 +243,43 @@ class WorkTimeline extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// This week's logged hours, Saturday to Friday, today highlighted (the Work
+/// tab and the productivity report; the report draws them teal).
+class WeekHoursChart extends ConsumerWidget {
+  const WeekHoursChart({super.key, this.color});
+
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = AppLocalizations.of(context);
+    final f = ref.watch(formatProvider);
+    final today = dateOnly(ref.watch(clockProvider)());
+    final start = weekStartOf(today);
+    final minutes = ref.watch(weekMinutesProvider).value ?? const <String, int>{};
+    final days = [for (var i = 0; i < 7; i++) DateTime(start.year, start.month, start.day + i)];
+    final hours = [for (final d in days) (minutes[dayKey(d)] ?? 0) / 60];
+    return DLCard(
+      child: DLBarChart(
+        height: 120,
+        barAreaHeight: 80,
+        colors: color == null ? null : [color!],
+        selectedIndex: days.indexWhere((d) => dayKey(d) == dayKey(today)),
+        semanticLabel: t.weekly,
+        groups: [
+          for (final (i, d) in days.indexed)
+            DLBarGroup(
+              label: f.weekdayShort(d),
+              values: [hours[i]],
+              valueLabel: hours[i] > 0 ? f.oneDecimal(hours[i]) : '',
+              semanticLabel: '${f.dateLong(d)}: ${f.duration(minutes[dayKey(d)] ?? 0)}',
+            ),
+        ],
+      ),
     );
   }
 }

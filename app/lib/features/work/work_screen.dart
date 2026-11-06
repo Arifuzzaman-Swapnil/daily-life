@@ -223,7 +223,7 @@ class _TimerHero extends ConsumerWidget {
   }
 }
 
-/// This week's logged hours, Saturday to Friday, today highlighted.
+/// This week's logged hours under the "Weekly productivity" title.
 class _WeekChart extends ConsumerWidget {
   const _WeekChart();
 
@@ -232,34 +232,12 @@ class _WeekChart extends ConsumerWidget {
     final t = AppLocalizations.of(context);
     final c = context.dl;
     final f = ref.watch(formatProvider);
-    final today = dateOnly(ref.watch(clockProvider)());
-    final start = weekStartOf(today);
-    final minutes = ref.watch(weekMinutesProvider).value ?? const <String, int>{};
-    final days = [for (var i = 0; i < 7; i++) DateTime(start.year, start.month, start.day + i)];
-    final hours = [for (final d in days) (minutes[dayKey(d)] ?? 0) / 60];
-    final total = minutes.values.fold<int>(0, (a, b) => a + b);
-
+    final total = (ref.watch(weekMinutesProvider).value ?? const <String, int>{}).values.fold<int>(0, (a, b) => a + b);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         DLSectionTitle(t.weekly, trailing: Text(f.duration(total), style: DLText.amountSm.copyWith(color: c.textSecondary))),
-        DLCard(
-          child: DLBarChart(
-            height: 120,
-            barAreaHeight: 80,
-            selectedIndex: days.indexWhere((d) => dayKey(d) == dayKey(today)),
-            semanticLabel: t.weekly,
-            groups: [
-              for (final (i, d) in days.indexed)
-                DLBarGroup(
-                  label: f.weekdayShort(d),
-                  values: [hours[i]],
-                  valueLabel: hours[i] > 0 ? f.oneDecimal(hours[i]) : '',
-                  semanticLabel: '${f.dateLong(d)}: ${f.duration(minutes[dayKey(d)] ?? 0)}',
-                ),
-            ],
-          ),
-        ),
+        const WeekHoursChart(),
       ],
     );
   }

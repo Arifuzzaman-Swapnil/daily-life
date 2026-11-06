@@ -9,6 +9,7 @@ import '../../core/theme/dl_tokens.dart';
 import '../../core/widgets/dl_widgets.dart';
 import '../../l10n/app_localizations.dart';
 import '../../router.dart';
+import '../reports/reports_providers.dart';
 import 'work_providers.dart';
 import 'work_ui.dart';
 
@@ -69,7 +70,7 @@ class _WorkHistoryScreenState extends ConsumerState<WorkHistoryScreen> {
       appBar: DLAppBar(
         title: t.workHistory,
         onLeading: () => popOr(context, Routes.work),
-        actions: [DLIconButton(icon: DLIcons.chart, tooltip: t.productivity, onPressed: () => context.push(Routes.reports))],
+        actions: [DLIconButton(icon: DLIcons.chart, tooltip: t.productivity, onPressed: () => context.push(Routes.reportsTab(ReportTab.prod)))],
       ),
       body: ListView(
         padding: EdgeInsets.fromLTRB(DLSpace.s4, DLSpace.s1, DLSpace.s4, DLSpace.s12 + MediaQuery.paddingOf(context).bottom),

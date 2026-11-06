@@ -102,6 +102,14 @@ abstract final class DLIcons {
   static const IconData walk = LucideIcons.footprints;
   static const IconData sunrise = LucideIcons.sunrise;
 
+  // Documents and reports.
+  /// A PDF (prototype `file`).
+  static const IconData file = LucideIcons.file;
+  static const IconData image = LucideIcons.image;
+  static const IconData upload = LucideIcons.upload;
+  static const IconData share = LucideIcons.share2;
+  static const IconData download = LucideIcons.download;
+
   /// A stored icon key (prototype `I` name, e.g. `food`, `cash`) → icon.
   /// Unknown keys fall back to [tag], the custom-category icon.
   static IconData byKey(String key) => switch (key) {

@@ -69,7 +69,7 @@ class MoreScreen extends ConsumerWidget {
         row(DLIcons.target, DLTone.accent, t.goalsT, t.goalSubM(f.count(goals)), Routes.goals),
       ]),
       (t.vault, [
-        row(DLIcons.folder, DLTone.neutral, t.docs, t.docSubM(f.count(docs)), null),
+        row(DLIcons.folder, DLTone.neutral, t.docs, t.docSubM(f.count(docs)), Routes.documents),
         row(DLIcons.chart, DLTone.accent, t.reports, t.repSubM, Routes.reports),
       ]),
       (t.settings, [row(DLIcons.gear, DLTone.neutral, t.settings, t.setSubM, Routes.settings)]),

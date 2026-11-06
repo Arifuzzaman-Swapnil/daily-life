@@ -83,8 +83,7 @@ class NotificationsScreen extends ConsumerWidget {
 }
 
 /// Where an inbox item's `route` (a prototype screen id) leads, or null.
-/// Reminders, health, notes, goals and documents live under More; their own
-/// screens arrive in build step 6.
+/// Unknown ids open the More tab.
 String? inboxDestination(String route) => switch (route) {
       '' => null,
       'home' => Routes.home,
@@ -98,6 +97,7 @@ String? inboxDestination(String route) => switch (route) {
       'notes' => Routes.notes,
       'health' => Routes.health,
       'goals' => Routes.goals,
+      'docs' => Routes.documents,
       'salary' => Routes.salary,
       'allocation' => Routes.allocation,
       'savings' => Routes.savings,

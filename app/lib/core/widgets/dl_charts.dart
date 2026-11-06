@@ -8,7 +8,7 @@ import 'dl_motion.dart';
 
 /// One column of [DLBarChart]: a label under the axis and one bar per series.
 class DLBarGroup {
-  const DLBarGroup({required this.label, required this.values, this.semanticLabel, this.valueLabel});
+  const DLBarGroup({required this.label, required this.values, this.semanticLabel, this.valueLabel, this.colors});
 
   /// Axis label, already formatted (may be empty to thin out a long axis).
   final String label;
@@ -19,6 +19,10 @@ class DLBarGroup {
 
   /// Small figure above the bars (the work-hours chart).
   final String? valueLabel;
+
+  /// This group's bar colours, overriding the chart's (water days that met
+  /// the target vs. not).
+  final List<Color>? colors;
 }
 
 /// Grouped bar chart (prototype `.chart`): groups share the width 6 apart, each
@@ -91,7 +95,7 @@ class DLBarChart extends StatelessWidget {
                     width: width,
                     height: area * (v.isNaN ? 0 : v.clamp(0, top)) / top,
                     decoration: BoxDecoration(
-                      color: palette[i % palette.length],
+                      color: (g.colors ?? palette)[i % (g.colors ?? palette).length],
                       borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
                     ),
                   ),

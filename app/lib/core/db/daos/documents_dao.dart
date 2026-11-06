@@ -27,6 +27,8 @@ class DocumentsDao extends DatabaseAccessor<AppDatabase> with _$DocumentsDaoMixi
 
   Future<Document?> documentById(String id) => (select(documents)..where((d) => d.id.equals(id))).getSingleOrNull();
 
+  Stream<Document?> watchDocument(String id) => (select(documents)..where((d) => d.id.equals(id))).watchSingleOrNull();
+
   /// Inserts [row] and returns its id.
   Future<String> addDocument(DocumentsCompanion row) async {
     final id = row.id.present ? row.id.value : newId();

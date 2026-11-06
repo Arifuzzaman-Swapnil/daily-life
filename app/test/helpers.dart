@@ -4,6 +4,7 @@ import 'package:dailylife/app.dart';
 import 'package:dailylife/core/db/app_database.dart';
 import 'package:dailylife/core/db/db_providers.dart';
 import 'package:dailylife/core/db/sample/sample_data.dart';
+import 'package:dailylife/core/files/file_service.dart';
 import 'package:dailylife/core/format/dl_format.dart';
 import 'package:dailylife/core/format/format_provider.dart';
 import 'package:dailylife/core/notifications/notification_scheduler.dart';
@@ -71,6 +72,7 @@ Future<AppDatabase> pumpApp(
         appDatabaseProvider.overrideWithValue(db),
         clockProvider.overrideWithValue(clock ?? (() => kToday)),
         notificationSchedulerProvider.overrideWithValue(FakeNotificationScheduler()),
+        fileServiceProvider.overrideWithValue(FakeFileService()),
       ],
       child: const DailyLifeApp(),
     ),
@@ -96,6 +98,39 @@ class FakeNotificationScheduler implements NotificationScheduler {
 /// The fake scheduler [pumpApp] installs.
 FakeNotificationScheduler notificationsOf(WidgetTester tester) =>
     containerOf(tester).read(notificationSchedulerProvider) as FakeNotificationScheduler;
+
+/// Stands in for the device's files: the picker returns [next] (a file per
+/// kind by default), storing and sharing are recorded.
+class FakeFileService implements FileService {
+  PickedFile? Function(DocKind kind) next = (kind) => kind == DocKind.pdf
+      ? const PickedFile(path: '/picked/scan.pdf', name: 'scan_2026-11-06.pdf', size: 798720)
+      : const PickedFile(path: '/picked/photo.jpg', name: 'IMG_20261106_1042.jpg', size: 1468006);
+  final stored = <String>[];
+  final deleted = <String?>[];
+  final shared = <String>[];
+
+  @override
+  Future<PickedFile?> pick(DocKind kind) async => next(kind);
+
+  @override
+  Future<({String path, int pages})> store(PickedFile file, String id, DocKind kind) async {
+    stored.add(id);
+    return (path: '/app/documents/$id', pages: kind == DocKind.pdf ? 2 : 1);
+  }
+
+  @override
+  Future<void> delete(String? path) async => deleted.add(path);
+
+  @override
+  Future<void> share({String? path, required String text}) async => shared.add(text);
+
+  @override
+  Future<void> shareTextFile(String fileName, String content, {required String subject}) async => shared.add('$fileName
+$content');
+}
+
+/// The fake file service [pumpApp] installs.
+FakeFileService filesOf(WidgetTester tester) => containerOf(tester).read(fileServiceProvider) as FakeFileService;
 
 /// A clock that starts at [kToday] and moves only when told to.
 class TestClock {

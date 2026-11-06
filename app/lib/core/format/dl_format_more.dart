@@ -58,6 +58,12 @@ extension DLFormatMore on DLFormat {
     return '${names[first.month]}–${names[last.month]} ${digitsOf(last.year)}';
   }
 
+  /// A file size: 245760 → `২৪০ KB`, 1468006 → `১.৪ MB`.
+  String fileSize(int bytes) {
+    if (bytes >= 1024 * 1024) return '${oneDecimal(bytes / (1024 * 1024))} MB';
+    return '${digitsOf((bytes / 1024).round())} KB';
+  }
+
   /// A stopwatch reading: 2723 s → `০০:৪৫:২৩`.
   String stopwatch(int seconds) {
     String two(int n) => n.toString().padLeft(2, '0');
