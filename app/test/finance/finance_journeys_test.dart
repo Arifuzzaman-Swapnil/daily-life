@@ -1,10 +1,10 @@
 // Acceptance journeys 2–5 from the brief (build step 4), on the sample data in
-// Bengali. The Home part of journey 3 ("Dashboard totals and recent list
-// update") follows with the dashboard in step 5.
+// Bengali. Journey 3 ends on Home (step 5): its totals and recent list update.
 import 'package:dailylife/core/db/app_database.dart';
 import 'package:dailylife/core/widgets/dl_widgets.dart';
 import 'package:dailylife/features/finance/finance_screen.dart';
 import 'package:dailylife/features/finance/money_providers.dart';
+import 'package:dailylife/router.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -56,7 +56,7 @@ void main() {
     expect((saved.amount, saved.categoryId, saved.paymentMethod, saved.date), (2500, 'bonus', PaymentMethod.bank, DateTime(2026, 11, 6)));
   });
 
-  testWidgets('journey 3: Add expense with a budget category → Finance totals update', (tester) async {
+  testWidgets('journey 3: Add expense with a budget category → Finance and Home totals update', (tester) async {
     final db = await pumpApp(tester, sampleData: true, size: kTallPhone);
     await openFinance(tester);
 
@@ -82,6 +82,16 @@ void main() {
     await tapOn(tester, find.text('নতুন বই'));
     expect(titleBar('লেনদেনের বিবরণ'), findsOneWidget);
     expect(find.text('ব্যক্তিগত খরচ'), findsOneWidget);
+    expect(find.text('−৳১,০০০'), findsOneWidget);
+
+    // Home: the month's totals and the recent list include it (12:00, after lunch).
+    containerOf(tester).read(routerProvider).pop();
+    await tester.pumpAndSettle();
+    await tester.tap(navLabel('হোম'));
+    await tester.pumpAndSettle();
+    await expectHero(tester, '৳১৬,১২০', '৳৫০,০০০', '৳২৩,৮৮০');
+    await scrollTo(tester, find.text('কেনাকাটা · আজ'));
+    expect([for (final r in tester.widgetList<TxRow>(find.byType(TxRow))) r.x.title].take(2).toList(), ['দুপুরের খাবার', 'নতুন বই']);
     expect(find.text('−৳১,০০০'), findsOneWidget);
   });
 

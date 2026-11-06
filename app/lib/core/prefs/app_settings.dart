@@ -22,6 +22,7 @@ class AppSettings {
     this.dateStyle = DateStyle.written,
     this.banglaDate = true,
     this.themeMode = ThemeMode.light,
+    this.displayName = '',
   });
 
   /// First launch: Bengali, Bengali digits, written dates, Bangla calendar line on, Light theme.
@@ -33,14 +34,19 @@ class AppSettings {
   final bool banglaDate;
   final ThemeMode themeMode;
 
+  /// The name Home greets (set by onboarding, step 7). Empty until then.
+  final String displayName;
+
   Locale get locale => Locale(lang.name);
 
-  AppSettings copyWith({AppLang? lang, DigitStyle? digits, DateStyle? dateStyle, bool? banglaDate, ThemeMode? themeMode}) => AppSettings(
+  AppSettings copyWith({AppLang? lang, DigitStyle? digits, DateStyle? dateStyle, bool? banglaDate, ThemeMode? themeMode, String? displayName}) =>
+      AppSettings(
         lang: lang ?? this.lang,
         digits: digits ?? this.digits,
         dateStyle: dateStyle ?? this.dateStyle,
         banglaDate: banglaDate ?? this.banglaDate,
         themeMode: themeMode ?? this.themeMode,
+        displayName: displayName ?? this.displayName,
       );
 
   @override
@@ -50,10 +56,11 @@ class AppSettings {
       other.digits == digits &&
       other.dateStyle == dateStyle &&
       other.banglaDate == banglaDate &&
-      other.themeMode == themeMode;
+      other.themeMode == themeMode &&
+      other.displayName == displayName;
 
   @override
-  int get hashCode => Object.hash(lang, digits, dateStyle, banglaDate, themeMode);
+  int get hashCode => Object.hash(lang, digits, dateStyle, banglaDate, themeMode, displayName);
 }
 
 /// Storage keys. Values are enum `.name`s so they stay readable in backups.
@@ -63,6 +70,14 @@ abstract final class PrefKeys {
   static const dateStyle = 'pref.dateStyle';
   static const banglaDate = 'pref.banglaDate';
   static const themeMode = 'pref.themeMode';
+  static const displayName = 'pref.displayName';
+
+  /// Home dashboard: section names in order, and the hidden ones.
+  static const dashOrder = 'pref.dash.order';
+  static const dashHidden = 'pref.dash.hidden';
+
+  /// Daily water target in ml.
+  static const waterTarget = 'pref.waterTarget';
 
   /// Sample data: true once seeded, false when the person turned it off, absent
   /// when never decided.
@@ -82,6 +97,7 @@ class SettingsController extends Notifier<AppSettings> {
       dateStyle: _enum(DateStyle.values, p.getString(PrefKeys.dateStyle)) ?? d.dateStyle,
       banglaDate: p.getBool(PrefKeys.banglaDate) ?? d.banglaDate,
       themeMode: _enum(ThemeMode.values, p.getString(PrefKeys.themeMode)) ?? d.themeMode,
+      displayName: p.getString(PrefKeys.displayName) ?? d.displayName,
     );
   }
 
@@ -112,6 +128,12 @@ class SettingsController extends Notifier<AppSettings> {
   Future<void> setThemeMode(ThemeMode mode) async {
     state = state.copyWith(themeMode: mode);
     await _prefs.setString(PrefKeys.themeMode, mode.name);
+  }
+
+  Future<void> setDisplayName(String name) async {
+    final trimmed = name.trim();
+    state = state.copyWith(displayName: trimmed);
+    await _prefs.setString(PrefKeys.displayName, trimmed);
   }
 
   static T? _enum<T extends Enum>(List<T> values, String? name) {

@@ -12,6 +12,7 @@ import '../../l10n/app_localizations.dart';
 import '../../router.dart';
 import 'categories.dart';
 import 'money_providers.dart';
+import 'month_sheet.dart';
 
 /// Finance tab (prototype `finance`, screenshot 10): month switcher, remaining
 /// balance, savings and shop-credit cards, tools, and the month's transactions
@@ -63,7 +64,7 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
         label: f.monthYear(month),
         onBack: months.canGoBack ? months.back : null,
         onForward: months.canGoForward ? months.forward : null,
-        onPick: () => showDLSheet<void>(context, title: t.monthSel, builder: (_) => const _MonthSheet()),
+        onPick: () => showMonthSheet(context),
       ),
       const SizedBox(height: DLSpace.s3),
       DLBalanceHero(
@@ -232,12 +233,14 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
 }
 
 /// A transaction in a list (prototype `.li` from `txView`): icon tile, title,
-/// "category · time · method", signed amount. Opens the details.
+/// "category · time · method", signed amount. Opens the details. With
+/// [relativeDate] the subtitle is "category · আজ/গতকাল/৪ নভে" (Home's recent list).
 class TxRow extends ConsumerWidget {
-  const TxRow({super.key, required this.x, required this.book});
+  const TxRow({super.key, required this.x, required this.book, this.relativeDate = false});
 
   final Txn x;
   final CategoryBook book;
+  final bool relativeDate;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -250,7 +253,9 @@ class TxRow extends ConsumerWidget {
     return DLListRow(
       leading: DLIconChip(icon: icon.icon, tone: icon.tone),
       title: x.title,
-      subtitle: '${info.label} · ${f.time(x.time)} · ${paymentLabel(t, x.paymentMethod)}',
+      subtitle: relativeDate
+          ? '${info.label} · ${f.relative(x.date, ref.watch(clockProvider)())}'
+          : '${info.label} · ${f.time(x.time)} · ${paymentLabel(t, x.paymentMethod)}',
       trailing: Text(
         f.taka(x.amount, sign: income ? '+' : '-'),
         style: DLText.amountMd.copyWith(color: income ? c.successText : c.dangerText),
@@ -411,44 +416,6 @@ class _ActiveFilters extends ConsumerWidget {
           ],
         ],
       ),
-    );
-  }
-}
-
-/// Month picker sheet: the last 6 months with each month's net.
-class _MonthSheet extends ConsumerWidget {
-  const _MonthSheet();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final c = context.dl;
-    final f = ref.watch(formatProvider);
-    final selected = ref.watch(selectedMonthProvider);
-    final series = ref.watch(monthlySeriesProvider(6)).value ?? const [];
-    return DLList(
-      outlined: true,
-      children: [
-        for (final m in series.reversed)
-          DLListRow(
-            minHeight: 56,
-            title: f.monthYear(m.month),
-            titleStyle: DLText.textBodyLg,
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(f.taka(m.income - m.expense), style: DLText.amountSm.copyWith(color: c.textSecondary)),
-                if (m.month == selected) ...[
-                  const SizedBox(width: DLSpace.s2),
-                  Icon(DLIcons.check, size: DLSize.icon, color: c.accentText),
-                ],
-              ],
-            ),
-            onTap: () {
-              ref.read(selectedMonthProvider.notifier).show(m.month);
-              Navigator.of(context).pop();
-            },
-          ),
-      ],
     );
   }
 }

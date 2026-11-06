@@ -21,9 +21,12 @@ class DLAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.leading = DLAppBarLeading.back,
     this.onLeading,
     this.actions = const [],
-  }) : root = false;
+  })  : root = false,
+        titleWidget = null;
 
-  const DLAppBar.root({super.key, required this.title, this.actions = const []})
+  /// [titleWidget] replaces the title text, e.g. Home's date over the Bangla
+  /// date; [title] then only names the bar for screen readers.
+  const DLAppBar.root({super.key, required this.title, this.actions = const [], this.titleWidget})
       : root = true,
         leading = DLAppBarLeading.none,
         onLeading = null;
@@ -31,6 +34,7 @@ class DLAppBar extends StatelessWidget implements PreferredSizeWidget {
   static const double height = 64;
 
   final String title;
+  final Widget? titleWidget;
   final DLAppBarLeading leading;
 
   /// Defaults to popping the current route.
@@ -57,12 +61,14 @@ class DLAppBar extends StatelessWidget implements PreferredSizeWidget {
           padding: EdgeInsets.only(left: root ? 0 : DLSpace.s1),
           child: Semantics(
             header: true,
-            child: Text(
-              title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: (root ? DLText.textH1 : DLText.textH2).copyWith(color: c.textPrimary),
-            ),
+            label: titleWidget != null ? title : null,
+            child: titleWidget ??
+                Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: (root ? DLText.textH1 : DLText.textH2).copyWith(color: c.textPrimary),
+                ),
           ),
         ),
       ),

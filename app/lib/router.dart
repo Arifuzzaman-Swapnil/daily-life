@@ -3,11 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'core/db/app_database.dart';
-import 'core/widgets/dl_widgets.dart';
 import 'features/finance/categories_screen.dart';
 import 'features/finance/finance_screen.dart';
 import 'features/finance/tx_detail_screen.dart';
 import 'features/finance/tx_form_screen.dart';
+import 'features/home/home_screen.dart';
+import 'features/home/notifications_screen.dart';
 import 'features/more/more_screen.dart';
 import 'features/reports/reports_screen.dart';
 import 'features/salary/add_salary_screen.dart';
@@ -28,8 +29,12 @@ abstract final class Routes {
   static const work = '/work';
   static const more = '/more';
 
+  /// The 5 root tabs: reached with `go`, everything else with `push`.
+  static const tabs = {home, finance, calendar, work, more};
+
   // Full-screen pages above the shell (no bottom nav).
   static const settings = '/settings';
+  static const notifications = '/notifications';
 
   /// New transaction of [type].
   static String newTx(TxType type) => '/tx/new?type=${type.name}';
@@ -58,7 +63,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state, shell) => AppShell(shell: shell),
         branches: [
           StatefulShellBranch(routes: [
-            GoRoute(path: Routes.home, builder: (context, state) => const _HomeTab()),
+            GoRoute(path: Routes.home, builder: (context, state) => const HomeScreen()),
           ]),
           StatefulShellBranch(routes: [
             GoRoute(path: Routes.finance, builder: (context, state) => const FinanceScreen()),
@@ -75,6 +80,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         ],
       ),
       page(Routes.settings, (_) => const SettingsScreen()),
+      page(Routes.notifications, (_) => const NotificationsScreen()),
       // `/tx/new` and `/tx/edit/:id` come before `/tx/:id`.
       page('/tx/new', (s) => TxFormScreen(type: s.uri.queryParameters['type'] == TxType.income.name ? TxType.income : TxType.expense)),
       page('/tx/edit/:id', (s) => TxFormScreen.edit(id: s.pathParameters['id']!)),
@@ -100,21 +106,5 @@ void popOr(BuildContext context, [String fallback = Routes.home]) {
     context.pop();
   } else {
     context.go(fallback);
-  }
-}
-
-/// Home placeholder with the prototype's settings shortcut in the title bar.
-class _HomeTab extends StatelessWidget {
-  const _HomeTab();
-
-  @override
-  Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context);
-    return TabPlaceholder(
-      title: t.home,
-      actions: [
-        DLIconButton(icon: DLIcons.gear, tooltip: t.settings, onPressed: () => context.push(Routes.settings)),
-      ],
-    );
   }
 }

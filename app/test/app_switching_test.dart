@@ -3,6 +3,7 @@
 import 'package:dailylife/core/format/dl_format.dart';
 import 'package:dailylife/core/prefs/app_settings.dart';
 import 'package:dailylife/core/theme/dl_tokens.dart';
+import 'package:dailylife/features/home/home_screen.dart';
 import 'package:dailylife/features/settings/settings_screen.dart';
 import 'package:dailylife/router.dart';
 import 'package:flutter/material.dart';
@@ -102,8 +103,10 @@ void main() {
 
   testWidgets('settings survive a restart', (tester) async {
     await pumpApp(tester, prefs: {PrefKeys.lang: 'en', PrefKeys.digits: 'en', PrefKeys.themeMode: 'dark'});
-    expect(titleBar('Home'), findsOneWidget);
-    expect(find.text('৳125,000'), findsOneWidget);
+    expect(find.byType(HomeScreen), findsOneWidget);
+    expect(find.text('Make today productive.'), findsOneWidget);
+    expect(find.text('Friday, 6 November'), findsOneWidget);
+    expect(find.text('+৳0 this month'), findsOneWidget);
     expect(Theme.of(tester.element(find.byType(Scaffold).first)).brightness, Brightness.dark);
   });
 }

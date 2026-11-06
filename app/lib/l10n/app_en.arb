@@ -1451,5 +1451,14 @@
   "streak2": "Current streak",
   "@streak2": {},
   "changeStatus": "Change status",
-  "@changeStatus": {}
+  "@changeStatus": {},
+  "savMonthTag": "{a} this month",
+  "@savMonthTag": {
+    "description": "Home savings card tag: this month's net deposits (the prototype wrote this text inline).",
+    "placeholders": {
+      "a": {
+        "type": "String"
+      }
+    }
+  }
 }

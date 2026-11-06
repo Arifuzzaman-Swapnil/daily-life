@@ -635,5 +635,6 @@
   "setSubM": "ভাষা, থিম, গোপনীয়তা",
   "tasksN2": "কাজ",
   "streak2": "বর্তমান ধারা",
-  "changeStatus": "অবস্থা বদলান"
+  "changeStatus": "অবস্থা বদলান",
+  "savMonthTag": "{a} এ মাসে"
 }

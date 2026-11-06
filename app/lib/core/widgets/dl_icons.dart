@@ -25,7 +25,19 @@ abstract final class DLIcons {
   static const IconData chevronLeft = LucideIcons.chevronLeft;
   static const IconData chevronRight = LucideIcons.chevronRight;
   static const IconData chevronDown = LucideIcons.chevronDown;
+  static const IconData chevronUp = LucideIcons.chevronUp;
   static const IconData edit = LucideIcons.pencil;
+  static const IconData sun = LucideIcons.sun;
+  static const IconData moon = LucideIcons.moon;
+  static const IconData bell = LucideIcons.bell;
+
+  /// Customize dashboard (prototype `sliders`).
+  static const IconData sliders = LucideIcons.slidersVertical;
+  static const IconData users = LucideIcons.users;
+
+  /// Water (prototype `drop`).
+  static const IconData drop = LucideIcons.droplet;
+  static const IconData flame = LucideIcons.flame;
   static const IconData filter = LucideIcons.funnel;
   static const IconData tag = LucideIcons.tag;
   static const IconData chart = LucideIcons.chartColumn;
@@ -75,6 +87,12 @@ abstract final class DLIcons {
         'wifi' => wifi,
         'piggy' => piggy,
         'wallet' => wallet,
+        // Notification icons (inbox items).
+        'bell' => bell,
+        'users' => users,
+        'drop' => drop,
+        'cal' => calendar,
+        'flame' => flame,
         _ => tag,
       };
 }

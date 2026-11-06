@@ -1,5 +1,6 @@
 import 'package:dailylife/core/theme/dl_tokens.dart';
 import 'package:dailylife/core/widgets/dl_bottom_nav.dart';
+import 'package:dailylife/features/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -12,12 +13,13 @@ void main() {
     for (final label in ['হোম', 'হিসাব', 'ক্যালেন্ডার', 'কাজ', 'আরও']) {
       expect(navLabel(label), findsOneWidget, reason: label);
     }
-    expect(titleBar('হোম'), findsOneWidget);
+    expect(find.byType(HomeScreen), findsOneWidget);
+    expect(find.text('আজকের দিনটি সুন্দর হোক।'), findsOneWidget);
 
     // Formatted values follow the Bengali defaults.
     expect(find.text('৬ নভেম্বর, শুক্রবার'), findsOneWidget);
     expect(find.text('২১ কার্তিক ১৪৩৩'), findsOneWidget);
-    expect(find.text('৳১,২৫,০০০'), findsOneWidget);
+    expect(find.text('+৳০ এ মাসে'), findsOneWidget);
 
     final ctx = tester.element(find.byType(DLBottomNav));
     expect(Theme.of(ctx).brightness, Brightness.light);
