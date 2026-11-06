@@ -25,7 +25,7 @@ Future<void> openFinance(WidgetTester tester) async {
 
 void main() {
   testWidgets('journey 2: Finance → Add income → Save → top of the list, Income tab, toast', (tester) async {
-    final db = await pumpApp(tester, sampleData: true);
+    final db = await pumpApp(tester, sampleData: true, size: kTallPhone);
     await openFinance(tester);
     expectHero('৳১৭,১২০', '৳৫০,০০০', '৳২২,৮৮০');
 
@@ -52,7 +52,7 @@ void main() {
   });
 
   testWidgets('journey 3: Add expense with a budget category → Finance totals update', (tester) async {
-    final db = await pumpApp(tester, sampleData: true);
+    final db = await pumpApp(tester, sampleData: true, size: kTallPhone);
     await openFinance(tester);
 
     await tapOn(tester, find.byTooltip('যোগ করুন'));
@@ -81,7 +81,7 @@ void main() {
   });
 
   testWidgets('journey 4: Salary → Add salary → income recorded → Allocate → over-allocation warning', (tester) async {
-    final db = await pumpApp(tester, sampleData: true);
+    final db = await pumpApp(tester, sampleData: true, size: kTallPhone);
     await openFinance(tester);
 
     await tapOn(tester, find.text('বেতন ব্যবস্থাপনা'));
@@ -120,7 +120,7 @@ void main() {
   });
 
   testWidgets('journey 5: Shop credit → purchase → partial payment; overpay blocked', (tester) async {
-    final db = await pumpApp(tester, sampleData: true);
+    final db = await pumpApp(tester, sampleData: true, size: kTallPhone);
     await openFinance(tester);
 
     await tapOn(tester, find.text('দোকানের বাকি').first);

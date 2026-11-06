@@ -21,6 +21,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// The prototype's fixed "today".
 final kToday = DateTime(2026, 11, 6, 9, 30);
 
+/// A phone tall enough that long screens (Finance, forms) build completely, for
+/// tests about behaviour rather than layout.
+const kTallPhone = Size(393, 1800);
+
 /// The bundled sample data, read synchronously (widget tests run in a fake
 /// async zone where real file IO never completes).
 final sampleJson = File(SampleDataService.asset).readAsStringSync();
@@ -49,7 +53,9 @@ Future<AppDatabase> pumpApp(
   SharedPreferences.setMockInitialValues(prefs);
   final sp = await SharedPreferences.getInstance();
   final db = memoryDatabase();
-  addTearDown(db.close);
+  // When a test fails, its widgets (and their stream listeners) stay mounted in
+  // the finished fake-async zone, so close() would never complete.
+  addTearDown(() => db.close().timeout(const Duration(seconds: 2), onTimeout: () {}));
   if (sampleData) {
     final lang = AppLang.values.asNameMap()[prefs[PrefKeys.lang]] ?? AppLang.bn;
     await tester.runAsync(() => SampleDataService(db, loadJson: () async => sampleJson).load(lang));
@@ -86,8 +92,10 @@ Finder titleBar(String text) => find.descendant(of: find.byType(DLAppBar), match
 Finder fieldLabelled(String label) =>
     find.descendant(of: find.ancestor(of: find.text(label), matching: find.byType(DLField)).first, matching: find.byType(EditableText));
 
-/// Scrolls [finder] into view, taps it and settles.
+/// Scrolls [finder] into view (building it first if the list hasn't yet),
+/// taps it and settles.
 Future<void> tapOn(WidgetTester tester, Finder finder) async {
+  if (finder.evaluate().isEmpty) await scrollTo(tester, finder);
   await tester.ensureVisible(finder);
   await tester.pumpAndSettle();
   await tester.tap(finder);
@@ -97,6 +105,7 @@ Future<void> tapOn(WidgetTester tester, Finder finder) async {
 /// Types [text] into the field labelled [label] and settles.
 Future<void> typeInto(WidgetTester tester, String label, String text) async {
   final field = fieldLabelled(label);
+  if (field.evaluate().isEmpty) await scrollTo(tester, find.text(label));
   await tester.ensureVisible(field);
   await tester.enterText(field, text);
   await tester.pumpAndSettle();

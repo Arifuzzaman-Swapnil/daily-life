@@ -21,7 +21,7 @@ List<String> listedTitles(WidgetTester tester) => [for (final r in tester.widget
 
 void main() {
   testWidgets('saving an empty expense shows every error and saves nothing (screen 16)', (tester) async {
-    final db = await pumpApp(tester, sampleData: true);
+    final db = await pumpApp(tester, sampleData: true, size: kTallPhone);
     final before = (await db.financeDao.transactionsIn()).length;
     await openRoute(tester, Routes.newTx(TxType.expense));
     expect(titleBar('খরচ যোগ করুন'), findsOneWidget);
@@ -43,7 +43,7 @@ void main() {
   });
 
   testWidgets('a new category from the form is selected and listed on Categories', (tester) async {
-    await pumpApp(tester, sampleData: true);
+    await pumpApp(tester, sampleData: true, size: kTallPhone);
     await openRoute(tester, Routes.newTx(TxType.income));
     await tapOn(tester, find.widgetWithText(DLChip, 'নতুন ক্যাটাগরি'));
     await tapOn(tester, find.text('যোগ করুন')); // empty name
@@ -65,7 +65,7 @@ void main() {
   });
 
   testWidgets('search matches title and category name; filters show as removable chips', (tester) async {
-    await pumpApp(tester, sampleData: true);
+    await pumpApp(tester, sampleData: true, size: kTallPhone);
     await openFinance(tester);
     expect(find.text('১২টি লেনদেন'), findsOneWidget);
 
@@ -102,7 +102,7 @@ void main() {
   });
 
   testWidgets('month switcher stops at the current month and the month sheet picks a month', (tester) async {
-    await pumpApp(tester, sampleData: true);
+    await pumpApp(tester, sampleData: true, size: kTallPhone);
     await openFinance(tester);
     final next = tester.widget<DLIconButton>(find.widgetWithIcon(DLIconButton, DLIcons.chevronRight));
     expect(next.onPressed, isNull);
@@ -117,7 +117,7 @@ void main() {
   });
 
   testWidgets('deleting a transaction asks first, then removes it', (tester) async {
-    final db = await pumpApp(tester, sampleData: true);
+    final db = await pumpApp(tester, sampleData: true, size: kTallPhone);
     await openRoute(tester, Routes.tx('t6'));
     expect(find.text('সিনেমা'), findsOneWidget);
     expect(find.text('১ নভেম্বর, রবিবার, ২০২৬'), findsOneWidget);
@@ -134,7 +134,7 @@ void main() {
   });
 
   testWidgets('a shop payment links to its shop; editing keeps the other details', (tester) async {
-    final db = await pumpApp(tester, sampleData: true);
+    final db = await pumpApp(tester, sampleData: true, size: kTallPhone);
     await openRoute(tester, Routes.tx('t11'));
     await tapOn(tester, find.text('মায়ের দোয়া স্টোর'));
     expect(titleBar('মায়ের দোয়া স্টোর'), findsOneWidget);
@@ -154,7 +154,7 @@ void main() {
   });
 
   testWidgets('savings: withdrawing more than saved is blocked; a deposit adds to the total', (tester) async {
-    await pumpApp(tester, sampleData: true);
+    await pumpApp(tester, sampleData: true, size: kTallPhone);
     await openRoute(tester, Routes.savings);
     expect(find.text('৳১,২৫,০০০'), findsOneWidget);
 
@@ -175,7 +175,7 @@ void main() {
   });
 
   testWidgets('an empty database shows every empty state with its action', (tester) async {
-    await pumpApp(tester);
+    await pumpApp(tester, size: kTallPhone);
     await openFinance(tester);
     await scrollTo(tester, find.text('এখনো কোনো লেনদেন যোগ করা হয়নি।'));
     expect(find.widgetWithText(DLButton, 'আয় যোগ করুন'), findsOneWidget);
