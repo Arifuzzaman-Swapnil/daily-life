@@ -16,15 +16,24 @@ dependencies:
   go_router: ^18.1.0
   shared_preferences: ^2.5.0
   lucide_icons_flutter: ^4.0.2
+  drift: ^2.35.3
+  path_provider: ^2.1.6
+  path: ^1.9.1
+  uuid: ^4.6.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  drift_dev: ^2.35.2
+  build_runner: ^2.17.1
 
 flutter:
   uses-material-design: true
   generate: true
+  assets:
+    # The prototype's seed data, copied unchanged from daily-life-kit/data/.
+    - assets/sample_data.json
   fonts:
     - family: HindSiliguri
       fonts:

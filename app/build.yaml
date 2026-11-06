@@ -1,0 +1,10 @@
+targets:
+  $default:
+    builders:
+      drift_dev:
+        options:
+          # ISO-8601 text keeps millisecond precision (the work timer needs it)
+          # and stays readable in backups.
+          store_date_time_values_as_text: true
+          # DAOs use the core query API; skip the large "manager" API.
+          generate_manager: false

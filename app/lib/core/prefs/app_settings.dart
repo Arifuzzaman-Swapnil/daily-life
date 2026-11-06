@@ -63,6 +63,10 @@ abstract final class PrefKeys {
   static const dateStyle = 'pref.dateStyle';
   static const banglaDate = 'pref.banglaDate';
   static const themeMode = 'pref.themeMode';
+
+  /// Sample data: true once seeded, false when the person turned it off, absent
+  /// when never decided.
+  static const sampleData = 'pref.sampleData';
 }
 
 class SettingsController extends Notifier<AppSettings> {

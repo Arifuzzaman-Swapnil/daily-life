@@ -79,14 +79,20 @@ jobs:
       - name: Generate localizations
         run: flutter gen-l10n
 
+      # Drift tables/DAOs -> *.g.dart. Not committed: there is no local SDK to run it.
+      - name: Generate code (drift)
+        run: dart run build_runner build --delete-conflicting-outputs
+
       - name: Analyze
         run: flutter analyze
 
       - name: Test
         run: flutter test
 
+      # DL_SAMPLE_DATA seeds the prototype's sample data on first launch of this
+      # test build. A real release builds without it and starts empty.
       - name: Build release APK (signed with the debug key)
-        run: flutter build apk --release
+        run: flutter build apk --release --dart-define=DL_SAMPLE_DATA=true
 
       - name: Verify signing certificate
         run: |
