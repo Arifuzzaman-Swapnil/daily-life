@@ -2,6 +2,7 @@
 // screenshots 55–57 and 93) and acceptance journey 9, on the sample data in
 // Bengali with the pinned clock (Friday 2026-11-06).
 import 'package:dailylife/core/widgets/dl_widgets.dart';
+import 'package:dailylife/features/notes/note_editor_screen.dart';
 import 'package:dailylife/features/notes/notes_providers.dart';
 import 'package:dailylife/features/notes/notes_screen.dart';
 import 'package:dailylife/router.dart';
@@ -10,8 +11,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../helpers.dart';
 
-/// The editor's title (first) and body (second) inputs.
-Finder editorField(int i) => find.byType(TextField).at(i);
+/// The editor's title (0) and body (1) inputs.
+Finder editorField(int i) => find.descendant(of: find.byType(NoteEditorScreen), matching: find.byType(TextField)).at(i);
 
 void main() {
   testWidgets('Notebook: pinned and other notes, search, categories, archive (screen 55)', (tester) async {
@@ -63,6 +64,7 @@ void main() {
     await tester.enterText(editorField(0), 'বাজারের তালিকা');
     await tester.enterText(editorField(1), 'চাল ডাল তেল');
     await tester.pumpAndSettle();
+    expect(tester.widget<TextField>(editorField(0)).controller!.text, 'বাজারের তালিকা');
     expect(find.text('৩ শব্দ'), findsOneWidget);
     await tapOn(tester, find.widgetWithText(DLChip, 'অফিস'));
     await tapOn(tester, find.widgetWithText(DLButton, 'সংরক্ষণ করুন'));
