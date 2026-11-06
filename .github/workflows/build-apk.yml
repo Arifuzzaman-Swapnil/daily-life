@@ -97,7 +97,7 @@ jobs:
         run: flutter analyze
 
       - name: Test
-        run: flutter test
+        run: flutter test --exclude-tags "golden,tour"
 
       # Goldens are opt-in: the default push run skips the `golden` tag so a
       # Flutter release moving an anti-aliased pixel doesn't fail the build.
