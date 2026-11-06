@@ -438,7 +438,7 @@ class _EventCard extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                fit(Text(allDay ? t.allDay : f.time(start!), maxLines: 1, style: DLText.amountSm.copyWith(color: c.textPrimary))),
+                fit(Text(allDay ? t.allDay : f.time(start), maxLines: 1, style: DLText.amountSm.copyWith(color: c.textPrimary))),
                 if (!allDay && end != null && end.isNotEmpty)
                   fit(Text(f.time(end), maxLines: 1, style: DLText.textCaption.copyWith(color: c.textSecondary))),
               ],

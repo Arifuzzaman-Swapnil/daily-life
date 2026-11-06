@@ -185,7 +185,7 @@ void main() {
     expect(titleBar('ইভেন্ট যোগ করুন'), findsOneWidget);
   });
 
-  testWidgets('Home: the meeting tile opens today's day view, Agenda the agenda', (tester) async {
+  testWidgets("Home: the meeting tile opens today's day view, Agenda the agenda", (tester) async {
     await pumpApp(tester, sampleData: true, size: const Size(393, 3000));
     containerOf(tester).read(calendarProvider.notifier).select(DateTime(2026, 11, 20));
 
