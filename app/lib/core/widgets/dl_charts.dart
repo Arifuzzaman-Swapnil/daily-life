@@ -22,7 +22,8 @@ class DLBarGroup {
 }
 
 /// Grouped bar chart (prototype `.chart`): groups share the width 6 apart, each
-/// series a 10px bar (3 apart, 4px top corners) scaled to [maxValue], a
+/// series a 10px bar (3 apart, 4px top corners; narrower when a group can't fit
+/// them) scaled to [maxValue], a
 /// `divider` baseline and `textCaption` labels below. Colours default to
 /// `chart1`, `chart2`, … (never the income/expense pair). With [onSelect] the
 /// groups are buttons and [selectedIndex] gets the `surfaceSunken` highlight.
@@ -74,6 +75,10 @@ class DLBarChart extends StatelessWidget {
     Widget bars(DLBarGroup g) => LayoutBuilder(
           builder: (context, constraints) {
             final area = constraints.maxHeight;
+            // Like the prototype's flex items, bars narrow below 10px when a
+            // group is too thin for them (12 months on a phone); gaps stay 3.
+            final n = g.values.length;
+            final width = n == 0 ? barWidth : math.max(0.0, math.min(barWidth, (constraints.maxWidth - 3 * (n - 1)) / n));
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -83,7 +88,7 @@ class DLBarChart extends StatelessWidget {
                   AnimatedContainer(
                     duration: duration,
                     curve: Curves.ease,
-                    width: barWidth,
+                    width: width,
                     height: area * (v.isNaN ? 0 : v.clamp(0, top)) / top,
                     decoration: BoxDecoration(
                       color: palette[i % palette.length],

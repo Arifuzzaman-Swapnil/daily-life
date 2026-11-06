@@ -46,6 +46,21 @@ void main() {
     semantics.dispose();
   });
 
+  testWidgets('DLBarChart: bars narrow to fit 12 two-bar groups on a 360dp phone', (tester) async {
+    await pumpDL(
+      tester,
+      width: 360,
+      DLBarChart(groups: [for (var i = 0; i < 12; i++) DLBarGroup(label: '', values: [100, 50])]),
+    );
+    expect(tester.takeException(), isNull);
+    final widths = [
+      for (final w in tester.widgetList<AnimatedContainer>(find.byWidgetPredicate((w) => w is AnimatedContainer && w.child == null)))
+        tester.getSize(find.byWidget(w)).width,
+    ];
+    expect(widths, hasLength(24));
+    expect(widths.every((w) => w > 0 && w < DLBarChart.barWidth), isTrue);
+  });
+
   testWidgets('DLBarChart copes with all-zero data and value labels', (tester) async {
     await pumpDL(
       tester,
