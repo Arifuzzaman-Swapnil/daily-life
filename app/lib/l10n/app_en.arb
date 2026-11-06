@@ -1468,5 +1468,13 @@
   "noResults": "Nothing found",
   "@noResults": {
     "description": "Notebook and documents: nothing matches the search or filter (the prototype reused the Finance \"No transactions match\" text)."
+  },
+  "notifWater": "Time for a glass of water",
+  "@notifWater": {
+    "description": "Water reminder notification text (the prototype only simulated notifications)."
+  },
+  "msPerLine": "One milestone per line",
+  "@msPerLine": {
+    "description": "Goal form: milestones field hint (the prototype wrote this text inline)."
   }
 }

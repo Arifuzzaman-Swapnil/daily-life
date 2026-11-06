@@ -5,14 +5,15 @@ import 'package:go_router/go_router.dart';
 import '../../core/format/dl_format.dart';
 import '../../core/format/format_provider.dart';
 import '../../core/prefs/app_settings.dart';
+import '../../core/prefs/notification_prefs.dart';
 import '../../core/theme/dl_tokens.dart';
 import '../../core/widgets/dl_widgets.dart';
 import '../../l10n/app_localizations.dart';
 import '../../router.dart';
 
-/// Settings (prototype `settings`, screenshot 80). Build step 1 covers the
-/// "Language & region" and "Appearance" sections; profile, notifications,
-/// privacy, data management and about follow in later steps.
+/// Settings (prototype `settings`, screenshot 80): "Language & region",
+/// "Appearance" (step 1) and "Notifications" (step 6); profile, privacy, data
+/// management and about follow in step 7.
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
@@ -22,6 +23,8 @@ class SettingsScreen extends ConsumerWidget {
     final c = context.dl;
     final s = ref.watch(settingsProvider);
     final ctl = ref.read(settingsProvider.notifier);
+    final notif = ref.watch(notificationPrefsProvider);
+    final notifCtl = ref.read(notificationPrefsProvider.notifier);
     final f = ref.watch(formatProvider);
     final today = ref.watch(clockProvider)();
     final platformDark = MediaQuery.platformBrightnessOf(context) == Brightness.dark;
@@ -136,6 +139,25 @@ class SettingsScreen extends ConsumerWidget {
               padding: const EdgeInsets.only(top: DLSpace.s2),
               child: sample('${t.themeNote} · ${platformDark ? t.dark : t.light}'),
             ),
+          DLSectionHeader(t.notifsT),
+          DLList(
+            children: [
+              for (final (kind, icon, tone, title) in [
+                (NotifKind.general, DLIcons.bell, DLTone.warning, t.nGeneral),
+                (NotifKind.water, DLIcons.drop, DLTone.accent, t.nWater),
+                (NotifKind.meal, DLIcons.food, DLTone.teal, t.nMeal),
+                (NotifKind.office, DLIcons.briefcase, DLTone.neutral, t.nOffice),
+                (NotifKind.calendar, DLIcons.calendar, DLTone.accent, t.nCal),
+              ])
+                DLListRow(
+                  minHeight: 56,
+                  leading: DLIconChip(icon: icon, tone: tone, size: 36),
+                  title: title,
+                  onTap: () => notifCtl.set(kind, !notif[kind]),
+                  trailing: DLSwitch(value: notif[kind], onChanged: (v) => notifCtl.set(kind, v), semanticLabel: title),
+                ),
+            ],
+          ),
         ],
       ),
     );

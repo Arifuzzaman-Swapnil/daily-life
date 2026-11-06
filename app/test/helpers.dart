@@ -6,10 +6,12 @@ import 'package:dailylife/core/db/db_providers.dart';
 import 'package:dailylife/core/db/sample/sample_data.dart';
 import 'package:dailylife/core/format/dl_format.dart';
 import 'package:dailylife/core/format/format_provider.dart';
+import 'package:dailylife/core/notifications/notification_scheduler.dart';
 import 'package:dailylife/core/prefs/app_settings.dart';
 import 'package:dailylife/core/widgets/dl_app_bar.dart';
 import 'package:dailylife/core/widgets/dl_bottom_nav.dart';
 import 'package:dailylife/core/widgets/dl_inputs.dart';
+import 'package:dailylife/features/notifications/notification_sync.dart';
 import 'package:dailylife/router.dart';
 import 'package:drift/drift.dart' show DatabaseConnection, driftRuntimeOptions;
 import 'package:drift/native.dart';
@@ -68,6 +70,7 @@ Future<AppDatabase> pumpApp(
         sharedPrefsProvider.overrideWithValue(sp),
         appDatabaseProvider.overrideWithValue(db),
         clockProvider.overrideWithValue(clock ?? (() => kToday)),
+        notificationSchedulerProvider.overrideWithValue(FakeNotificationScheduler()),
       ],
       child: const DailyLifeApp(),
     ),
@@ -75,6 +78,24 @@ Future<AppDatabase> pumpApp(
   await tester.pumpAndSettle();
   return db;
 }
+
+/// Records the notification plans the app hands over, instead of scheduling.
+class FakeNotificationScheduler implements NotificationScheduler {
+  final plans = <List<PlannedNotification>>[];
+
+  /// The plan now pending (empty before the first one).
+  List<PlannedNotification> get pending => plans.isEmpty ? const [] : plans.last;
+
+  @override
+  Future<void> init(void Function(String route) onOpen) async {}
+
+  @override
+  Future<void> replaceAll(List<PlannedNotification> plan, Map<NotifChannel, String> channelNames) async => plans.add(plan);
+}
+
+/// The fake scheduler [pumpApp] installs.
+FakeNotificationScheduler notificationsOf(WidgetTester tester) =>
+    containerOf(tester).read(notificationSchedulerProvider) as FakeNotificationScheduler;
 
 /// A clock that starts at [kToday] and moves only when told to.
 class TestClock {

@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/db/sample/sample_data.dart';
 import 'core/prefs/app_settings.dart';
 import 'core/theme/dl_theme.dart';
+import 'features/notifications/notification_sync.dart';
 import 'l10n/app_localizations.dart';
 import 'router.dart';
 
@@ -20,6 +21,8 @@ class DailyLifeApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
     final router = ref.watch(routerProvider);
+    // Device notifications follow reminders, events and the toggles.
+    ref.watch(notificationSyncProvider);
     // Sample data follows the language, like the prototype (edited text stays).
     ref.listen(settingsProvider.select((s) => s.lang), (prev, next) {
       if (prev == null || prev == next) return;

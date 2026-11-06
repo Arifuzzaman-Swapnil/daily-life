@@ -37,6 +37,9 @@ SELECT COALESCE(SUM(CASE WHEN done = 0 AND date <= ?1 THEN 1 ELSE 0 END), 0) AS 
   /// Enabled, not-done reminders (for scheduling notifications).
   Future<List<Reminder>> activeReminders() => _sorted((r) => r.enabled.equals(true) & r.done.equals(false)).get();
 
+  /// [activeReminders] as a stream: notifications follow every change.
+  Stream<List<Reminder>> watchActive() => _sorted((r) => r.enabled.equals(true) & r.done.equals(false)).watch();
+
   Future<Reminder?> reminderById(String id) => (select(reminders)..where((r) => r.id.equals(id))).getSingleOrNull();
 
   Stream<Reminder?> watchReminder(String id) => (select(reminders)..where((r) => r.id.equals(id))).watchSingleOrNull();
