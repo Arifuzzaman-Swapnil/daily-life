@@ -176,7 +176,7 @@ The build brief, covering stack, design rules, data model, business rules, scree
 - Tests:
   - Never `await` a drift `watch…().first` in a widget test or in widget code: it doesn't complete under fake async and hangs the run. Use one-shot queries (`db.select(…).get()`, `…ById`).
   - `tester.enterText` doesn't pump after typing. If typing triggers a rebuild that inserts or removes list children (an error line), the next field can be rebuilt mid-focus and get the wrong text. Keep conditional rows in one fixed slot (`cond ? widget : const SizedBox.shrink()`).
-  - Toasts sit over the lower screen for 2.4 s: wait them out before tapping a field under them.
+  - Toasts sit over the lower screen for 2.4 s. Since step 7 they let taps through (`IgnorePointer`), but a toast still covers what is under it in a screenshot or a `find` by position.
   - `pumpApp` installs `FakeNotificationScheduler` (`notificationsOf(tester)`) and `FakeFileService` (`filesOf(tester)`), and takes a `clock`; `TestClock` drives the timer.
   - `export` doesn't import: a file that re-exports a provider and also uses it must import it too.
   - Records compare sets by identity: check a `Set` field with its own `expect`.
@@ -186,6 +186,58 @@ The build brief, covering stack, design rules, data model, business rules, scree
   - The day view shows hours before 7 AM when an event starts then.
   - The Android app label is "Daily Life".
 
+## Conventions established in step 7 (onboarding, privacy, data)
+- Onboarding lives in `features/onboarding/` (`welcome_screen.dart`, `onboarding_screen.dart`; `Routes.welcome`, `Routes.onboarding`).
+  - `pref.onboarded` is set when onboarding is finished or skipped. The router reads it once, for `initialLocation`.
+  - `pumpApp` marks onboarding done unless `onboarded: false` (first-launch tests).
+  - The language and theme pickers are shared: `features/settings/appearance_cards.dart` (`LanguageCards(large:)`, `ThemeCards`).
+- Profile: `AppSettings.avatar` (`pref.avatar`) is an index into `DLAvatar.tones`. "Change photo" cycles it (`cycleAvatar()`), as in the prototype. `DLAvatar(color:)` everywhere the avatar shows.
+- Create a `TextEditingController` that reads `ref` in `initState`, never as a `late final` field initializer: one that was never used is first created in `dispose`, after unmount, and Riverpod throws.
+- Privacy settings: `core/prefs/privacy_prefs.dart` (`privacyProvider`: `hideAmounts`, `lock`, `biometric`, `hasPin`).
+  - The PIN is stored only as a salted SHA-256 hash (`setPin`, `checkPin`, `hashPin`; `pref.pin.hash`, `pref.pin.salt`).
+  - The lock can only be on with a PIN (`setLock(true)` throws otherwise). Settings says `errPinFirst`, opens the PIN sheet, and turns the lock on once the PIN is saved.
+  - `PrefKeys.deviceOnly` (lock, fingerprint, PIN) and `pref.lastBackup` (`PrefKeys.notBackedUp`) never go into a backup, and a restore leaves them as they are.
+- Hide amounts: `formatProvider` builds `DLFormat(hideAmounts:)`. Exports use `f.unmasked` (`dl_format_more.dart`).
+  - Reports computes its export figures during `build` (`report(f.unmasked)`): its builders call `ref.watch`, so never call them from a callback.
+- App lock: `core/security/app_lock.dart` (`appLockProvider` is true while locked).
+  - Locks on launch and on `onHide` when `privacy.locks`.
+  - System screens the app opens itself don't lock it: run them through `whileOutside()`. `DeviceFileService` does this for its picker and share calls (`OutsideRunner`); the lock screen does it for the fingerprint prompt.
+  - `AppLockGate` (`features/privacy/lock_screen.dart`) wraps the app in `MaterialApp.builder`. While locked, the app below stays mounted but `Offstage`, without focus, semantics or tickers, and `LockScreen` covers it. The lock screen sits outside the Navigator and Overlay: no tooltips, toasts or sheets there.
+  - `MaterialApp.router` takes the GoRouter's delegate, parser and provider plus `_LockAwareBackButtonDispatcher` (`app.dart`): system back while locked leaves the app instead of popping the hidden pages.
+- Fingerprint: `core/security/biometric_service.dart` (`biometricServiceProvider`, local_auth 3). The prompt's texts come from the ARB through `AndroidAuthMessages` (`local_auth_android`).
+  - The lock screen prompts by itself once per lock, when the app is resumed. Settings only turns biometric unlock on when `isAvailable()`.
+- PIN UI: `DLPinDots` and `DLKeypad` (`core/widgets/dl_pin_pad.dart`). `showPinSheet(context)` resolves to whether a PIN was saved; the new PIN is asked twice.
+- Backup: `core/backup/backup_service.dart`.
+  - The file is JSON (`format: dailylife-backup`, `version: 1`, `schema`): every table's rows as stored (`SELECT *`), plus the `pref.…` keys that back up.
+  - `parse` refuses another format or a different `schemaVersion`. Once real migrations exist, migrate older backups instead.
+  - `restore` replaces every table in one transaction (`PRAGMA defer_foreign_keys`), so a bad file changes nothing. A document whose file isn't on the phone keeps only its details.
+  - After a restore, every preference-backed provider is invalidated (`_apply` in `features/settings/data_section.dart`). A new preference-backed provider must be added there.
+- Data management (`features/settings/data_section.dart`):
+  - Back up keeps `<app documents>/backups/latest.json`, sets `pref.lastBackup`, then offers the share sheet.
+  - Restore uses that copy; Import picks any file (`FileService.pickTextFile`). Both ask first.
+  - Export shares all transactions (`transactionsCsv`). `toCsv` (`core/files/csv.dart`) is shared with Reports. On the device, CSV files get a UTF-8 byte-order mark.
+  - "Show sample data" is `sampleDataSwitchProvider` (`core/db/sample/sample_data.dart`). Off clears every record; on loads the sample data. Both ask first when records would be lost.
+- `appVersionProvider` (`core/app_info.dart`, package_info_plus) is the installed version for About and More.
+- Committed Android files added (Flutter 3.47 template copies plus changes):
+  - `app/android/app/src/main/kotlin/com/intelleqt/dailylife/MainActivity.kt`: `FlutterFragmentActivity`, for local_auth.
+  - `app/android/app/src/main/res/values/styles.xml` and `values-night/styles.xml`: AppCompat parents for `LaunchTheme` and `NormalTheme`.
+  - `AndroidManifest.xml` gains `USE_BIOMETRIC`; `build.gradle.kts` gains `minSdk = maxOf(24, flutter.minSdkVersion)` and `androidx.appcompat`.
+- Shared widgets added: `DLButton.trailingIcon`, `DLTextField.invalid` (error border without the line, for a field with a button beside it), `DLAppBar(titleWidget:)` on sub-pages, `DLListRow.subtitleMaxLines`, more `DLIcons` (`lock`, `hash`, `fingerprint`, `eyeOff`, `database`, `list`, `shield`, `backspace`).
+- ARB additions (kit changes 7–21): `pinAgain`, `pinMismatch`, `unlockSub`, `wrongPin`, `useBiometric`, `bioHint`, `bioUnavailable`, `deleteDigit`, `noBackup`, `backupFailed`, `errBackupFile`, `sampleOffQ`, `sampleOffB`, `sampleOnQ`, `sampleOnB`. The prototype only simulated the lock, the fingerprint and backups.
+- Tests:
+  - `pumpApp` also installs `FakeBiometricService` (`biometricsOf(tester)`), overrides `sampleDataProvider` with the JSON read in `helpers.dart` (the asset bundle never loads under fake async) and `appVersionProvider` with `0.1.0`.
+  - `FakeFileService` keeps the latest backup in `backup`, and `pickTextFile` returns `nextText()`.
+  - Lifecycle: step through `inactive → hidden → inactive → resumed` (`leaveAndReturn` in `test/privacy/privacy_test.dart`). `AppLifecycleListener` asserts on jumps, and no frames run while hidden.
+  - System back is `tester.binding.handlePopRoute()`. To see the app leave, mock `SystemChannels.platform` and watch for `SystemNavigator.pop`.
+  - Settings builds lazily: scroll to a row before checking it.
+- Deliberate differences from the prototype:
+  - The PIN is asked twice.
+  - The lock screen itself is new.
+  - Skip also marks onboarding done.
+  - Back up also opens the share sheet.
+  - The sample-data switch clears or loads real records, and asks first.
+  - Toasts let taps through.
+
 ## Build-order progress
 - [x] 1. Setup, fonts, theme, l10n, DLFormat + tests, router shell + bottom nav, language/digit/theme settings (done 2026-11-06)
 - [x] 2. Shared DL widgets (done 2026-11-06)
@@ -193,5 +245,5 @@ The build brief, covering stack, design rules, data model, business rules, scree
 - [x] 4. Finance → Salary/Allocation → Savings → Shop credit (done 2026-11-06)
 - [x] 5. Home dashboard (done 2026-11-06)
 - [x] 6. Work/timer → Calendar → Reminders → Notes → Health → Goals → Documents → Reports (done 2026-11-06)
-- [ ] 7. Privacy, backup/restore/export, onboarding
+- [x] 7. Privacy, backup/restore/export, onboarding (done 2026-11-07)
 - [ ] 8. Journeys, goldens, prototype comparison, small-screen fixes
