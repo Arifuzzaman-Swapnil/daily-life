@@ -6,6 +6,7 @@ import '../../core/db/app_database.dart';
 import '../../core/db/daos/health_dao.dart';
 import '../../core/db/db_providers.dart';
 import '../finance/money_providers.dart';
+import '../home/home_providers.dart';
 
 export '../home/home_providers.dart' show habitsProvider, todayMealsProvider, todayWaterProvider;
 
