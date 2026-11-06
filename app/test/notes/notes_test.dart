@@ -60,6 +60,9 @@ void main() {
     // A title or some text is required.
     await tapOn(tester, find.widgetWithText(DLButton, 'সংরক্ষণ করুন'));
     expect(find.text('শিরোনাম বা কিছু লেখা দিন'), findsOneWidget);
+    // Let the error toast go: it sits over the body field.
+    await tester.pump(const Duration(seconds: 3));
+    await tester.pumpAndSettle();
 
     await tester.enterText(editorField(0), 'বাজারের তালিকা');
     await tester.enterText(editorField(1), 'চাল ডাল তেল');
