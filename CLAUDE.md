@@ -23,6 +23,9 @@ The build brief, covering stack, design rules, data model, business rules, scree
   - app label and icon
 - The generated l10n (`app/lib/l10n/app_localizations*.dart`) is not committed. CI runs `flutter gen-l10n`. `flutter analyze` treats infos as errors.
 - The APK is signed with a stable debug key from the `DEBUG_KEYSTORE_B64` repo secret, so updates install over earlier builds. CI checks the certificate SHA-256 against `EXPECTED_CERT_SHA256`.
+  - CI must export `ANDROID_USER_HOME=$HOME/.android`. Without it, the Android Gradle Plugin generates its own key.
+  - A local backup of the keystore is at `~/.android/dailylife-debug.keystore`. It uses the standard debug credentials: store and key password `android`, alias `androiddebugkey`.
+- A clean CI run takes about 10 minutes. The Gradle build and the NDK download are most of it.
 
 ## Conventions established in step 1
 - Kit files are copied into `app/lib` unchanged, with one exception: `BanglaDate` in `core/format/dl_format.dart`. Falgun has 29 days, or 30 in a leap year, per the 2019 revision. The kit had 30/31, which put every Chaitra date one day early.
@@ -36,7 +39,7 @@ The build brief, covering stack, design rules, data model, business rules, scree
 - Tests: `test/helpers.dart` → `pumpApp()` pumps the whole app on a 393×852 phone with mock prefs and the pinned clock.
 
 ## Build-order progress
-- [ ] 1. Setup, fonts, theme, l10n, DLFormat + tests, router shell + bottom nav, language/digit/theme settings
+- [x] 1. Setup, fonts, theme, l10n, DLFormat + tests, router shell + bottom nav, language/digit/theme settings (done 2026-11-06)
 - [ ] 2. Shared DL widgets
 - [ ] 3. Drift schema + DAOs + seeder
 - [ ] 4. Finance → Salary/Allocation → Savings → Shop credit
