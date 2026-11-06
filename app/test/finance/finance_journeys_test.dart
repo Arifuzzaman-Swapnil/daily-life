@@ -5,24 +5,18 @@ import 'package:dailylife/core/db/app_database.dart';
 import 'package:dailylife/core/widgets/dl_widgets.dart';
 import 'package:dailylife/features/finance/finance_screen.dart';
 import 'package:dailylife/features/finance/money_providers.dart';
-import 'package:flutter/widgets.dart' show Text;
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../helpers.dart';
 
-/// Diagnostics while chasing a stale hero after returning from two pages deep.
-Future<void> dumpHero(WidgetTester tester, String when) async {
-  final texts = [
-    for (final w in tester.widgetList<Text>(find.descendant(of: find.byType(DLBalanceHero), matching: find.byType(Text)))) w.data,
-  ];
-  final totals = containerOf(tester).read(monthTotalsProvider(DateTime(2026, 11)));
-  // ignore: avoid_print
-  print('HERO[$when] texts=$texts provider=${totals.value?.available} ${totals.runtimeType}');
-}
-
-/// The Finance hero's remaining / income / expense figures.
-void expectHero(String remaining, String income, String expense) {
+/// The Finance hero's remaining / income / expense figures. Taps scroll the
+/// list (ensureVisible), so the hero is first scrolled back into view.
+Future<void> expectHero(WidgetTester tester, String remaining, String income, String expense) async {
   final hero = find.byType(DLBalanceHero);
+  final page = find.byWidgetPredicate((w) => w is Scrollable && w.axisDirection == AxisDirection.down).first;
+  await tester.dragUntilVisible(hero, page, const Offset(0, 300));
+  await tester.pumpAndSettle();
   expect(find.descendant(of: hero, matching: find.text(remaining)), findsOneWidget, reason: 'remaining');
   expect(find.descendant(of: hero, matching: find.text(income)), findsOneWidget, reason: 'income');
   expect(find.descendant(of: hero, matching: find.text(expense)), findsOneWidget, reason: 'expense');
@@ -38,7 +32,7 @@ void main() {
   testWidgets('journey 2: Finance → Add income → Save → top of the list, Income tab, toast', (tester) async {
     final db = await pumpApp(tester, sampleData: true, size: kTallPhone);
     await openFinance(tester);
-    expectHero('৳১৭,১২০', '৳৫০,০০০', '৳২২,৮৮০');
+    await expectHero(tester, '৳১৭,১২০', '৳৫০,০০০', '৳২২,৮৮০');
 
     await tapOn(tester, find.byTooltip('যোগ করুন'));
     await tapOn(tester, find.text('আয় যোগ করুন'));
@@ -56,7 +50,7 @@ void main() {
     expect(rows.first.x.title, 'বোনাস পেমেন্ট');
     expect(rows.every((r) => r.x.type == TxType.income), isTrue);
     expect(find.text('+৳২,৫০০'), findsOneWidget);
-    expectHero('৳১৯,৬২০', '৳৫২,৫০০', '৳২২,৮৮০');
+    await expectHero(tester, '৳১৯,৬২০', '৳৫২,৫০০', '৳২২,৮৮০');
 
     final saved = (await db.financeDao.transactionsIn()).firstWhere((x) => x.title == 'বোনাস পেমেন্ট');
     expect((saved.amount, saved.categoryId, saved.paymentMethod, saved.date), (2500, 'bonus', PaymentMethod.bank, DateTime(2026, 11, 6)));
@@ -77,7 +71,7 @@ void main() {
 
     expect(find.text('খরচ সংরক্ষণ হয়েছে'), findsOneWidget);
     expect(containerOf(tester).read(finFilterProvider).tab, FinTab.expense);
-    expectHero('৳১৬,১২০', '৳৫০,০০০', '৳২৩,৮৮০');
+    await expectHero(tester, '৳১৬,১২০', '৳৫০,০০০', '৳২৩,৮৮০');
     await scrollTo(tester, find.text('নতুন বই'));
     expect(find.text('−৳১,০০০'), findsOneWidget);
 
@@ -127,11 +121,7 @@ void main() {
     // Back on Finance the salary is in this month's income.
     await tapOn(tester, find.byTooltip('পেছনে যান'));
     await tapOn(tester, find.byTooltip('পেছনে যান'));
-    await dumpHero(tester, 'j4 back');
-    await tester.pump(const Duration(seconds: 3));
-    await tester.pumpAndSettle();
-    await dumpHero(tester, 'j4 +3s');
-    expectHero('৳৬২,১২০', '৳৯৫,০০০', '৳২২,৮৮০');
+    await expectHero(tester, '৳৬২,১২০', '৳৯৫,০০০', '৳২২,৮৮০');
   });
 
   testWidgets('journey 5: Shop credit → purchase → partial payment; overpay blocked', (tester) async {
@@ -179,11 +169,7 @@ void main() {
     await tapOn(tester, find.byTooltip('পেছনে যান'));
     await tapOn(tester, find.byTooltip('পেছনে যান'));
     expect(titleBar('হিসাব'), findsOneWidget);
-    await dumpHero(tester, 'j5 back');
-    await tester.pump(const Duration(seconds: 3));
-    await tester.pumpAndSettle();
-    await dumpHero(tester, 'j5 +3s');
-    expectHero('৳১৬,৬২০', '৳৫০,০০০', '৳২৩,৩৮০');
+    await expectHero(tester, '৳১৬,৬২০', '৳৫০,০০০', '৳২৩,৩৮০');
     await scrollTo(tester, find.text('মায়ের দোয়া স্টোর-এ পরিশোধ'));
   });
 }

@@ -104,6 +104,8 @@ The build brief, covering stack, design rules, data model, business rules, scree
   - `pumpApp(tester, sampleData: true)` seeds the sample data in the prefs' language and returns the database.
   - `memoryDatabase()` uses `closeStreamsSynchronously`, so drift leaves no timer pending when a widget test ends.
   - Helpers: `openRoute`, `tapOn`, `typeInto`, `fieldLabelled` (finds a `DLField` by its label), `scrollTo`.
+  - Use `kTallPhone` (393×1800) for behaviour tests, so long lazy lists and forms build completely.
+  - `tapOn` uses `ensureVisible`, which scrolls the target to the top of its list. Scroll back up (e.g. `dragUntilVisible`) before checking anything above it: list items scrolled out of view are invisible to finders.
   - `finance_screens_test.dart` lays out every step 4 screen at 360 dp wide (2400 tall, so whole lists build) in English + Dark and Bengali + Light.
 - Deliberate differences from the prototype:
   - Category usage is counted per (type, id).
@@ -115,7 +117,7 @@ The build brief, covering stack, design rules, data model, business rules, scree
 - [x] 1. Setup, fonts, theme, l10n, DLFormat + tests, router shell + bottom nav, language/digit/theme settings (done 2026-11-06)
 - [x] 2. Shared DL widgets (done 2026-11-06)
 - [x] 3. Drift schema + DAOs + seeder (done 2026-11-06)
-- [ ] 4. Finance → Salary/Allocation → Savings → Shop credit
+- [x] 4. Finance → Salary/Allocation → Savings → Shop credit (done 2026-11-06)
 - [ ] 5. Home dashboard
 - [ ] 6. Work/timer → Calendar → Reminders → Notes → Health → Goals → Documents → Reports
 - [ ] 7. Privacy, backup/restore/export, onboarding
