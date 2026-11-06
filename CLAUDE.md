@@ -75,6 +75,42 @@ The build brief, covering stack, design rules, data model, business rules, scree
   - Step 7's "Show sample data" toggle uses `SampleDataService.load` and `clear`.
   - Seeded dates are absolute, anchored to 2026-11-06.
 
+## Conventions established in step 4 (money screens)
+- Screens live in `features/<area>/` (`finance/`, `salary/`, `savings/`, `shop_credit/`).
+- Money data comes from `features/finance/money_providers.dart`: one `StreamProvider` per DAO stream, `.family` per month or id.
+  - `selectedMonthProvider` is the month Finance shows. Home (step 5) should use it too, like the prototype's shared `month`. It goes back at most 11 months and never past the current month.
+  - `finFilterProvider` holds the Finance tab, search and filters.
+  - "This month" and "today" come from `clockProvider` (`currentMonthFrom(ref)`, `todayFrom(ref)`).
+- Categories on screen: `categoryBookProvider` plus `categoryInfo(t, book, type, id)` in `finance/categories.dart`. A built-in shows `cat_<id>`; an unknown or deleted id shows "Other" with the tag icon.
+- `core/format/dl_format_more.dart` adds `takaCompact`, `monthShort`, `monthName`, `dateLongYear`, `count` and `paymentLabel()`. `dl_format.dart` stays as copied from the kit.
+- Routing:
+  - Sub-pages are top-level `GoRoute`s on the root navigator, made with `page()` in `router.dart`.
+  - Paths come from `Routes`, e.g. `Routes.tx(id)`, `Routes.newTx(type)`, `Routes.shop(id)`.
+  - Back and close use `popOr(context, fallback)`, so a page opened directly still has somewhere to go.
+  - `/reports` is a titled placeholder until step 6.
+- Forms:
+  - Errors are a map keyed by field. On a failed save, show `DLToast.show(context, t.errForm, error: true)`. Typing in a field clears that field's error.
+  - Amounts go through `DLFormat.parseAmount(...)?.round()`, which accepts Bengali digits; ≤ 0 is `errAmount`.
+  - Dates and times use `DLPickerField` with `pickDate`/`pickTime` (`core/widgets/dl_pickers.dart`). Payment methods use chips in sheets and `DLSelect` on full forms, as in the prototype.
+  - Show the toast before `pop`. It lives in the root overlay and outlives the page.
+- Never set a `TextEditingController`'s text in `build`. Prefill in `initState` (e.g. from a DAO future) or in a listener.
+- Sheets are `showDLSheet` with a private `Consumer(Stateful)Widget` body. They close with `Navigator.of(context).pop()`.
+- Allocation rows save as you type: one controller pair per row id, created once. Save only removes empty rows. Removing a row that has a name or amount asks first.
+- Shared widgets added:
+  - `DLCard`/`DLList` `outlined` (inside sheets), `DLNote` (tinted note), `DLAddButton` (dashed "add another").
+  - `DLPickerField`, a second action on `DLEmptyState`, `DLTextField.prefixText`.
+  - More `DLIcons`, plus `DLIcons.byKey` for stored category icon keys.
+- Tests:
+  - `pumpApp(tester, sampleData: true)` seeds the sample data in the prefs' language and returns the database.
+  - `memoryDatabase()` uses `closeStreamsSynchronously`, so drift leaves no timer pending when a widget test ends.
+  - Helpers: `openRoute`, `tapOn`, `typeInto`, `fieldLabelled` (finds a `DLField` by its label), `scrollTo`.
+  - `finance_screens_test.dart` lays out every step 4 screen at 360 dp wide (2400 tall, so whole lists build) in English + Dark and Bengali + Light.
+- Deliberate differences from the prototype:
+  - Category usage is counted per (type, id).
+  - The salary income title is `salaryFor(monthName)` ("November salary"); shop payments use `payTo`.
+  - Split-bar colours follow each row's index.
+  - Editing a shop payment's amount doesn't change the shop entry, as in the prototype.
+
 ## Build-order progress
 - [x] 1. Setup, fonts, theme, l10n, DLFormat + tests, router shell + bottom nav, language/digit/theme settings (done 2026-11-06)
 - [x] 2. Shared DL widgets (done 2026-11-06)

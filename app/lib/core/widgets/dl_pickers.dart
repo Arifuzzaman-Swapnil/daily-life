@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../core/db/app_database.dart';
-
-/// The system date picker (in the app's theme and language). Resolves to the
-/// picked day at local midnight, or null when cancelled.
+/// The system date picker, in the app's theme and language. Resolves to the
+/// picked day at local midnight, or null when cancelled. Pair it with
+/// `DLPickerField` in forms.
 Future<DateTime?> pickDate(BuildContext context, DateTime initial) async {
   final d = await showDatePicker(
     context: context,
@@ -11,7 +10,7 @@ Future<DateTime?> pickDate(BuildContext context, DateTime initial) async {
     firstDate: DateTime(2000),
     lastDate: DateTime(2100, 12, 31),
   );
-  return d == null ? null : dateOnly(d);
+  return d == null ? null : DateTime(d.year, d.month, d.day);
 }
 
 /// The system time picker for an `HH:mm` value; resolves to the new `HH:mm`.

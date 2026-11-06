@@ -11,7 +11,6 @@ import '../../core/theme/dl_tokens.dart';
 import '../../core/widgets/dl_widgets.dart';
 import '../../l10n/app_localizations.dart';
 import '../../router.dart';
-import '../finance/date_pickers.dart';
 import '../finance/money_providers.dart';
 
 /// Savings (prototype `savings`, screenshots 21–23): total, this year's

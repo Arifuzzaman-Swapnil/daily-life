@@ -375,7 +375,7 @@ class DLPickerField extends StatelessWidget {
       child: DLPressable(
         onTap: onTap,
         scaleOnPress: false,
-        semanticLabel: [if (label != null) label!, text].join(', '),
+        semanticLabel: [?label, text].join(', '),
         excludeSemantics: true,
         borderRadius: _controlRadius,
         decoration: BoxDecoration(color: enabled ? c.surface : c.surfaceSunken, borderRadius: _controlRadius),

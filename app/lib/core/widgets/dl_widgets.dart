@@ -11,6 +11,7 @@ export 'dl_icons.dart';
 export 'dl_inputs.dart';
 export 'dl_motion.dart';
 export 'dl_overlays.dart';
+export 'dl_pickers.dart';
 export 'dl_progress.dart';
 export 'dl_segmented.dart';
 export 'dl_tone.dart';
