@@ -8,8 +8,8 @@
 // the goldens and uploads failure diffs.
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -38,7 +38,7 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) async {
 }
 
 class _TolerantComparator extends LocalFileComparator {
-  _TolerantComparator(Uri baseDir) : super(baseDir);
+  _TolerantComparator(super.baseDir);
 
   static const _maxPixelFraction = 0.005;
 
