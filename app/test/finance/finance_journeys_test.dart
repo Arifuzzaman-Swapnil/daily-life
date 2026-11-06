@@ -5,9 +5,20 @@ import 'package:dailylife/core/db/app_database.dart';
 import 'package:dailylife/core/widgets/dl_widgets.dart';
 import 'package:dailylife/features/finance/finance_screen.dart';
 import 'package:dailylife/features/finance/money_providers.dart';
+import 'package:flutter/widgets.dart' show Text;
 import 'package:flutter_test/flutter_test.dart';
 
 import '../helpers.dart';
+
+/// Diagnostics while chasing a stale hero after returning from two pages deep.
+Future<void> dumpHero(WidgetTester tester, String when) async {
+  final texts = [
+    for (final w in tester.widgetList<Text>(find.descendant(of: find.byType(DLBalanceHero), matching: find.byType(Text)))) w.data,
+  ];
+  final totals = containerOf(tester).read(monthTotalsProvider(DateTime(2026, 11)));
+  // ignore: avoid_print
+  print('HERO[$when] texts=$texts provider=${totals.value?.available} ${totals.runtimeType} loading=${totals.isLoading}');
+}
 
 /// The Finance hero's remaining / income / expense figures.
 void expectHero(String remaining, String income, String expense) {
@@ -116,6 +127,10 @@ void main() {
     // Back on Finance the salary is in this month's income.
     await tapOn(tester, find.byTooltip('পেছনে যান'));
     await tapOn(tester, find.byTooltip('পেছনে যান'));
+    await dumpHero(tester, 'j4 back');
+    await tester.pump(const Duration(seconds: 3));
+    await tester.pumpAndSettle();
+    await dumpHero(tester, 'j4 +3s');
     expectHero('৳৬২,১২০', '৳৯৫,০০০', '৳২২,৮৮০');
   });
 
@@ -164,6 +179,10 @@ void main() {
     await tapOn(tester, find.byTooltip('পেছনে যান'));
     await tapOn(tester, find.byTooltip('পেছনে যান'));
     expect(titleBar('হিসাব'), findsOneWidget);
+    await dumpHero(tester, 'j5 back');
+    await tester.pump(const Duration(seconds: 3));
+    await tester.pumpAndSettle();
+    await dumpHero(tester, 'j5 +3s');
     expectHero('৳১৬,৬২০', '৳৫০,০০০', '৳২৩,৩৮০');
     await scrollTo(tester, find.text('মায়ের দোয়া স্টোর-এ পরিশোধ'));
   });
