@@ -18,6 +18,7 @@ import '../calendar/calendar_providers.dart';
 import '../finance/finance_screen.dart';
 import '../finance/money_providers.dart';
 import '../finance/month_sheet.dart';
+import '../health/health_providers.dart';
 import '../reminders/reminders_providers.dart';
 import 'customize_sheet.dart';
 import 'home_providers.dart';
@@ -395,7 +396,6 @@ class _TodaySection extends ConsumerWidget {
       ref.read(calendarProvider.notifier).setView(CalView.agenda);
       context.go(Routes.calendar);
     }
-    void toMore() => context.go(Routes.more);
 
     final tiles = [
       _Tile(
@@ -450,7 +450,7 @@ class _TodaySection extends ConsumerWidget {
         label: t.water,
         sub: '${t.ml(f.group(water))} / ${t.ml(f.group(target))}',
         bar: water / target,
-        onTap: toMore,
+        onTap: () => context.push(Routes.healthTab(HealthTab.water)),
       ),
       _Tile(
         icon: DLIcons.food,
@@ -458,7 +458,7 @@ class _TodaySection extends ConsumerWidget {
         value: '${f.count(meals.length)}/${f.count(4)}',
         label: t.meals,
         sub: meals.isEmpty ? t.notLogged : [for (final m in meals) mealLabel(m.type)].join(', '),
-        onTap: toMore,
+        onTap: () => context.push(Routes.healthTab(HealthTab.food)),
       ),
       _Tile(
         icon: DLIcons.flame,
@@ -468,7 +468,7 @@ class _TodaySection extends ConsumerWidget {
         sub: t.todayDone(f.count(habitsDone), f.count(habits.length)),
         bar: habits.isEmpty ? 0 : habitsDone / habits.length,
         barTone: DLTone.teal,
-        onTap: toMore,
+        onTap: () => context.push(Routes.healthTab(HealthTab.habits)),
       ),
     ];
 

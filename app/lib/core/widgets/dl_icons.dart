@@ -93,6 +93,15 @@ abstract final class DLIcons {
   /// A note (prototype `note`).
   static const IconData note = LucideIcons.fileText;
 
+  // Health and goals.
+  static const IconData coffee = LucideIcons.coffee;
+  static const IconData book = LucideIcons.bookOpen;
+
+  /// Learning (prototype `grad`).
+  static const IconData graduation = LucideIcons.graduationCap;
+  static const IconData walk = LucideIcons.footprints;
+  static const IconData sunrise = LucideIcons.sunrise;
+
   /// A stored icon key (prototype `I` name, e.g. `food`, `cash`) → icon.
   /// Unknown keys fall back to [tag], the custom-category icon.
   static IconData byKey(String key) => switch (key) {
@@ -119,6 +128,13 @@ abstract final class DLIcons {
         'drop' => drop,
         'cal' => calendar,
         'flame' => flame,
+        // Habit icons.
+        'book' => book,
+        'pulse' => pulse,
+        'grad' => graduation,
+        'walk' => walk,
+        'moon' => moon,
+        'sunrise' => sunrise,
         _ => tag,
       };
 }

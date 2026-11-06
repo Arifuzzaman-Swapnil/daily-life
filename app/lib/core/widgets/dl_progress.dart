@@ -11,7 +11,16 @@ import 'dl_tone.dart';
 /// animates its width over 300 ms. [value] is clamped to 0…1. Fills the width
 /// it is given.
 class DLProgressBar extends StatelessWidget {
-  const DLProgressBar({super.key, required this.value, this.tone = DLTone.accent, this.height = 8, this.color, this.semanticLabel, this.semanticValue});
+  const DLProgressBar({
+    super.key,
+    required this.value,
+    this.tone = DLTone.accent,
+    this.height = 8,
+    this.color,
+    this.trackColor,
+    this.semanticLabel,
+    this.semanticValue,
+  });
 
   final double value;
   final DLTone tone;
@@ -19,6 +28,9 @@ class DLProgressBar extends StatelessWidget {
 
   /// Bar colour override.
   final Color? color;
+
+  /// Track colour override, e.g. `brandHover` on the navy hero.
+  final Color? trackColor;
   final String? semanticLabel;
 
   /// Formatted value for screen readers, e.g. "৬৫%".
@@ -36,7 +48,7 @@ class DLProgressBar extends StatelessWidget {
         width: double.infinity,
         height: height,
         clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(color: c.surfaceSunken, borderRadius: shape),
+        decoration: BoxDecoration(color: trackColor ?? c.surfaceSunken, borderRadius: shape),
         child: TweenAnimationBuilder<double>(
           tween: Tween(end: v),
           duration: DLMotion.of(context, DLMotion.progress),

@@ -52,6 +52,15 @@ class HealthDao extends DatabaseAccessor<AppDatabase> with _$HealthDaoMixin {
         ..orderBy([(m) => OrderingTerm.asc(m.time)]))
       .watch();
 
+  /// Meals before [day], newest day first and by time within a day (the
+  /// meal history).
+  Stream<List<Meal>> watchMealsBefore(DateTime day) => (select(meals)
+        ..where((m) => m.date.isSmallerThanValue(dayKey(day)))
+        ..orderBy([(m) => OrderingTerm.desc(m.date), (m) => OrderingTerm.asc(m.time)]))
+      .watch();
+
+  Future<Meal?> mealById(String id) => (select(meals)..where((m) => m.id.equals(id))).getSingleOrNull();
+
   /// Inserts [row] and returns its id.
   Future<String> addMeal(MealsCompanion row) async {
     final id = row.id.present ? row.id.value : newId();

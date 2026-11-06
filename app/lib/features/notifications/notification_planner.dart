@@ -10,6 +10,7 @@ import '../../l10n/app_localizations.dart';
 import '../../router.dart';
 import '../calendar/calendar_ui.dart';
 import '../calendar/event_rules.dart';
+import '../health/health_providers.dart';
 
 /// Water reminders: every 2 hours from 8 AM to 10 PM.
 const waterHours = [8, 10, 12, 14, 16, 18, 20, 22];
@@ -131,7 +132,7 @@ List<PlannedNotification> planNotifications({
         at: at,
         title: t.water,
         body: t.notifWater,
-        route: Routes.more,
+        route: Routes.healthTab(HealthTab.water),
         repeat: NotifRepeat.daily,
         channel: NotifChannel.health,
       ));
@@ -145,7 +146,7 @@ List<PlannedNotification> planNotifications({
         at: at,
         title: mealLabel(t, meal),
         body: t.mealDesc,
-        route: Routes.more,
+        route: Routes.healthTab(HealthTab.food),
         repeat: NotifRepeat.daily,
         channel: NotifChannel.health,
       ));

@@ -65,8 +65,8 @@ class MoreScreen extends ConsumerWidget {
         row(DLIcons.note, DLTone.teal, t.notebook, t.noteSubM(f.count(notes)), Routes.notes),
       ]),
       (t.lifestyle, [
-        row(DLIcons.pulse, DLTone.success, t.health, t.healthSubM, null),
-        row(DLIcons.target, DLTone.accent, t.goalsT, t.goalSubM(f.count(goals)), null),
+        row(DLIcons.pulse, DLTone.success, t.health, t.healthSubM, Routes.health),
+        row(DLIcons.target, DLTone.accent, t.goalsT, t.goalSubM(f.count(goals)), Routes.goals),
       ]),
       (t.vault, [
         row(DLIcons.folder, DLTone.neutral, t.docs, t.docSubM(f.count(docs)), null),

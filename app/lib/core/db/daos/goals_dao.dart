@@ -71,6 +71,8 @@ class GoalsDao extends DatabaseAccessor<AppDatabase> with _$GoalsDaoMixin {
         return id;
       });
 
+  Future<Goal?> goalById(String id) => (select(goals)..where((g) => g.id.equals(id))).getSingleOrNull();
+
   Future<bool> updateGoal(Goal row) => update(goals).replace(row);
 
   /// Deletes the goal and its milestones.

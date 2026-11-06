@@ -10,6 +10,12 @@ import 'features/finance/categories_screen.dart';
 import 'features/finance/finance_screen.dart';
 import 'features/finance/tx_detail_screen.dart';
 import 'features/finance/tx_form_screen.dart';
+import 'features/goals/goal_form_screen.dart';
+import 'features/goals/goals_screen.dart';
+import 'features/health/habit_detail_screen.dart';
+import 'features/health/health_providers.dart';
+import 'features/health/health_screen.dart';
+import 'features/health/meal_form_screen.dart';
 import 'features/home/home_screen.dart';
 import 'features/home/notifications_screen.dart';
 import 'features/more/more_screen.dart';
@@ -88,6 +94,17 @@ abstract final class Routes {
   static const newNote = '/notes/new';
   static String note(String id) => '/notes/$id';
   static String editNote(String id) => '/notes/edit/$id';
+
+  // Health and goals.
+  static const health = '/health';
+  static String healthTab(HealthTab tab) => '/health?tab=${tab.name}';
+  static String newMeal(MealType type) => '/meals/new?type=${type.name}';
+  static String editMeal(String id) => '/meals/edit/$id';
+  static String habit(String id) => '/habits/$id';
+  static const goals = '/goals';
+  static const newGoal = '/goals/new';
+  static String goal(String id) => '/goals/$id';
+  static String editGoal(String id) => '/goals/edit/$id';
 }
 
 /// Built once for the app's lifetime, so locale/theme changes never reset navigation.
@@ -153,6 +170,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       page(Routes.newNote, (_) => const NoteEditorScreen()),
       page('/notes/edit/:id', (s) => NoteEditorScreen.edit(id: s.pathParameters['id']!)),
       page('/notes/:id', (s) => NoteDetailScreen(id: s.pathParameters['id']!)),
+      page(Routes.health, (s) => HealthScreen(tab: HealthTab.values.asNameMap()[s.uri.queryParameters['tab']] ?? HealthTab.water)),
+      page('/meals/new', (s) => MealFormScreen(type: MealType.values.asNameMap()[s.uri.queryParameters['type']] ?? MealType.snack)),
+      page('/meals/edit/:id', (s) => MealFormScreen.edit(id: s.pathParameters['id']!)),
+      page('/habits/:id', (s) => HabitDetailScreen(id: s.pathParameters['id']!)),
+      page(Routes.goals, (_) => const GoalsScreen()),
+      page(Routes.newGoal, (_) => const GoalFormScreen()),
+      page('/goals/edit/:id', (s) => GoalFormScreen.edit(id: s.pathParameters['id']!)),
+      page('/goals/:id', (s) => GoalDetailScreen(id: s.pathParameters['id']!)),
     ],
   );
   ref.onDispose(router.dispose);
