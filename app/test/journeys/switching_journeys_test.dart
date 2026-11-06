@@ -61,7 +61,8 @@ void main() {
       final leaks = <String, List<String>>{};
       await tour(tester, stops, (stop) {
         expect(appBrightness(tester), expected, reason: stop);
-        final bad = wrongThemeColours(tester, wrong);
+        expect(themeOnlyColours(tester, expected), isNotEmpty, reason: stop);
+        final bad = themeOnlyColours(tester, wrong);
         if (bad.isNotEmpty) leaks[stop] = bad;
       });
       expect(leaks, isEmpty, reason: '${wrong.name}-only colours in the ${expected.name} theme');
@@ -94,9 +95,10 @@ void main() {
     final enDark = <String, List<String>>{};
     await tour(tester, fullTour, (stop) {
       expect(appBrightness(tester), Brightness.dark, reason: stop);
+      expect(themeOnlyColours(tester, Brightness.dark), isNotEmpty, reason: stop);
       final problems = [
         ...screenTexts(tester, skip: skipLanguageCards).where(bengali.hasMatch).toSet(),
-        ...wrongThemeColours(tester, Brightness.light),
+        ...themeOnlyColours(tester, Brightness.light),
       ];
       if (problems.isNotEmpty) enDark[stop] = problems;
     });
@@ -108,12 +110,13 @@ void main() {
     final changed = <String, List<String>>{};
     await tour(tester, fullTour, (stop) {
       expect(appBrightness(tester), Brightness.light, reason: stop);
+      expect(themeOnlyColours(tester, Brightness.light), isNotEmpty, reason: stop);
       final texts = screenTexts(tester);
       final was = textsBefore[stop]!;
       final diff = [
         for (final s in texts.toSet().difference(was.toSet())) '+ $s',
         for (final s in was.toSet().difference(texts.toSet())) '- $s',
-        ...wrongThemeColours(tester, Brightness.dark),
+        ...themeOnlyColours(tester, Brightness.dark),
       ];
       if (diff.isNotEmpty) changed[stop] = diff;
     });

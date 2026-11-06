@@ -53,8 +53,15 @@ Future<void> show(WidgetTester tester, String location) async {
   final tab = Routes.tabs.contains(location);
   router.go(tab ? location : Routes.home);
   await tester.pumpAndSettle();
-  if (tab) return;
-  router.push(location);
+  if (!tab) {
+    router.push(location);
+    await tester.pumpAndSettle();
+  }
+  // Tabs keep their scroll position: start every stop at the top of its lists, so a stop
+  // looks the same each time it is visited.
+  for (final s in tester.stateList<ScrollableState>(find.byWidgetPredicate((w) => w is Scrollable && w.axisDirection == AxisDirection.down))) {
+    if (s.position.hasPixels && s.position.pixels != s.position.minScrollExtent) s.position.jumpTo(s.position.minScrollExtent);
+  }
   await tester.pumpAndSettle();
 }
 
@@ -246,9 +253,10 @@ List<(String, Color)> screenColours(WidgetTester tester) {
   return out;
 }
 
-/// Colours on screen that belong only to the [wrong] theme, as "widget colour".
-List<String> wrongThemeColours(WidgetTester tester, Brightness wrong) {
-  final bad = onlyIn(wrong);
+/// Colours on screen that belong only to [theme], as "widget colour". In the
+/// other theme this must be empty; in [theme] itself it never is.
+List<String> themeOnlyColours(WidgetTester tester, Brightness theme) {
+  final bad = onlyIn(theme);
   return {
     for (final (who, c) in screenColours(tester))
       if (bad.contains(c.toARGB32())) '$who 0x${c.toARGB32().toRadixString(16)}',
