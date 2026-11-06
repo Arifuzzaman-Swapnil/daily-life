@@ -142,7 +142,7 @@ class DLBalanceHero extends StatelessWidget {
           Row(
             children: [
               Expanded(child: Text(label, style: DLText.textLabel.copyWith(color: c.brandMuted))),
-              if (trailing != null) trailing!,
+              ?trailing,
             ],
           ),
           SizedBox(height: trailing != null ? DLSpace.s2 : DLSpace.s1),

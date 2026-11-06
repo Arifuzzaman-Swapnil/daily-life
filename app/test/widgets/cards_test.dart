@@ -99,7 +99,9 @@ void main() {
     expect((card('bn').border! as Border).top, BorderSide(color: c.accent, width: 2));
     expect(card('bn').color, c.accentSoft);
     expect((card('en').border! as Border).top, BorderSide(color: c.divider, width: 2));
-    expect(tester.getSemantics(find.byType(DLSelectableCard).first), containsSemantics(isButton: true, isSelected: true));
+    expect(semanticsOf(tester, find.byType(DLSelectableCard).first).button, isTrue);
+    expect(semanticsOf(tester, find.byType(DLSelectableCard).first).selected, isTrue);
+    expect(semanticsOf(tester, find.byType(DLSelectableCard).last).selected, isFalse);
 
     await tester.tap(find.text('en'));
     await tester.pumpAndSettle();

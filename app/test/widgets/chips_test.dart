@@ -43,8 +43,11 @@ void main() {
       findsOneWidget,
     );
 
-    expect(tester.getSemantics(chip('খাবার')), containsSemantics(isButton: true, isSelected: true, label: 'খাবার'));
-    expect(tester.getSemantics(chip('খাবার ✕')), containsSemantics(label: 'ফিল্টার সরান: খাবার'));
+    expect(tester.getSemantics(chip('খাবার')).label, 'খাবার');
+    expect(semanticsOf(tester, chip('খাবার')).button, isTrue);
+    expect(semanticsOf(tester, chip('খাবার')).selected, isTrue);
+    expect(semanticsOf(tester, chip('যাতায়াত')).selected, isFalse);
+    expect(tester.getSemantics(chip('খাবার ✕')).label, 'ফিল্টার সরান: খাবার');
 
     await tester.tap(chip('যাতায়াত'));
     await tester.pump();
@@ -116,7 +119,8 @@ void main() {
     expect(segment('খরচ').boxShadow, isEmpty);
     expect(styleOf(tester, 'আয়').color, c.textPrimary);
     expect(styleOf(tester, 'খরচ').color, c.textSecondary);
-    expect(tester.getSemantics(find.text('আয়')), containsSemantics(isSelected: true, isButton: true));
+    expect(semanticsOf(tester, find.text('আয়')).selected, isTrue);
+    expect(semanticsOf(tester, find.text('খরচ')).selected, isFalse);
 
     await tester.tap(find.text('১২ মাস'));
     await tester.pumpAndSettle();

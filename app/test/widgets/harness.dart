@@ -1,5 +1,6 @@
 import 'package:dailylife/core/theme/dl_theme.dart';
 import 'package:dailylife/core/theme/dl_tokens.dart';
+import 'package:dailylife/core/widgets/dl_motion.dart';
 import 'package:dailylife/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -55,6 +56,14 @@ DLColors colorsOf(WidgetTester tester) => tester.element(find.byType(Scaffold).f
 /// their ground in one so colour changes animate).
 BoxDecoration groundOf(WidgetTester tester, Finder of) =>
     tester.widget<AnimatedContainer>(find.descendant(of: of, matching: find.byType(AnimatedContainer)).first).decoration! as BoxDecoration;
+
+/// The semantics a DL component declares: the `Semantics` its [DLPressable]
+/// builds. [of] is the component or anything inside it.
+SemanticsProperties semanticsOf(WidgetTester tester, Finder of) {
+  final own = find.descendant(of: of, matching: find.byType(DLPressable), matchRoot: true);
+  final pressable = own.evaluate().isNotEmpty ? own.first : find.ancestor(of: of, matching: find.byType(DLPressable)).first;
+  return tester.widget<Semantics>(find.descendant(of: pressable, matching: find.byType(Semantics)).first).properties;
+}
 
 /// Style of the [Text] showing [text].
 TextStyle styleOf(WidgetTester tester, String text) => tester.widget<Text>(find.text(text)).style!;

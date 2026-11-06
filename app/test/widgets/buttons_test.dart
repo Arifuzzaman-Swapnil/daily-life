@@ -92,7 +92,8 @@ void main() {
 
     // The icon-only button's accessible label is its tooltip.
     final semantics = tester.ensureSemantics();
-    expect(tester.getSemantics(find.descendant(of: find.byType(DLIconButton).first, matching: find.byType(DLPressable))), containsSemantics(label: 'সেটিংস', isButton: true));
+    expect(tester.getSemantics(find.descendant(of: find.byType(DLIconButton).first, matching: find.byType(DLPressable))).label, 'সেটিংস');
+    expect(semanticsOf(tester, find.byType(DLIconButton).first).button, isTrue);
     semantics.dispose();
   });
 

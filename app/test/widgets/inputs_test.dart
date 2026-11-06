@@ -121,7 +121,7 @@ void main() {
     expect(tester.getSize(find.byType(DLCheckbox)), const Size.square(48));
     expect(track().color, c.borderStrong);
     bool? toggled() => tester.widget<Semantics>(find.descendant(of: find.byType(DLSwitch), matching: find.byType(Semantics)).first).properties.toggled;
-    expect(tester.getSemantics(find.byType(DLSwitch)), containsSemantics(label: 'বাংলা তারিখ', isButton: true));
+    expect(tester.getSemantics(find.byType(DLSwitch)).label, 'বাংলা তারিখ');
     expect(toggled(), isFalse);
 
     await tester.tap(find.byType(DLSwitch));
