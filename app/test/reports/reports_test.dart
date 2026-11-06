@@ -25,7 +25,7 @@ void main() {
     expect(find.text('নিট ৳২৭,১২০'), findsOneWidget);
     expect(tester.widget<DLBarChart>(find.byType(DLBarChart)).groups, hasLength(6));
     expect(find.byType(DLDonut), findsOneWidget);
-    expect(find.text('নভেম্বর ২০২৬-এর বেতন'), findsOneWidget);
+    expect(find.text('অক্টোবর ২০২৬-এর বেতন'), findsOneWidget); // the latest salary: October's, paid 1 November
     expect(find.text('৳১,৮৫০'), findsOneWidget);
 
     // The current month is the latest; October is one back.
