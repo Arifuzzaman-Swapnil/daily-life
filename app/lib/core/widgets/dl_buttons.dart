@@ -75,7 +75,8 @@ class DLButton extends StatelessWidget {
         border: border == null ? null : Border.all(color: border),
       ),
       child: SizedBox(
-        height: height,
+        // The 1px outline sits inside the height, like the prototype's border-box.
+        height: border == null ? height : height - 2,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: hPad),
           child: Center(widthFactor: 1, child: content),
