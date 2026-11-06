@@ -137,12 +137,18 @@ class _ProfileCard extends ConsumerStatefulWidget {
 }
 
 class _ProfileCardState extends ConsumerState<_ProfileCard> with AutomaticKeepAliveClientMixin {
-  late final _name = TextEditingController(text: ref.read(settingsProvider).displayName);
+  late final TextEditingController _name;
   bool _error = false;
 
   // A typed name survives scrolling the card out of the list and back.
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    _name = TextEditingController(text: ref.read(settingsProvider).displayName);
+  }
 
   @override
   void dispose() {

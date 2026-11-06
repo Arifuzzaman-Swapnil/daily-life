@@ -25,8 +25,14 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   int _step = 0;
-  late final _name = TextEditingController(text: ref.read(settingsProvider).displayName);
+  late final TextEditingController _name;
   bool _nameError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _name = TextEditingController(text: ref.read(settingsProvider).displayName);
+  }
 
   @override
   void dispose() {
