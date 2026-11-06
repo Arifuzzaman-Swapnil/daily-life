@@ -35,6 +35,7 @@ void main() {
     expect(before, isNotEmpty);
 
     await openRoute(tester, Routes.settings);
+    await scrollTo(tester, find.text('এখনো কোনো ব্যাকআপ নেই')); // the list builds lazily
     expect(find.text('এখনো কোনো ব্যাকআপ নেই'), findsOneWidget);
     await tapRow(tester, 'ব্যাকআপ নিন');
     expect(find.text('ব্যাকআপ সম্পন্ন হয়েছে'), findsOneWidget);
