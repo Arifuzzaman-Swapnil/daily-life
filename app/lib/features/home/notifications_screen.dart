@@ -60,7 +60,7 @@ class NotificationsScreen extends ConsumerWidget {
               child: DLEmptyState(icon: DLIcons.bell, title: t.noNotif, body: t.noNotifSub),
             ),
           ),
-        final list? => ListView(
+        final list => ListView(
             padding: EdgeInsets.fromLTRB(DLSpace.s4, DLSpace.s1, DLSpace.s4, DLSpace.s12 + MediaQuery.paddingOf(context).bottom),
             children: [
               DLList(

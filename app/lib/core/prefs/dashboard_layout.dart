@@ -42,8 +42,7 @@ class DashboardLayout {
     return DashboardLayout(
       order: List.unmodifiable(list),
       hidden: Set.unmodifiable({
-        for (final name in hidden ?? const <String>[])
-          if (byName[name] case final s?) s,
+        for (final name in hidden ?? const <String>[]) ?byName[name],
       }),
     );
   }
