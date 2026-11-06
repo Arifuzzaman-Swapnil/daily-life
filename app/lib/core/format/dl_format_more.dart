@@ -49,6 +49,15 @@ extension DLFormatMore on DLFormat {
   /// Short weekday (prototype `wd`): শুক্র / Fri.
   String weekdayShort(DateTime d) => (lang == AppLang.en ? DLFormat.weekdaysEnShort : DLFormat.weekdaysBnShort)[d.weekday % 7];
 
+  /// The Bangla months a Gregorian month spans (prototype `bMon`): November 2026
+  /// → `কার্তিক–অগ্রহায়ণ ১৪৩৩` / `Kartik–Agrahayan 1433`.
+  String banglaMonthSpan(DateTime month) {
+    final first = BanglaDate.from(DateTime(month.year, month.month));
+    final last = BanglaDate.from(DateTime(month.year, month.month + 1, 0));
+    final names = lang == AppLang.en ? DLFormat.banglaMonthsEn : DLFormat.banglaMonthsBn;
+    return '${names[first.month]}–${names[last.month]} ${digitsOf(last.year)}';
+  }
+
   /// A stopwatch reading: 2723 s → `০০:৪৫:২৩`.
   String stopwatch(int seconds) {
     String two(int n) => n.toString().padLeft(2, '0');

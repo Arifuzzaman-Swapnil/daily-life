@@ -18,6 +18,7 @@ class DLChip extends StatelessWidget {
     required this.onTap,
     this.selected = false,
     this.icon,
+    this.leading,
     this.trailingIcon,
     this.dashed = false,
     this.semanticLabel,
@@ -29,6 +30,9 @@ class DLChip extends StatelessWidget {
 
   /// 16px icon before the label (category chips).
   final IconData? icon;
+
+  /// A mark before the label instead of [icon], e.g. an event category's dot.
+  final Widget? leading;
 
   /// 16px icon after the label (the ✕ on an active filter chip).
   final IconData? trailingIcon;
@@ -57,7 +61,7 @@ class DLChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (icon != null) ...[Icon(icon, size: 16, color: fg), const SizedBox(width: 6)],
+          if (leading != null) ...[leading!, const SizedBox(width: 6)] else if (icon != null) ...[Icon(icon, size: 16, color: fg), const SizedBox(width: 6)],
           // User-typed category names can be long: shrink and ellipsize rather than overflow.
           Flexible(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: DLText.textLabel.copyWith(color: fg))),
           if (trailingIcon != null) ...[const SizedBox(width: 6), Icon(trailingIcon, size: 16, color: fg)],

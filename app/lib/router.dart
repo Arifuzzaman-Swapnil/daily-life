@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'core/db/app_database.dart';
+import 'features/calendar/calendar_screen.dart';
+import 'features/calendar/event_detail_screen.dart';
+import 'features/calendar/event_form_screen.dart';
 import 'features/finance/categories_screen.dart';
 import 'features/finance/finance_screen.dart';
 import 'features/finance/tx_detail_screen.dart';
@@ -17,7 +20,6 @@ import 'features/salary/salary_screen.dart';
 import 'features/savings/savings_screen.dart';
 import 'features/settings/settings_screen.dart';
 import 'features/shell/app_shell.dart';
-import 'features/shell/tab_placeholder.dart';
 import 'features/shop_credit/shop_detail_screen.dart';
 import 'features/shop_credit/shops_screen.dart';
 import 'features/work/projects_screen.dart';
@@ -26,7 +28,6 @@ import 'features/work/task_form_screen.dart';
 import 'features/work/timer_screen.dart';
 import 'features/work/work_history_screen.dart';
 import 'features/work/work_screen.dart';
-import 'l10n/app_localizations.dart';
 
 abstract final class Routes {
   static const home = '/home';
@@ -64,6 +65,11 @@ abstract final class Routes {
   static const workHistory = '/work-history';
   static const projects = '/projects';
   static String project(String id) => '/projects/$id';
+
+  // Calendar. A new event starts on the Calendar's selected day.
+  static const newEvent = '/events/new';
+  static String event(String id) => '/events/$id';
+  static String editEvent(String id) => '/events/edit/$id';
 }
 
 /// Built once for the app's lifetime, so locale/theme changes never reset navigation.
@@ -85,7 +91,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             GoRoute(path: Routes.finance, builder: (context, state) => const FinanceScreen()),
           ]),
           StatefulShellBranch(routes: [
-            GoRoute(path: Routes.calendar, builder: (context, state) => TabPlaceholder(title: AppLocalizations.of(context).calendar)),
+            GoRoute(path: Routes.calendar, builder: (context, state) => const CalendarScreen()),
           ]),
           StatefulShellBranch(routes: [
             GoRoute(path: Routes.work, builder: (context, state) => const WorkScreen()),
@@ -117,6 +123,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       page(Routes.workHistory, (_) => const WorkHistoryScreen()),
       page('/projects/:id', (s) => ProjectDetailScreen(id: s.pathParameters['id']!)),
       page(Routes.projects, (_) => const ProjectsScreen()),
+      // `/events/new` and `/events/edit/:id` come before `/events/:id`.
+      page(Routes.newEvent, (_) => const EventFormScreen()),
+      page('/events/edit/:id', (s) => EventFormScreen.edit(id: s.pathParameters['id']!)),
+      page('/events/:id', (s) => EventDetailScreen(id: s.pathParameters['id']!)),
     ],
   );
   ref.onDispose(router.dispose);

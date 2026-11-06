@@ -78,6 +78,21 @@ abstract final class DLIcons {
   /// Priority (prototype `flag`).
   static const IconData flag = LucideIcons.flag;
 
+  // Calendar.
+  /// Location (prototype `map`).
+  static const IconData mapPin = LucideIcons.mapPin;
+  static const IconData repeat = LucideIcons.repeat;
+
+  // Reminders and notes.
+  /// Health (prototype `pulse`).
+  static const IconData pulse = LucideIcons.activity;
+  static const IconData undo = LucideIcons.undo2;
+  static const IconData pin = LucideIcons.pin;
+  static const IconData archive = LucideIcons.archive;
+
+  /// A note (prototype `note`).
+  static const IconData note = LucideIcons.fileText;
+
   /// A stored icon key (prototype `I` name, e.g. `food`, `cash`) → icon.
   /// Unknown keys fall back to [tag], the custom-category icon.
   static IconData byKey(String key) => switch (key) {

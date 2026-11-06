@@ -14,6 +14,7 @@ import '../../core/theme/dl_tokens.dart';
 import '../../core/widgets/dl_widgets.dart';
 import '../../l10n/app_localizations.dart';
 import '../../router.dart';
+import '../calendar/calendar_providers.dart';
 import '../finance/finance_screen.dart';
 import '../finance/money_providers.dart';
 import '../finance/month_sheet.dart';
@@ -394,7 +395,16 @@ class _TodaySection extends ConsumerWidget {
           MealType.dinner => t.dinner,
         };
     void toWork() => context.go(Routes.work);
-    void toCalendar() => context.go(Routes.calendar);
+    // Meeting and event tiles open today's day view; "Agenda" the agenda.
+    void toCalendar() {
+      ref.read(calendarProvider.notifier).showToday(CalView.day);
+      context.go(Routes.calendar);
+    }
+
+    void toAgenda() {
+      ref.read(calendarProvider.notifier).setView(CalView.agenda);
+      context.go(Routes.calendar);
+    }
     void toMore() => context.go(Routes.more);
 
     final tiles = [
@@ -472,7 +482,7 @@ class _TodaySection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        DLSectionTitle(t.todayOverview, first: first, trailing: DLLinkButton(label: t.agenda, onPressed: toCalendar)),
+        DLSectionTitle(t.todayOverview, first: first, trailing: DLLinkButton(label: t.agenda, onPressed: toAgenda)),
         for (var r = 0; r < tiles.length; r += 2) ...[
           if (r > 0) const SizedBox(height: DLSpace.s3),
           IntrinsicHeight(
