@@ -51,16 +51,16 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
     if (widget.editId != null) {
       _load(widget.editId!);
     } else {
-      _projectId = widget.projectId;
-      // Like the prototype: a new task starts in the first project.
-      if (_projectId == null) _firstProject();
+      // Like the prototype: a new task starts in the first project (once the
+      // projects have loaded, if they haven't yet).
+      _projectId = widget.projectId ?? ref.read(projectsProvider).value?.firstOrNull?.id;
+      if (_projectId == null) {
+        ref.listenManual<AsyncValue<List<Project>>>(projectsProvider, (_, next) {
+          final first = next.value?.firstOrNull;
+          if (_projectId == null && first != null && mounted) setState(() => _projectId = first.id);
+        });
+      }
     }
-  }
-
-  Future<void> _firstProject() async {
-    final all = await ref.read(workDaoProvider).watchProjects().first;
-    if (!mounted || _projectId != null || all.isEmpty) return;
-    setState(() => _projectId = all.first.id);
   }
 
   Future<void> _load(String id) async {

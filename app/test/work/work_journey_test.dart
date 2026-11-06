@@ -21,7 +21,7 @@ void main() {
     await tapOn(tester, find.text('সংরক্ষণ করুন'));
     expect(find.text('কাজ সংরক্ষণ হয়েছে'), findsOneWidget);
 
-    final task = (await db.workDao.watchTasksOn(DateTime(2026, 11, 6)).first).singleWhere((k) => k.title == 'রিলিজ নোট লেখা');
+    final task = (await db.select(db.tasks).get()).singleWhere((k) => k.title == 'রিলিজ নোট লেখা');
     expect(task.status, TaskStatus.todo);
 
     // Task details → Start timer: the timer opens on this task.

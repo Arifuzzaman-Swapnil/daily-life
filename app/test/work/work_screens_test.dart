@@ -90,7 +90,7 @@ void main() {
 
     expect(find.text('কাজ সংরক্ষণ হয়েছে'), findsOneWidget);
     expect(titleBar('অফিস ও কাজ'), findsOneWidget);
-    final saved = (await db.workDao.watchTasksOn(DateTime(2026, 11, 6)).first).firstWhere((k) => k.title == 'API ডকুমেন্টেশন');
+    final saved = (await db.select(db.tasks).get()).firstWhere((k) => k.title == 'API ডকুমেন্টেশন');
     expect((saved.projectId, saved.priority, saved.status, saved.startTime, saved.endTime), ('p3', PriorityLevel.high, TaskStatus.todo, '10:00', '11:00'));
     expect([for (final c in tester.widgetList<TaskCard>(find.byType(TaskCard))) c.task.title][1], 'API ডকুমেন্টেশন');
   });
@@ -108,7 +108,7 @@ void main() {
     expect(find.byType(DLSheet), findsNothing);
     expect(find.text('প্রজেক্ট যোগ হয়েছে'), findsOneWidget);
     expect(tester.widget<DLChip>(find.widgetWithText(DLChip, 'Intelleqt')).selected, isTrue);
-    expect((await db.workDao.watchProjects().first).map((p) => p.name), contains('Intelleqt'));
+    expect((await db.select(db.projects).get()).map((p) => p.name), contains('Intelleqt'));
   });
 
   testWidgets('task detail: status chips, facts, edit and delete (screen 32)', (tester) async {
