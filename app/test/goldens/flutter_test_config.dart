@@ -64,7 +64,10 @@ Future<void> _loadLucideIfFound() async {
     debugPrint('[goldens] lucide_icons_flutter not in package_config.json');
     return;
   }
-  final rootField = pkg['rootUri'] as String;
+  // rootUri is relative to the config file; it has no trailing slash, so
+  // resolving another relative URI against it would drop its last segment.
+  var rootField = pkg['rootUri'] as String;
+  if (!rootField.endsWith('/')) rootField += '/';
   final rootUri = Uri.parse(rootField);
   final configDirUri = config.absolute.parent.uri;
   final absRoot = rootUri.isAbsolute ? rootUri : configDirUri.resolveUri(rootUri);
