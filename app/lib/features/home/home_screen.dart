@@ -18,6 +18,7 @@ import '../calendar/calendar_providers.dart';
 import '../finance/finance_screen.dart';
 import '../finance/money_providers.dart';
 import '../finance/month_sheet.dart';
+import '../reminders/reminders_providers.dart';
 import 'customize_sheet.dart';
 import 'home_providers.dart';
 
@@ -155,18 +156,7 @@ class _Greeting extends ConsumerWidget {
           semanticLabel: t.profile,
           excludeSemantics: true,
           borderRadius: shape,
-          decoration: BoxDecoration(color: c.accentSoft, borderRadius: shape),
-          child: SizedBox.square(
-            dimension: avatar,
-            child: Center(
-              child: name.isEmpty
-                  ? Icon(DLIcons.user, size: DLSize.icon, color: c.accentText)
-                  : Text(
-                      name.characters.first.toUpperCase(),
-                      style: DLText.textH2.copyWith(fontSize: 22, fontWeight: FontWeight.w700, color: c.accentText),
-                    ),
-            ),
-          ),
+          child: DLAvatar(name: name, size: avatar),
         ),
         const SizedBox(width: DLSpace.s3),
         Expanded(
@@ -448,7 +438,10 @@ class _TodaySection extends ConsumerWidget {
         value: f.count(reminders.length),
         label: t.ovRem,
         sub: reminders.isEmpty ? t.none : timed(reminders.first.time, reminders.first.title),
-        onTap: toMore,
+        onTap: () {
+          ref.read(remTabProvider.notifier).set(RemTab.today);
+          context.push(Routes.reminders);
+        },
       ),
       _Tile(
         icon: DLIcons.drop,
@@ -611,8 +604,8 @@ class _QuickSection extends StatelessWidget {
       (DLIcons.income, DLTone.success, t.addIncome, () => context.push(Routes.newTx(TxType.income))),
       (DLIcons.expense, DLTone.danger, t.addExpense, () => context.push(Routes.newTx(TxType.expense))),
       (DLIcons.briefcase, DLTone.accent, t.addWork, () => context.push(Routes.newTask())),
-      (DLIcons.edit, DLTone.teal, t.writeNote, () => context.go(Routes.more)),
-      (DLIcons.bell, DLTone.warning, t.addReminder, () => context.go(Routes.more)),
+      (DLIcons.edit, DLTone.teal, t.writeNote, () => context.push(Routes.newNote)),
+      (DLIcons.bell, DLTone.warning, t.addReminder, () => context.push(Routes.newReminder(landOnList: true))),
     ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -1,5 +1,6 @@
 // The shared Daily Life component set (build step 2). Screens import this one file.
 export 'dl_app_bar.dart';
+export 'dl_avatar.dart';
 export 'dl_bottom_nav.dart';
 export 'dl_buttons.dart';
 export 'dl_card.dart';

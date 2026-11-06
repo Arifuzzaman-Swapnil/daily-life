@@ -13,6 +13,12 @@ import 'features/finance/tx_form_screen.dart';
 import 'features/home/home_screen.dart';
 import 'features/home/notifications_screen.dart';
 import 'features/more/more_screen.dart';
+import 'features/notes/note_detail_screen.dart';
+import 'features/notes/note_editor_screen.dart';
+import 'features/notes/notes_screen.dart';
+import 'features/reminders/reminder_detail_screen.dart';
+import 'features/reminders/reminder_form_screen.dart';
+import 'features/reminders/reminders_screen.dart';
 import 'features/reports/reports_screen.dart';
 import 'features/salary/add_salary_screen.dart';
 import 'features/salary/allocation_screen.dart';
@@ -70,6 +76,18 @@ abstract final class Routes {
   static const newEvent = '/events/new';
   static String event(String id) => '/events/$id';
   static String editEvent(String id) => '/events/edit/$id';
+
+  // Reminders and notes.
+  static const reminders = '/reminders';
+
+  /// New reminder; from outside Reminders, saving then shows the list.
+  static String newReminder({bool landOnList = false}) => landOnList ? '/reminders/new?land=1' : '/reminders/new';
+  static String reminder(String id) => '/reminders/$id';
+  static String editReminder(String id) => '/reminders/edit/$id';
+  static const notes = '/notes';
+  static const newNote = '/notes/new';
+  static String note(String id) => '/notes/$id';
+  static String editNote(String id) => '/notes/edit/$id';
 }
 
 /// Built once for the app's lifetime, so locale/theme changes never reset navigation.
@@ -127,6 +145,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       page(Routes.newEvent, (_) => const EventFormScreen()),
       page('/events/edit/:id', (s) => EventFormScreen.edit(id: s.pathParameters['id']!)),
       page('/events/:id', (s) => EventDetailScreen(id: s.pathParameters['id']!)),
+      page(Routes.reminders, (_) => const RemindersScreen()),
+      page('/reminders/new', (s) => ReminderFormScreen(landOnList: s.uri.queryParameters['land'] == '1')),
+      page('/reminders/edit/:id', (s) => ReminderFormScreen.edit(id: s.pathParameters['id']!)),
+      page('/reminders/:id', (s) => ReminderDetailScreen(id: s.pathParameters['id']!)),
+      page(Routes.notes, (_) => const NotesScreen()),
+      page(Routes.newNote, (_) => const NoteEditorScreen()),
+      page('/notes/edit/:id', (s) => NoteEditorScreen.edit(id: s.pathParameters['id']!)),
+      page('/notes/:id', (s) => NoteDetailScreen(id: s.pathParameters['id']!)),
     ],
   );
   ref.onDispose(router.dispose);

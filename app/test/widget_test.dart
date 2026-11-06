@@ -37,8 +37,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(titleBar('আরও'), findsOneWidget);
 
-    await tester.tap(find.text('সেটিংস').last);
-    await tester.pumpAndSettle();
+    await tapOn(tester, find.text('সেটিংস').last);
     expect(find.text('ভাষা ও অঞ্চল'), findsOneWidget);
     expect(find.byType(DLBottomNav), findsNothing);
 

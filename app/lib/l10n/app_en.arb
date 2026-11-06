@@ -1464,5 +1464,9 @@
   "noProjects": "No projects yet",
   "@noProjects": {
     "description": "Projects screen empty state (the prototype had none)."
+  },
+  "noResults": "Nothing found",
+  "@noResults": {
+    "description": "Notebook and documents: nothing matches the search or filter (the prototype reused the Finance \"No transactions match\" text)."
   }
 }

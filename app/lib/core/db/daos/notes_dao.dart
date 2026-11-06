@@ -25,6 +25,12 @@ class NotesDao extends DatabaseAccessor<AppDatabase> with _$NotesDaoMixin {
         readsFrom: {notes},
       ).watchSingle().map((r) => r.read<int>('n'));
 
+  /// Every note, archived included (the Notebook's "still empty" state).
+  Stream<int> watchTotalCount() => customSelect(
+        'SELECT COUNT(*) AS n FROM notes',
+        readsFrom: {notes},
+      ).watchSingle().map((r) => r.read<int>('n'));
+
   Future<Note?> noteById(String id) => (select(notes)..where((n) => n.id.equals(id))).getSingleOrNull();
 
   Stream<Note?> watchNote(String id) => (select(notes)..where((n) => n.id.equals(id))).watchSingleOrNull();
