@@ -46,7 +46,7 @@ The build brief, covering stack, design rules, data model, business rules, scree
 
 ## Build-order progress
 - [x] 1. Setup, fonts, theme, l10n, DLFormat + tests, router shell + bottom nav, language/digit/theme settings (done 2026-11-06)
-- [ ] 2. Shared DL widgets
+- [x] 2. Shared DL widgets (done 2026-11-06)
 - [ ] 3. Drift schema + DAOs + seeder
 - [ ] 4. Finance → Salary/Allocation → Savings → Shop credit
 - [ ] 5. Home dashboard
