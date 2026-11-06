@@ -3,6 +3,7 @@ import 'package:dailylife/core/theme/dl_tokens.dart';
 import 'package:dailylife/core/widgets/dl_motion.dart';
 import 'package:dailylife/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart' show SemanticsProperties;
 import 'package:flutter_test/flutter_test.dart';
 
 /// Bengali strings, for tooltips and button labels.
