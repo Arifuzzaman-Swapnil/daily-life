@@ -17,7 +17,7 @@ Future<void> dumpHero(WidgetTester tester, String when) async {
   ];
   final totals = containerOf(tester).read(monthTotalsProvider(DateTime(2026, 11)));
   // ignore: avoid_print
-  print('HERO[$when] texts=$texts provider=${totals.value?.available} ${totals.runtimeType} loading=${totals.isLoading}');
+  print('HERO[$when] texts=$texts provider=${totals.value?.available} ${totals.runtimeType}');
 }
 
 /// The Finance hero's remaining / income / expense figures.
