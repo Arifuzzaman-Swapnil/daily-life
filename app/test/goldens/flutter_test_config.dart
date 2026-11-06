@@ -8,6 +8,7 @@
 // the goldens and uploads failure diffs.
 import 'dart:async';
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -22,13 +23,16 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) async {
   // show up in the asset bundle; read them from disk. The test runner starts
   // in the app/ working directory, where assets/fonts/ lives.
   const weights = ['Light', 'Regular', 'Medium', 'SemiBold', 'Bold'];
-  final loader = FontLoader('HindSiliguri');
+  final hind = FontLoader('HindSiliguri');
   for (final weight in weights) {
-    loader.addFont(Future.value(ByteData.view(
-      (await File('assets/fonts/HindSiliguri-$weight.ttf').readAsBytes()).buffer,
-    )));
+    hind.addFont(_fontFromFile('assets/fonts/HindSiliguri-$weight.ttf'));
   }
-  await loader.load();
+  await hind.load();
+
+  // Lucide icons: the package ships one or more TTFs under its own lib/
+  // folder. The pub cache path isn't predictable, so find the package root
+  // via Isolate.resolvePackageUri.
+  await _loadLucideIfFound();
 
   // A little room for anti-aliasing and Flutter version drift: at most 0.5 %
   // of the pixels may differ. A real layout change easily exceeds that.
@@ -38,6 +42,26 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) async {
   goldenFileComparator = _TolerantComparator(existing.basedir);
 
   await testMain();
+}
+
+Future<ByteData> _fontFromFile(String path) async {
+  final bytes = await File(path).readAsBytes();
+  return ByteData.view(bytes.buffer, bytes.offsetInBytes, bytes.lengthInBytes);
+}
+
+Future<void> _loadLucideIfFound() async {
+  final rootUri = await Isolate.resolvePackageUri(Uri.parse('package:lucide_icons_flutter/lucide_icons_flutter.dart'));
+  if (rootUri == null) return;
+  final packageLib = Directory(rootUri.toFilePath()).parent;
+  final fontFiles = packageLib.listSync(recursive: true).whereType<File>().where((f) => f.path.toLowerCase().endsWith('.ttf')).toList();
+  if (fontFiles.isEmpty) return;
+  // IconData from the package carries `fontPackage: lucide_icons_flutter`;
+  // the loader family for a packaged font is `packages/<pkg>/<family>`.
+  final lucide = FontLoader('packages/lucide_icons_flutter/LucideIcons');
+  for (final f in fontFiles) {
+    lucide.addFont(_fontFromFile(f.path));
+  }
+  await lucide.load();
 }
 
 class _TolerantComparator extends LocalFileComparator {
