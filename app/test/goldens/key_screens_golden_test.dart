@@ -14,7 +14,6 @@ import 'package:dailylife/core/db/app_database.dart';
 import 'package:dailylife/core/prefs/app_settings.dart';
 import 'package:dailylife/core/widgets/dl_icons.dart';
 import 'package:dailylife/features/calendar/calendar_providers.dart';
-import 'package:flutter/foundation.dart';
 import 'package:dailylife/features/health/health_providers.dart';
 import 'package:dailylife/features/reports/reports_providers.dart';
 import 'package:dailylife/l10n/app_localizations.dart';
