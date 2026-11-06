@@ -7,8 +7,8 @@
 // and I commit them. Normal pushes skip the `golden` tag; "goldens=check" runs
 // the goldens and uploads failure diffs.
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
-import 'dart:isolate';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -50,10 +50,19 @@ Future<ByteData> _fontFromFile(String path) async {
 }
 
 Future<void> _loadLucideIfFound() async {
-  final rootUri = await Isolate.resolvePackageUri(Uri.parse('package:lucide_icons_flutter/lucide_icons_flutter.dart'));
-  if (rootUri == null) return;
-  final packageLib = Directory(rootUri.toFilePath()).parent;
-  final fontFiles = packageLib.listSync(recursive: true).whereType<File>().where((f) => f.path.toLowerCase().endsWith('.ttf')).toList();
+  // Isolate.resolvePackageUri is unsupported in the Flutter test VM. Read
+  // the package's lib directory from .dart_tool/package_config.json instead.
+  final config = File('.dart_tool/package_config.json');
+  if (!config.existsSync()) return;
+  final decoded = jsonDecode(await config.readAsString()) as Map<String, Object?>;
+  final packages = (decoded['packages'] as List).cast<Map<String, Object?>>();
+  final pkg = packages.firstWhere((p) => p['name'] == 'lucide_icons_flutter', orElse: () => const <String, Object?>{});
+  if (pkg.isEmpty) return;
+  final rootUri = Uri.parse(pkg['rootUri'] as String);
+  final root = rootUri.isAbsolute ? Directory.fromUri(rootUri) : Directory.fromUri(config.parent.uri.resolveUri(rootUri));
+  final libDir = Directory.fromUri(root.uri.resolveUri(Uri.parse(pkg['packageUri'] as String? ?? 'lib/')));
+  if (!libDir.existsSync()) return;
+  final fontFiles = libDir.listSync(recursive: true).whereType<File>().where((f) => f.path.toLowerCase().endsWith('.ttf')).toList();
   if (fontFiles.isEmpty) return;
   // IconData from the package carries `fontPackage: lucide_icons_flutter`;
   // the loader family for a packaged font is `packages/<pkg>/<family>`.
