@@ -6,15 +6,18 @@ import '../../core/format/dl_format.dart';
 import '../../core/format/format_provider.dart';
 import '../../core/prefs/app_settings.dart';
 import '../../core/prefs/notification_prefs.dart';
+import '../../core/prefs/privacy_prefs.dart';
+import '../../core/security/biometric_service.dart';
 import '../../core/theme/dl_tokens.dart';
 import '../../core/widgets/dl_widgets.dart';
 import '../../l10n/app_localizations.dart';
 import '../../router.dart';
+import '../privacy/pin_sheet.dart';
 import 'appearance_cards.dart';
 
-/// Settings (prototype `settings`, screenshot 80): profile, "Language &
-/// region", "Appearance", "Notifications"; privacy, data management and about
-/// follow in steps 7.2 and 7.3.
+/// Settings (prototype `settings`, screenshots 80–81): profile, "Language &
+/// region", "Appearance", "Notifications", "Privacy & security"; data
+/// management and about follow in step 7.3.
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
@@ -121,6 +124,8 @@ class SettingsScreen extends ConsumerWidget {
                 ),
             ],
           ),
+          DLSectionHeader(t.privacy),
+          const _PrivacySection(),
         ],
       ),
     );
@@ -240,6 +245,71 @@ class _ProfileCardState extends ConsumerState<_ProfileCard> with AutomaticKeepAl
           ),
         ],
       ),
+    );
+  }
+}
+
+/// App lock, PIN, biometric unlock and hide amounts (prototype `a_set`). The
+/// lock needs a PIN first: without one, it says so and opens the PIN sheet,
+/// and saving the PIN turns the lock on.
+class _PrivacySection extends ConsumerWidget {
+  const _PrivacySection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = AppLocalizations.of(context);
+    final c = context.dl;
+    final p = ref.watch(privacyProvider);
+    final ctl = ref.read(privacyProvider.notifier);
+
+    Future<void> toggleLock() async {
+      if (p.lock) return ctl.setLock(false);
+      if (p.hasPin) return ctl.setLock(true);
+      DLToast.show(context, t.errPinFirst, error: true);
+      if (await showPinSheet(context)) await ctl.setLock(true);
+    }
+
+    Future<void> toggleBiometric() async {
+      if (p.biometric) return ctl.setBiometric(false);
+      final available = await ref.read(biometricServiceProvider).isAvailable();
+      if (!context.mounted) return;
+      if (!available) {
+        DLToast.show(context, t.bioUnavailable, error: true);
+        return;
+      }
+      await ctl.setBiometric(true);
+    }
+
+    DLListRow row(IconData icon, DLTone tone, String title, String subtitle, VoidCallback onTap, Widget trailing) => DLListRow(
+          leading: DLIconChip(icon: icon, tone: tone, size: 36),
+          title: title,
+          subtitle: subtitle,
+          onTap: onTap,
+          trailing: trailing,
+        );
+    DLSwitch toggle(bool value, VoidCallback onTap, String label) => DLSwitch(value: value, onChanged: (_) => onTap(), semanticLabel: label);
+
+    return DLList(
+      children: [
+        row(DLIcons.lock, DLTone.accent, t.appLock, t.appLockSub, toggleLock, toggle(p.lock, toggleLock, t.appLock)),
+        row(
+          DLIcons.hash,
+          DLTone.neutral,
+          p.hasPin ? t.pinChange : t.pinSet,
+          p.hasPin ? t.pinOn : t.pinOff,
+          () => showPinSheet(context),
+          Icon(DLIcons.chevronRight, size: 20, color: c.textSecondary),
+        ),
+        row(DLIcons.fingerprint, DLTone.teal, t.biometric, t.biometricSub, toggleBiometric, toggle(p.biometric, toggleBiometric, t.biometric)),
+        row(
+          DLIcons.eyeOff,
+          DLTone.warning,
+          t.hideAmounts,
+          t.hideSub,
+          () => ctl.setHideAmounts(!p.hideAmounts),
+          toggle(p.hideAmounts, () => ctl.setHideAmounts(!p.hideAmounts), t.hideAmounts),
+        ),
+      ],
     );
   }
 }

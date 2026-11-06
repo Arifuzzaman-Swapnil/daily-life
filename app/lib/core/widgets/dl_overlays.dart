@@ -299,32 +299,36 @@ class _ToastViewState extends State<_ToastView> {
       left: DLSpace.s4,
       right: DLSpace.s4,
       bottom: bottom,
-      child: TweenAnimationBuilder<double>(
-        tween: Tween(begin: 0, end: 1),
-        duration: DLMotion.of(context, DLMotion.toast),
-        curve: Curves.ease,
-        builder: (context, v, child) => Opacity(
-          opacity: v,
-          child: Transform.translate(offset: Offset(0, 32 * (1 - v)), child: child),
-        ),
-        child: Semantics(
-          liveRegion: true,
-          container: true,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: DLSpace.s4, vertical: DLSpace.s3),
-            decoration: BoxDecoration(
-              color: c.textPrimary,
-              borderRadius: const BorderRadius.all(Radius.circular(DLRadius.md)),
-              boxShadow: DLShadows.dropdown(Theme.of(context).brightness),
-            ),
-            child: DefaultTextStyle(
-              style: DLText.textBody.copyWith(color: c.background),
-              child: Row(
-                children: [
-                  Icon(widget.error ? DLIcons.alert : DLIcons.checkCircle, size: 20, color: widget.error ? c.danger : c.success),
-                  const SizedBox(width: DLSpace.s3),
-                  Expanded(child: Text(widget.message)),
-                ],
+      // A toast has no actions: taps go through to what is under it (a PIN
+      // pad, a list), so it never blocks the screen while it shows.
+      child: IgnorePointer(
+        child: TweenAnimationBuilder<double>(
+          tween: Tween(begin: 0, end: 1),
+          duration: DLMotion.of(context, DLMotion.toast),
+          curve: Curves.ease,
+          builder: (context, v, child) => Opacity(
+            opacity: v,
+            child: Transform.translate(offset: Offset(0, 32 * (1 - v)), child: child),
+          ),
+          child: Semantics(
+            liveRegion: true,
+            container: true,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: DLSpace.s4, vertical: DLSpace.s3),
+              decoration: BoxDecoration(
+                color: c.textPrimary,
+                borderRadius: const BorderRadius.all(Radius.circular(DLRadius.md)),
+                boxShadow: DLShadows.dropdown(Theme.of(context).brightness),
+              ),
+              child: DefaultTextStyle(
+                style: DLText.textBody.copyWith(color: c.background),
+                child: Row(
+                  children: [
+                    Icon(widget.error ? DLIcons.alert : DLIcons.checkCircle, size: 20, color: widget.error ? c.danger : c.success),
+                    const SizedBox(width: DLSpace.s3),
+                    Expanded(child: Text(widget.message)),
+                  ],
+                ),
               ),
             ),
           ),

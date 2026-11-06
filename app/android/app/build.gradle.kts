@@ -1,5 +1,6 @@
 // Kept in git (CI's `flutter create` only fills in missing files): Flutter
-// 3.47's template plus core library desugaring for flutter_local_notifications.
+// 3.47's template plus core library desugaring for flutter_local_notifications,
+// and minSdk 24 + AppCompat for local_auth.
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
@@ -23,7 +24,8 @@ android {
         applicationId = "com.intelleqt.dailylife"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        // local_auth 3 needs Android 7 (API 24).
+        minSdk = maxOf(24, flutter.minSdkVersion)
         targetSdk = flutter.targetSdkVersion
         // Uses the version code from pubspec.yaml. When using split APKs, 1000 * ABI_VERSION
         // is added automatically by Flutter. (https://developer.android.com/studio/build/configure-apk-splits#configure-APK-versions)
@@ -54,4 +56,6 @@ flutter {
 
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+    // Theme.AppCompat for res/values*/styles.xml (local_auth's prompt needs it).
+    implementation("androidx.appcompat:appcompat:1.7.0")
 }

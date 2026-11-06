@@ -106,6 +106,18 @@ abstract final class PrefKeys {
   /// Sample data: true once seeded, false when the person turned it off, absent
   /// when never decided.
   static const sampleData = 'pref.sampleData';
+
+  /// Privacy: amounts masked on screen.
+  static const hideAmounts = 'pref.hideAmounts';
+
+  /// Privacy: app lock, biometric unlock, and the PIN as a salted SHA-256 hash.
+  static const appLock = 'pref.lock';
+  static const biometric = 'pref.biometric';
+  static const pinHash = 'pref.pin.hash';
+  static const pinSalt = 'pref.pin.salt';
+
+  /// Security settings stay on this device: backups never include them.
+  static const deviceOnly = {appLock, biometric, pinHash, pinSalt};
 }
 
 class SettingsController extends Notifier<AppSettings> {

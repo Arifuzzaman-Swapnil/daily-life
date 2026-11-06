@@ -12,6 +12,7 @@ import 'package:pdfx/pdfx.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../db/app_database.dart';
+import '../security/app_lock.dart';
 
 /// A file the person picked, before it is copied into the app.
 @immutable
@@ -41,15 +42,23 @@ abstract class FileService {
   Future<void> shareTextFile(String fileName, String content, {required String subject});
 }
 
-final fileServiceProvider = Provider<FileService>((ref) => DeviceFileService());
+final fileServiceProvider = Provider<FileService>((ref) => DeviceFileService(outside: ref.read(appLockProvider.notifier).whileOutside));
+
+/// Runs a call that shows a system screen (picker, share sheet) without
+/// triggering the app lock; see [AppLockController.whileOutside].
+typedef OutsideRunner = Future<T> Function<T>(Future<T> Function() action);
 
 class DeviceFileService implements FileService {
+  DeviceFileService({required this.outside});
+
+  final OutsideRunner outside;
+
   @override
   Future<PickedFile?> pick(DocKind kind) async {
-    final f = await FilePicker.pickFile(
+    final f = await outside(() => FilePicker.pickFile(
       type: kind == DocKind.pdf ? FileType.custom : FileType.image,
       allowedExtensions: kind == DocKind.pdf ? const ['pdf'] : null,
-    );
+    ));
     final path = f?.path;
     if (f == null || path == null) return null;
     return PickedFile(path: path, name: f.name, size: f.lengthSync() ?? await f.length() ?? 0);
@@ -84,17 +93,14 @@ class DeviceFileService implements FileService {
 
   @override
   Future<void> share({String? path, required String text}) async {
-    if (path != null && File(path).existsSync()) {
-      await SharePlus.instance.share(ShareParams(files: [XFile(path)], text: text));
-    } else {
-      await SharePlus.instance.share(ShareParams(text: text));
-    }
+    final params = path != null && File(path).existsSync() ? ShareParams(files: [XFile(path)], text: text) : ShareParams(text: text);
+    await outside(() => SharePlus.instance.share(params));
   }
 
   @override
   Future<void> shareTextFile(String fileName, String content, {required String subject}) async {
     final file = File(p.join((await getTemporaryDirectory()).path, fileName));
     await file.writeAsString(content);
-    await SharePlus.instance.share(ShareParams(files: [XFile(file.path, mimeType: 'text/csv')], subject: subject));
+    await outside(() => SharePlus.instance.share(ShareParams(files: [XFile(file.path, mimeType: 'text/csv')], subject: subject)));
   }
 }

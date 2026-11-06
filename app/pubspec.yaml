@@ -26,6 +26,11 @@ dependencies:
   file_picker: ^13.3.2
   pdfx: ^2.11.0
   share_plus: ^13.3.1
+  crypto: ^3.0.8
+  # local_auth 3 needs Android 7 (API 24); local_auth_android is imported for
+  # the Bengali/English texts of the fingerprint prompt.
+  local_auth: ^3.0.2
+  local_auth_android: ^2.3.0
 
 dev_dependencies:
   flutter_test:

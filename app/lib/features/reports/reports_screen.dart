@@ -74,17 +74,20 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
     final f = ref.watch(formatProvider);
     final period = _period;
 
-    final (bool loading, List<_Kpi> kpis, List<Widget> body, List<List<String>> csv) = switch (_tab) {
-      ReportTab.fin => _finance(t, c, f, period),
-      ReportTab.prod => _productivity(t, c, f, period),
-      ReportTab.life => _lifestyle(t, c, f),
-    };
+    (bool, List<_Kpi>, List<Widget>, List<List<String>>) report(DLFormat f) => switch (_tab) {
+          ReportTab.fin => _finance(t, c, f, period),
+          ReportTab.prod => _productivity(t, c, f, period),
+          ReportTab.life => _lifestyle(t, c, f),
+        };
+    final (bool loading, List<_Kpi> kpis, List<Widget> body, List<List<String>> csv) = report(f);
+    // "Hide amounts" only masks the screen: the export gets the real figures.
+    final (_, exportKpis, _, exportCsv) = f.hideAmounts ? report(f.unmasked) : (loading, kpis, body, csv);
 
     Future<void> export() async {
       final rows = [
         [t.reportsT, _yearly ? f.digitsOf(_year) : f.monthYear(_month)],
-        for (final k in kpis) [k.label, k.value],
-        ...csv,
+        for (final k in exportKpis) [k.label, k.value],
+        ...exportCsv,
       ];
       String cell(String s) => s.contains(RegExp('[",\n]')) ? '"${s.replaceAll('"', '""')}"' : s;
       final content = rows.map((r) => r.map(cell).join(',')).join('\n');

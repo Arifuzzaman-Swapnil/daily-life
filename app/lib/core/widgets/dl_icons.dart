@@ -110,6 +110,18 @@ abstract final class DLIcons {
   static const IconData share = LucideIcons.share2;
   static const IconData download = LucideIcons.download;
 
+  // Settings: privacy and data management.
+  static const IconData lock = LucideIcons.lock;
+  static const IconData hash = LucideIcons.hash;
+  static const IconData fingerprint = LucideIcons.fingerprintPattern;
+  static const IconData eyeOff = LucideIcons.eyeOff;
+  static const IconData database = LucideIcons.database;
+  static const IconData list = LucideIcons.list;
+  static const IconData shield = LucideIcons.shieldCheck;
+
+  /// PIN keypad backspace.
+  static const IconData backspace = LucideIcons.delete;
+
   /// A stored icon key (prototype `I` name, e.g. `food`, `cash`) → icon.
   /// Unknown keys fall back to [tag], the custom-category icon.
   static IconData byKey(String key) => switch (key) {

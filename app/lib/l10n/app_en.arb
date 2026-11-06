@@ -1476,5 +1476,37 @@
   "msPerLine": "One milestone per line",
   "@msPerLine": {
     "description": "Goal form: milestones field hint (the prototype wrote this text inline)."
+  },
+  "pinAgain": "Enter the PIN again",
+  "@pinAgain": {
+    "description": "PIN sheet: second entry, to confirm the new PIN (the prototype took the PIN once)."
+  },
+  "pinMismatch": "The PINs don't match. Try again.",
+  "@pinMismatch": {
+    "description": "PIN sheet: the confirmation differed from the first entry."
+  },
+  "unlockSub": "Enter your PIN to continue",
+  "@unlockSub": {
+    "description": "Lock screen subtitle (the prototype only simulated the lock)."
+  },
+  "wrongPin": "Wrong PIN. Try again.",
+  "@wrongPin": {
+    "description": "Lock screen: the PIN entered is wrong."
+  },
+  "useBiometric": "Use fingerprint",
+  "@useBiometric": {
+    "description": "Lock screen button that opens the fingerprint prompt."
+  },
+  "bioHint": "Touch the fingerprint sensor",
+  "@bioHint": {
+    "description": "Hint in the system fingerprint prompt."
+  },
+  "bioUnavailable": "Fingerprint isn't set up on this phone",
+  "@bioUnavailable": {
+    "description": "Settings: biometric lock can't be turned on."
+  },
+  "deleteDigit": "Delete last digit",
+  "@deleteDigit": {
+    "description": "PIN keypad: the backspace key's label for screen readers."
   }
 }

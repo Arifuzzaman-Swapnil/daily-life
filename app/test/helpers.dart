@@ -9,6 +9,7 @@ import 'package:dailylife/core/format/dl_format.dart';
 import 'package:dailylife/core/format/format_provider.dart';
 import 'package:dailylife/core/notifications/notification_scheduler.dart';
 import 'package:dailylife/core/prefs/app_settings.dart';
+import 'package:dailylife/core/security/biometric_service.dart';
 import 'package:dailylife/core/widgets/dl_app_bar.dart';
 import 'package:dailylife/core/widgets/dl_bottom_nav.dart';
 import 'package:dailylife/core/widgets/dl_inputs.dart';
@@ -75,6 +76,7 @@ Future<AppDatabase> pumpApp(
         clockProvider.overrideWithValue(clock ?? (() => kToday)),
         notificationSchedulerProvider.overrideWithValue(FakeNotificationScheduler()),
         fileServiceProvider.overrideWithValue(FakeFileService()),
+        biometricServiceProvider.overrideWithValue(FakeBiometricService()),
       ],
       child: const DailyLifeApp(),
     ),
@@ -132,6 +134,26 @@ class FakeFileService implements FileService {
 
 /// The fake file service [pumpApp] installs.
 FakeFileService filesOf(WidgetTester tester) => containerOf(tester).read(fileServiceProvider) as FakeFileService;
+
+/// Stands in for the fingerprint prompt: [available] and the [result] of each
+/// prompt are set by the test; prompts are counted.
+class FakeBiometricService implements BiometricService {
+  bool available = true;
+  bool result = true;
+  int prompts = 0;
+
+  @override
+  Future<bool> isAvailable() async => available;
+
+  @override
+  Future<bool> authenticate({required String reason, required String title, required String hint, required String cancel}) async {
+    prompts++;
+    return result;
+  }
+}
+
+/// The fake fingerprint service [pumpApp] installs.
+FakeBiometricService biometricsOf(WidgetTester tester) => containerOf(tester).read(biometricServiceProvider) as FakeBiometricService;
 
 /// A clock that starts at [kToday] and moves only when told to.
 class TestClock {

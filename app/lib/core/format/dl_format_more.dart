@@ -5,6 +5,10 @@ import '../db/enums.dart';
 import 'dl_format.dart';
 
 extension DLFormatMore on DLFormat {
+  /// The same formatter with amounts shown, for exports: "Hide amounts" only
+  /// masks the screen.
+  DLFormat get unmasked => hideAmounts ? DLFormat(lang: lang, digits: digits, dateStyle: dateStyle) : this;
+
   /// Compact taka for chart labels (prototype `F.tkk`): 40000 → `৳৪০হা` / `৳40k`,
   /// 12500 → `৳১২.৫হা` / `৳12.5k`.
   String takaCompact(num n) {
