@@ -128,6 +128,7 @@ class DLTextField extends StatelessWidget {
     this.suffixIcon,
     this.prefixText,
     this.bottomGap = DLSpace.s4,
+    this.invalid = false,
   });
 
   final TextEditingController? controller;
@@ -160,10 +161,14 @@ class DLTextField extends StatelessWidget {
   final String? prefixText;
   final double bottomGap;
 
+  /// The error border without the error line, for a field whose message an
+  /// outer [DLField] shows (e.g. a field with a button beside it).
+  final bool invalid;
+
   @override
   Widget build(BuildContext context) {
     final c = context.dl;
-    final hasError = error != null;
+    final hasError = error != null || invalid;
     final style = amount ? DLText.amountLg : DLText.textBodyLg;
     // 52 = 12 + 28px line + 12; the amount field is 64 = 16 + 32 + 16.
     final minHeight = multiline ? 104.0 : (amount ? 64.0 : DLSize.controlLg);

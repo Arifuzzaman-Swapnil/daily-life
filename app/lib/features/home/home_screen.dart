@@ -137,7 +137,7 @@ class _Greeting extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final t = AppLocalizations.of(context);
     final c = context.dl;
-    final name = ref.watch(settingsProvider.select((s) => s.displayName));
+    final (name, avatarColor) = ref.watch(settingsProvider.select((s) => (s.displayName, s.avatar)));
     final hour = ref.watch(clockProvider)().hour;
     final hello = hour >= 5 && hour < 12
         ? t.gm
@@ -155,7 +155,7 @@ class _Greeting extends ConsumerWidget {
           semanticLabel: t.profile,
           excludeSemantics: true,
           borderRadius: shape,
-          child: DLAvatar(name: name, size: avatar),
+          child: DLAvatar(name: name, color: avatarColor, size: avatar),
         ),
         const SizedBox(width: DLSpace.s3),
         Expanded(

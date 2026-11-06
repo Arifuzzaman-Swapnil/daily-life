@@ -12,6 +12,9 @@ final sharedPrefsProvider = Provider<SharedPreferences>(
   (ref) => throw UnimplementedError('sharedPrefsProvider must be overridden in main()'),
 );
 
+/// How many avatar colours "Change photo" cycles through.
+const kAvatarColors = 4;
+
 final settingsProvider = NotifierProvider<SettingsController, AppSettings>(SettingsController.new);
 
 @immutable
@@ -23,6 +26,7 @@ class AppSettings {
     this.banglaDate = true,
     this.themeMode = ThemeMode.light,
     this.displayName = '',
+    this.avatar = 0,
   });
 
   /// First launch: Bengali, Bengali digits, written dates, Bangla calendar line on, Light theme.
@@ -34,12 +38,25 @@ class AppSettings {
   final bool banglaDate;
   final ThemeMode themeMode;
 
-  /// The name Home greets (set by onboarding, step 7). Empty until then.
+  /// The name Home greets (set by onboarding or Settings → Profile). Empty
+  /// until then.
   final String displayName;
+
+  /// The avatar colour: an index into `DLAvatar.tones` ("Change photo" cycles
+  /// it, as in the prototype).
+  final int avatar;
 
   Locale get locale => Locale(lang.name);
 
-  AppSettings copyWith({AppLang? lang, DigitStyle? digits, DateStyle? dateStyle, bool? banglaDate, ThemeMode? themeMode, String? displayName}) =>
+  AppSettings copyWith({
+    AppLang? lang,
+    DigitStyle? digits,
+    DateStyle? dateStyle,
+    bool? banglaDate,
+    ThemeMode? themeMode,
+    String? displayName,
+    int? avatar,
+  }) =>
       AppSettings(
         lang: lang ?? this.lang,
         digits: digits ?? this.digits,
@@ -47,6 +64,7 @@ class AppSettings {
         banglaDate: banglaDate ?? this.banglaDate,
         themeMode: themeMode ?? this.themeMode,
         displayName: displayName ?? this.displayName,
+        avatar: avatar ?? this.avatar,
       );
 
   @override
@@ -57,10 +75,11 @@ class AppSettings {
       other.dateStyle == dateStyle &&
       other.banglaDate == banglaDate &&
       other.themeMode == themeMode &&
-      other.displayName == displayName;
+      other.displayName == displayName &&
+      other.avatar == avatar;
 
   @override
-  int get hashCode => Object.hash(lang, digits, dateStyle, banglaDate, themeMode, displayName);
+  int get hashCode => Object.hash(lang, digits, dateStyle, banglaDate, themeMode, displayName, avatar);
 }
 
 /// Storage keys. Values are enum `.name`s so they stay readable in backups.
@@ -71,6 +90,11 @@ abstract final class PrefKeys {
   static const banglaDate = 'pref.banglaDate';
   static const themeMode = 'pref.themeMode';
   static const displayName = 'pref.displayName';
+  static const avatar = 'pref.avatar';
+
+  /// True once onboarding was finished or skipped; until then the app opens on
+  /// the Welcome screen.
+  static const onboarded = 'pref.onboarded';
 
   /// Home dashboard: section names in order, and the hidden ones.
   static const dashOrder = 'pref.dash.order';
@@ -98,6 +122,7 @@ class SettingsController extends Notifier<AppSettings> {
       banglaDate: p.getBool(PrefKeys.banglaDate) ?? d.banglaDate,
       themeMode: _enum(ThemeMode.values, p.getString(PrefKeys.themeMode)) ?? d.themeMode,
       displayName: p.getString(PrefKeys.displayName) ?? d.displayName,
+      avatar: (p.getInt(PrefKeys.avatar) ?? d.avatar) % kAvatarColors,
     );
   }
 
@@ -135,6 +160,16 @@ class SettingsController extends Notifier<AppSettings> {
     state = state.copyWith(displayName: trimmed);
     await _prefs.setString(PrefKeys.displayName, trimmed);
   }
+
+  /// "Change photo": the next avatar colour.
+  Future<void> cycleAvatar() async {
+    final next = (state.avatar + 1) % kAvatarColors;
+    state = state.copyWith(avatar: next);
+    await _prefs.setInt(PrefKeys.avatar, next);
+  }
+
+  /// Onboarding finished or skipped: the app opens on Home from now on.
+  Future<void> completeOnboarding() => _prefs.setBool(PrefKeys.onboarded, true);
 
   static T? _enum<T extends Enum>(List<T> values, String? name) {
     for (final v in values) {

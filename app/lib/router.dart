@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'core/db/app_database.dart';
+import 'core/prefs/app_settings.dart';
 import 'features/calendar/calendar_screen.dart';
 import 'features/calendar/event_detail_screen.dart';
 import 'features/calendar/event_form_screen.dart';
@@ -23,6 +24,8 @@ import 'features/more/more_screen.dart';
 import 'features/notes/note_detail_screen.dart';
 import 'features/notes/note_editor_screen.dart';
 import 'features/notes/notes_screen.dart';
+import 'features/onboarding/onboarding_screen.dart';
+import 'features/onboarding/welcome_screen.dart';
 import 'features/reminders/reminder_detail_screen.dart';
 import 'features/reminders/reminder_form_screen.dart';
 import 'features/reminders/reminders_screen.dart';
@@ -54,6 +57,9 @@ abstract final class Routes {
   static const tabs = {home, finance, calendar, work, more};
 
   // Full-screen pages above the shell (no bottom nav).
+  /// First launch: the Welcome screen, then the three onboarding steps.
+  static const welcome = '/welcome';
+  static const onboarding = '/onboarding';
   static const settings = '/settings';
   static const notifications = '/notifications';
 
@@ -121,9 +127,11 @@ final routerProvider = Provider<GoRouter>((ref) {
   final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
   GoRoute page(String path, Widget Function(GoRouterState state) build) =>
       GoRoute(path: path, parentNavigatorKey: rootNavigatorKey, builder: (context, state) => build(state));
+  // Until onboarding is finished or skipped, the app opens on Welcome.
+  final onboarded = ref.read(sharedPrefsProvider).getBool(PrefKeys.onboarded) ?? false;
   final router = GoRouter(
     navigatorKey: rootNavigatorKey,
-    initialLocation: Routes.home,
+    initialLocation: onboarded ? Routes.home : Routes.welcome,
     routes: [
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => AppShell(shell: shell),
@@ -145,6 +153,8 @@ final routerProvider = Provider<GoRouter>((ref) {
           ]),
         ],
       ),
+      page(Routes.welcome, (_) => const WelcomeScreen()),
+      page(Routes.onboarding, (_) => const OnboardingScreen()),
       page(Routes.settings, (_) => const SettingsScreen()),
       page(Routes.notifications, (_) => const NotificationsScreen()),
       // `/tx/new` and `/tx/edit/:id` come before `/tx/:id`.

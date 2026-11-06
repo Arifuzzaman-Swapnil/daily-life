@@ -10,10 +10,11 @@ import '../../core/theme/dl_tokens.dart';
 import '../../core/widgets/dl_widgets.dart';
 import '../../l10n/app_localizations.dart';
 import '../../router.dart';
+import 'appearance_cards.dart';
 
-/// Settings (prototype `settings`, screenshot 80): "Language & region",
-/// "Appearance" (step 1) and "Notifications" (step 6); profile, privacy, data
-/// management and about follow in step 7.
+/// Settings (prototype `settings`, screenshot 80): profile, "Language &
+/// region", "Appearance", "Notifications"; privacy, data management and about
+/// follow in steps 7.2 and 7.3.
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
@@ -46,37 +47,16 @@ class SettingsScreen extends ConsumerWidget {
       body: ListView(
         padding: EdgeInsets.fromLTRB(DLSpace.s4, DLSpace.s1, DLSpace.s4, DLSpace.s12 + MediaQuery.paddingOf(context).bottom),
         children: [
-          DLSectionHeader(t.langRegion, first: true),
+          DLSectionHeader(t.profile, first: true),
+          const _ProfileCard(),
+          DLSectionHeader(t.langRegion),
           DLCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 label(t.language),
                 const SizedBox(height: DLSpace.s2),
-                IntrinsicHeight(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Expanded(
-                        child: _LanguageCard(
-                          title: 'বাংলা',
-                          subtitle: 'Bengali · ডিফল্ট',
-                          selected: s.lang == AppLang.bn,
-                          onTap: () => ctl.setLanguage(AppLang.bn),
-                        ),
-                      ),
-                      const SizedBox(width: DLSpace.s2),
-                      Expanded(
-                        child: _LanguageCard(
-                          title: 'English',
-                          subtitle: 'ইংরেজি',
-                          selected: s.lang == AppLang.en,
-                          onTap: () => ctl.setLanguage(AppLang.en),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                LanguageCards(value: s.lang, onChanged: ctl.setLanguage),
                 const SizedBox(height: DLSpace.s4),
                 label(t.numFormat),
                 const SizedBox(height: DLSpace.s2),
@@ -116,24 +96,7 @@ class SettingsScreen extends ConsumerWidget {
             ],
           ),
           DLSectionHeader(t.appearance),
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                for (final (i, mode) in const [ThemeMode.light, ThemeMode.dark, ThemeMode.system].indexed) ...[
-                  if (i > 0) const SizedBox(width: DLSpace.s2),
-                  Expanded(
-                    child: _ThemeCard(
-                      mode: mode,
-                      label: switch (mode) { ThemeMode.light => t.light, ThemeMode.dark => t.dark, ThemeMode.system => t.system },
-                      selected: s.themeMode == mode,
-                      onTap: () => ctl.setThemeMode(mode),
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ),
+          ThemeCards(value: s.themeMode, onChanged: ctl.setThemeMode),
           if (s.themeMode == ThemeMode.system)
             Padding(
               padding: const EdgeInsets.only(top: DLSpace.s2),
@@ -164,117 +127,111 @@ class SettingsScreen extends ConsumerWidget {
   }
 }
 
-class _LanguageCard extends StatelessWidget {
-  const _LanguageCard({required this.title, required this.subtitle, required this.selected, required this.onTap});
-
-  final String title;
-  final String subtitle;
-  final bool selected;
-  final VoidCallback onTap;
+/// Avatar, name and "Change photo" (which cycles the avatar colour, as in the
+/// prototype), plus the display-name field with Save.
+class _ProfileCard extends ConsumerStatefulWidget {
+  const _ProfileCard();
 
   @override
-  Widget build(BuildContext context) {
-    final c = context.dl;
-    return DLSelectableCard(
-      selected: selected,
-      onTap: onTap,
-      selectedFill: c.accentSoft,
-      padding: const EdgeInsets.all(DLSpace.s3),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(minHeight: 80 - DLSpace.s3 * 2 - 4),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(child: Text(title, style: DLText.textH3.copyWith(color: c.textPrimary))),
-                if (selected)
-                  Container(
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(color: c.success, shape: BoxShape.circle),
-                    child: Icon(DLIcons.check, size: 16, color: c.onSuccess),
-                  ),
-              ],
-            ),
-            const SizedBox(height: DLSpace.s1),
-            Text(subtitle, style: DLText.textCaption.copyWith(color: c.textSecondary)),
-          ],
-        ),
-      ),
-    );
-  }
+  ConsumerState<_ProfileCard> createState() => _ProfileCardState();
 }
 
-/// Theme picker card with a miniature of the theme (prototype `.thm` / `.mini`).
-class _ThemeCard extends StatelessWidget {
-  const _ThemeCard({required this.mode, required this.label, required this.selected, required this.onTap});
+class _ProfileCardState extends ConsumerState<_ProfileCard> with AutomaticKeepAliveClientMixin {
+  late final _name = TextEditingController(text: ref.read(settingsProvider).displayName);
+  bool _error = false;
 
-  final ThemeMode mode;
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
+  // A typed name survives scrolling the card out of the list and back.
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void dispose() {
+    _name.dispose();
+    super.dispose();
+  }
+
+  Future<void> _changePhoto() async {
+    await ref.read(settingsProvider.notifier).cycleAvatar();
+    if (mounted) DLToast.show(context, AppLocalizations.of(context).photoUpdated);
+  }
+
+  Future<void> _save() async {
+    final t = AppLocalizations.of(context);
+    final name = _name.text.trim();
+    if (name.isEmpty) {
+      setState(() => _error = true);
+      DLToast.show(context, t.errForm, error: true);
+      return;
+    }
+    FocusScope.of(context).unfocus();
+    _name.text = name;
+    await ref.read(settingsProvider.notifier).setDisplayName(name);
+    if (mounted) DLToast.show(context, t.nameSaved);
+  }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    final t = AppLocalizations.of(context);
     final c = context.dl;
-    const l = DLColors.light, d = DLColors.dark;
-    // Colours of the miniature: [ground, top bar, card, lines] from the real tokens.
-    final (ground, bar, card, lines, border) = switch (mode) {
-      ThemeMode.light => (l.background, l.brand, l.surface, l.accentSoft, l.divider),
-      ThemeMode.dark => (d.background, d.brand, d.surface, d.accentSoft, d.divider),
-      ThemeMode.system => (l.background, l.brand, l.surface, l.onBrandAccent, l.borderStrong),
-    };
-    Widget line(double height, {double widthFactor = 1, required Color color}) => FractionallySizedBox(
-          alignment: Alignment.centerLeft,
-          widthFactor: widthFactor,
-          child: Container(height: height, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(4))),
-        );
-    return DLSelectableCard(
-      selected: selected,
-      onTap: onTap,
-      padding: const EdgeInsets.all(DLSpace.s2),
+    final (name, avatar) = ref.watch(settingsProvider.select((s) => (s.displayName, s.avatar)));
+    const size = 56.0;
+    return DLCard(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-            height: 96,
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              color: ground,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: border),
-            ),
-            child: Stack(
-              children: [
-                // "System" shows light on the left half and dark on the right half.
-                if (mode == ThemeMode.system)
-                  Positioned.fill(
-                    child: FractionallySizedBox(
-                      alignment: Alignment.centerRight,
-                      widthFactor: 0.5,
-                      child: ColoredBox(color: d.background),
+          Row(
+            children: [
+              DLPressable(
+                onTap: _changePhoto,
+                semanticLabel: t.changePhoto,
+                excludeSemantics: true,
+                borderRadius: const BorderRadius.all(Radius.circular(size / 2)),
+                child: DLAvatar(name: name, color: avatar, size: size),
+              ),
+              const SizedBox(width: DLSpace.s3),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name.isEmpty ? t.profile : name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: DLText.textH3.copyWith(color: c.textPrimary),
                     ),
-                  ),
-                Padding(
-                  padding: const EdgeInsets.all(DLSpace.s2),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      line(14, widthFactor: 0.7, color: bar),
-                      const SizedBox(height: 5),
-                      line(24, color: card),
-                      const SizedBox(height: 5),
-                      line(8, widthFactor: 0.55, color: lines),
-                      const SizedBox(height: 5),
-                      line(8, widthFactor: 0.55, color: lines),
-                    ],
+                    DLLinkButton(label: t.changePhoto, chevron: false, onPressed: _changePhoto),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: DLSpace.s3),
+          DLField(
+            label: t.displayName,
+            error: _error ? t.errName : null,
+            bottomGap: 0,
+            child: Row(
+              children: [
+                Expanded(
+                  child: DLTextField(
+                    controller: _name,
+                    hint: t.namePh,
+                    invalid: _error,
+                    bottomGap: 0,
+                    keyboardType: TextInputType.name,
+                    textInputAction: TextInputAction.done,
+                    onChanged: (_) {
+                      if (_error) setState(() => _error = false);
+                    },
+                    onSubmitted: (_) => _save(),
                   ),
                 ),
+                const SizedBox(width: DLSpace.s2),
+                DLButton(label: t.save, size: DLButtonSize.md, expand: false, onPressed: _save),
               ],
             ),
           ),
-          const SizedBox(height: DLSpace.s2),
-          Text(label, textAlign: TextAlign.center, style: DLText.textLabel.copyWith(color: c.textPrimary)),
         ],
       ),
     );

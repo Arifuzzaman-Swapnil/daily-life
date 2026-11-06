@@ -36,7 +36,7 @@ class MoreScreen extends ConsumerWidget {
     final t = AppLocalizations.of(context);
     final c = context.dl;
     final f = ref.watch(formatProvider);
-    final name = ref.watch(settingsProvider.select((s) => s.displayName));
+    final (name, avatarColor) = ref.watch(settingsProvider.select((s) => (s.displayName, s.avatar)));
     final dark = Theme.of(context).brightness == Brightness.dark;
     final due = ref.watch(remDueProvider).value ?? 0;
     final notes = ref.watch(activeNotesCountProvider).value ?? 0;
@@ -95,7 +95,7 @@ class MoreScreen extends ConsumerWidget {
                 onTap: () => context.push(Routes.settings),
                 child: Row(
                   children: [
-                    DLAvatar(name: name),
+                    DLAvatar(name: name, color: avatarColor),
                     const SizedBox(width: DLSpace.s3),
                     Expanded(
                       child: Column(

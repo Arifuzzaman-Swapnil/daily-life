@@ -19,6 +19,7 @@ class DLButton extends StatelessWidget {
     required this.label,
     required this.onPressed,
     this.icon,
+    this.trailingIcon,
     this.variant = DLButtonVariant.primary,
     this.size = DLButtonSize.lg,
     this.expand,
@@ -27,6 +28,9 @@ class DLButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
   final IconData? icon;
+
+  /// An icon after the label, e.g. the chevron on "Get started".
+  final IconData? trailingIcon;
   final DLButtonVariant variant;
   final DLButtonSize size;
 
@@ -64,6 +68,10 @@ class DLButton extends StatelessWidget {
         Flexible(
           child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, style: style),
         ),
+        if (trailingIcon != null) ...[
+          const SizedBox(width: DLSpace.s2),
+          Icon(trailingIcon, size: small ? 16 : 20, color: fg),
+        ],
       ],
     );
     final button = DLPressable(

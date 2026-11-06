@@ -21,11 +21,12 @@ class DLAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.leading = DLAppBarLeading.back,
     this.onLeading,
     this.actions = const [],
-  })  : root = false,
-        titleWidget = null;
+    this.titleWidget,
+  }) : root = false;
 
   /// [titleWidget] replaces the title text, e.g. Home's date over the Bangla
-  /// date; [title] then only names the bar for screen readers.
+  /// date or onboarding's "Step 1 of 3"; [title] then only names the bar for
+  /// screen readers.
   const DLAppBar.root({super.key, required this.title, this.actions = const [], this.titleWidget})
       : root = true,
         leading = DLAppBarLeading.none,

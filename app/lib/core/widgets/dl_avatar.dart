@@ -4,29 +4,35 @@ import 'package:flutter/material.dart';
 
 import '../theme/dl_tokens.dart';
 import 'dl_icons.dart';
+import 'dl_tone.dart';
 
-/// The person's round avatar (prototype `avStyle`): `accentSoft` with the
-/// name's first letter in `accentText`, or the user icon while there is no
-/// name yet.
+/// The person's round avatar (prototype `avStyle`): a soft tone with the
+/// name's first letter in the tone's text colour, or the user icon while there
+/// is no name yet. [color] picks one of [tones] (the saved avatar colour).
 class DLAvatar extends StatelessWidget {
-  const DLAvatar({super.key, required this.name, this.size = 52});
+  const DLAvatar({super.key, required this.name, this.size = 52, this.color = 0});
+
+  /// The prototype's four avatar colours, in "Change photo" order.
+  static const tones = [DLTone.accent, DLTone.success, DLTone.warning, DLTone.teal];
 
   final String name;
   final double size;
+  final int color;
 
   @override
   Widget build(BuildContext context) {
     final c = context.dl;
+    final tone = tones[color % tones.length];
     return Container(
       width: size,
       height: size,
       alignment: Alignment.center,
-      decoration: BoxDecoration(color: c.accentSoft, shape: BoxShape.circle),
+      decoration: BoxDecoration(color: tone.soft(c), shape: BoxShape.circle),
       child: name.isEmpty
-          ? Icon(DLIcons.user, size: DLSize.icon, color: c.accentText)
+          ? Icon(DLIcons.user, size: DLSize.icon, color: tone.text(c))
           : Text(
               name.characters.first.toUpperCase(),
-              style: DLText.textH2.copyWith(fontWeight: FontWeight.w700, color: c.accentText),
+              style: DLText.textH2.copyWith(fontSize: (size * 0.42).roundToDouble(), fontWeight: FontWeight.w700, color: tone.text(c)),
             ),
     );
   }
