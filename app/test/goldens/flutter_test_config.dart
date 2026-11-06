@@ -32,7 +32,10 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) async {
 
   // A little room for anti-aliasing and Flutter version drift: at most 0.5 %
   // of the pixels may differ. A real layout change easily exceeds that.
-  goldenFileComparator = _TolerantComparator(Uri.parse('${Directory.current.path}/'));
+  // Keep the default comparator's base directory (the test file's folder) so
+  // goldens land next to the test, not in the cwd.
+  final existing = goldenFileComparator as LocalFileComparator;
+  goldenFileComparator = _TolerantComparator(existing.basedir);
 
   await testMain();
 }
