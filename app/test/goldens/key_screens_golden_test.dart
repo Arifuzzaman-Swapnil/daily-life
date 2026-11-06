@@ -12,7 +12,6 @@
 // jumps out at CI without a visual pass.
 import 'package:dailylife/core/db/app_database.dart';
 import 'package:dailylife/core/prefs/app_settings.dart';
-import 'package:dailylife/core/widgets/dl_icons.dart';
 import 'package:dailylife/features/calendar/calendar_providers.dart';
 import 'package:dailylife/features/health/health_providers.dart';
 import 'package:dailylife/features/reports/reports_providers.dart';
@@ -78,11 +77,6 @@ const _variants = [
 ];
 
 void main() {
-  // Reveal which font family and package the Lucide icons in this app
-  // actually use, so the config can load the matching TTF.
-  for (final (name, ico) in [('home', DLIcons.home), ('wallet', DLIcons.wallet), ('x', DLIcons.close)]) {
-    debugPrint('[goldens] icon $name: family=${ico.fontFamily} pkg=${ico.fontPackage} codepoint=0x${ico.codePoint.toRadixString(16)}');
-  }
   for (final (variant, variantPrefs) in _variants) {
     for (final screen in screens) {
       testWidgets('golden: ${screen.slug} ($variant)', (tester) async {

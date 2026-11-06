@@ -83,15 +83,17 @@ Future<void> _loadLucideIfFound() async {
     debugPrint('[goldens] no .ttf under ${root.path}');
     return;
   }
-  // The TTF filename is the family name the IconData expects; the package
-  // declares each weight as its own family (LucideVariable-w100..900, etc.).
-  // Register each file under its own family, with the `packages/<pkg>/`
-  // prefix that a packaged font needs.
+  // Map the TTF filename to the font family the IconData expects. The base
+  // glyphs live in `lucide.ttf` but the package declares them under the
+  // family `Lucide` (capital L); the weight variants keep their filenames.
+  String familyOf(String file) {
+    final stem = file.substring(0, file.length - 4); // strip .ttf
+    return stem == 'lucide' ? 'Lucide' : stem;
+  }
+
   final fonts = <String, List<File>>{};
   for (final f in fontFiles) {
-    final name = f.uri.pathSegments.last;
-    final family = name.substring(0, name.length - 4); // strip .ttf
-    fonts.putIfAbsent(family, () => []).add(f);
+    fonts.putIfAbsent(familyOf(f.uri.pathSegments.last), () => []).add(f);
   }
   for (final e in fonts.entries) {
     final loader = FontLoader('packages/lucide_icons_flutter/${e.key}');
