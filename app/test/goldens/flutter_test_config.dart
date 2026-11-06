@@ -71,14 +71,16 @@ Future<void> _loadLucideIfFound() async {
   final rootUri = Uri.parse(rootField);
   final configDirUri = config.absolute.parent.uri;
   final absRoot = rootUri.isAbsolute ? rootUri : configDirUri.resolveUri(rootUri);
-  final libDir = Directory.fromUri(absRoot.resolve(pkg['packageUri'] as String? ?? 'lib/'));
-  if (!libDir.existsSync()) {
-    debugPrint('[goldens] lucide lib dir missing: ${libDir.path}');
+  // Search the whole package, not only lib/ — this package keeps its font
+  // outside lib/ in 4.x.
+  final root = Directory.fromUri(absRoot);
+  if (!root.existsSync()) {
+    debugPrint('[goldens] lucide root missing: ${root.path}');
     return;
   }
-  final fontFiles = libDir.listSync(recursive: true).whereType<File>().where((f) => f.path.toLowerCase().endsWith('.ttf')).toList();
+  final fontFiles = root.listSync(recursive: true).whereType<File>().where((f) => f.path.toLowerCase().endsWith('.ttf')).toList();
   if (fontFiles.isEmpty) {
-    debugPrint('[goldens] no .ttf under ${libDir.path}');
+    debugPrint('[goldens] no .ttf under ${root.path}');
     return;
   }
   // IconData from the package carries `fontPackage: lucide_icons_flutter`;
