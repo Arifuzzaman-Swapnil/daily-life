@@ -1,0 +1,9 @@
+# The `golden` tag only runs when CI asks for it (the "Build APK" workflow's
+# `goldens` input is set to `check` or `update`); a normal push leaves it out
+# so the pixel comparison doesn't fail after a Flutter release moves a glyph
+# by one shade. `tour` is step 8.3's screen tour, which runs on demand too.
+tags:
+  golden:
+    skip: 'Goldens: run the Build APK workflow with goldens=check or =update.'
+  tour:
+    skip: 'Screen tour: run the Build APK workflow with tour=on.'

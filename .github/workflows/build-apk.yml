@@ -3,6 +3,16 @@ name: Build APK
 on:
   push:
   workflow_dispatch:
+    inputs:
+      goldens:
+        description: 'Golden tests: off (push default), check (compare to baselines), update (regenerate PNGs — upload them as the "goldens" artifact).'
+        type: choice
+        default: 'off'
+        options: ['off', 'check', 'update']
+      tour:
+        description: 'Prototype screen tour (step 8.3): render every kit screen as a PNG artifact for a side-by-side with daily-life-kit/screenshots/.'
+        type: boolean
+        default: false
 
 concurrency:
   group: build-apk-${{ github.ref }}
@@ -88,6 +98,38 @@ jobs:
 
       - name: Test
         run: flutter test
+
+      # Goldens are opt-in: the default push run skips the `golden` tag so a
+      # Flutter release moving an anti-aliased pixel doesn't fail the build.
+      # Dispatch the workflow with `goldens=check` to compare against the
+      # committed baselines, or `goldens=update` to regenerate them (the
+      # generated PNGs are uploaded as the "goldens" artifact; commit them).
+      - name: Goldens (check or update)
+        if: ${{ inputs.goldens != '' && inputs.goldens != 'off' }}
+        run: |
+          if [ "${{ inputs.goldens }}" = "update" ]; then
+            flutter test --tags golden --update-goldens
+          else
+            flutter test --tags golden
+          fi
+
+      - name: Upload golden baselines (update run)
+        if: ${{ always() && inputs.goldens == 'update' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: goldens
+          path: app/test/goldens/_baselines/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload golden failure diffs (check run)
+        if: ${{ failure() && inputs.goldens == 'check' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: golden-failures
+          path: app/**/failures/**
+          if-no-files-found: ignore
+          retention-days: 14
 
       # DL_SAMPLE_DATA seeds the prototype's sample data on first launch of this
       # test build. A real release builds without it and starts empty.
