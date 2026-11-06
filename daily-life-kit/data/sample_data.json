@@ -1,0 +1,3227 @@
+{
+ "_readme": "Seed data used by the prototype. \"Today\" is fixed to 2026-11-06 (Asia/Dhaka). Text fields given as [bn, en] arrays are bilingual sample content; user-entered content is a plain string. Dates are YYYY-MM-DD, times HH:mm (24h). Amounts are whole BDT.",
+ "today": "2026-11-06",
+ "categories": {
+  "income": [
+   [
+    "salary",
+    "cash",
+    "t-su"
+   ],
+   [
+    "bonus",
+    "gift",
+    "t-su"
+   ],
+   [
+    "freelance",
+    "laptop",
+    "t-ac"
+   ],
+   [
+    "extra",
+    "brief",
+    "t-ct"
+   ],
+   [
+    "business",
+    "store",
+    "t-wa"
+   ],
+   [
+    "other",
+    "dots",
+    "t-nu"
+   ]
+  ],
+  "expense": [
+   [
+    "food",
+    "food",
+    "t-nu"
+   ],
+   [
+    "transport",
+    "bus",
+    "t-nu"
+   ],
+   [
+    "rent",
+    "home",
+    "t-nu"
+   ],
+   [
+    "shopping",
+    "bag",
+    "t-nu"
+   ],
+   [
+    "family",
+    "heart",
+    "t-nu"
+   ],
+   [
+    "personal",
+    "user",
+    "t-nu"
+   ],
+   [
+    "medical",
+    "med",
+    "t-nu"
+   ],
+   [
+    "ent",
+    "film",
+    "t-nu"
+   ],
+   [
+    "mobile",
+    "wifi",
+    "t-nu"
+   ],
+   [
+    "shop",
+    "store",
+    "t-nu"
+   ],
+   [
+    "other",
+    "dots",
+    "t-nu"
+   ]
+  ]
+ },
+ "paymentMethods": [
+  "cash",
+  "bkash",
+  "nagad",
+  "bank",
+  "card"
+ ],
+ "tx": [
+  {
+   "id": "t1",
+   "type": "income",
+   "title": [
+    "অক্টোবরের বেতন",
+    "October salary"
+   ],
+   "cat": "salary",
+   "amount": 40000,
+   "date": "2026-11-01",
+   "time": "10:15",
+   "pm": "bank",
+   "desc": [
+    "Intelleqt থেকে মাসিক বেতন",
+    "Monthly salary from Intelleqt"
+   ],
+   "note": ""
+  },
+  {
+   "id": "t2",
+   "type": "income",
+   "title": [
+    "ওয়েবসাইট প্রজেক্ট",
+    "Website project"
+   ],
+   "cat": "freelance",
+   "amount": 8500,
+   "date": "2026-11-03",
+   "time": "20:40",
+   "pm": "bkash",
+   "desc": [
+    "ফ্রিল্যান্স ক্লায়েন্টের দ্বিতীয় কিস্তি",
+    "Second instalment from a freelance client"
+   ],
+   "note": ""
+  },
+  {
+   "id": "t3",
+   "type": "income",
+   "title": [
+    "সপ্তাহান্তের অতিরিক্ত কাজ",
+    "Weekend overtime"
+   ],
+   "cat": "extra",
+   "amount": 1500,
+   "date": "2026-11-05",
+   "time": "18:00",
+   "pm": "cash",
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "t4",
+   "type": "expense",
+   "title": [
+    "বাসা ভাড়া",
+    "House rent"
+   ],
+   "cat": "rent",
+   "amount": 10000,
+   "date": "2026-11-02",
+   "time": "09:00",
+   "pm": "bank",
+   "desc": [
+    "নভেম্বর মাসের ভাড়া",
+    "Rent for November"
+   ],
+   "note": ""
+  },
+  {
+   "id": "t5",
+   "type": "expense",
+   "title": [
+    "মাসের বাজার",
+    "Monthly groceries"
+   ],
+   "cat": "food",
+   "amount": 4200,
+   "date": "2026-11-02",
+   "time": "17:30",
+   "pm": "cash",
+   "desc": [
+    "চাল, ডাল, তেল, সবজি",
+    "Rice, lentils, oil, vegetables"
+   ],
+   "note": ""
+  },
+  {
+   "id": "t6",
+   "type": "expense",
+   "title": [
+    "সিনেমা",
+    "Movie night"
+   ],
+   "cat": "ent",
+   "amount": 600,
+   "date": "2026-11-01",
+   "time": "19:30",
+   "pm": "card",
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "t7",
+   "type": "expense",
+   "title": [
+    "ওষুধ",
+    "Medicine"
+   ],
+   "cat": "medical",
+   "amount": 450,
+   "date": "2026-11-03",
+   "time": "13:10",
+   "pm": "cash",
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "t8",
+   "type": "expense",
+   "title": [
+    "অফিস যাতায়াত",
+    "Office commute"
+   ],
+   "cat": "transport",
+   "amount": 650,
+   "date": "2026-11-04",
+   "time": "08:40",
+   "pm": "bkash",
+   "desc": [
+    "সপ্তাহের রাইড শেয়ার",
+    "Ride-share for the week"
+   ],
+   "note": ""
+  },
+  {
+   "id": "t9",
+   "type": "expense",
+   "title": [
+    "ইন্টারনেট বিল",
+    "Internet bill"
+   ],
+   "cat": "mobile",
+   "amount": 1200,
+   "date": "2026-11-05",
+   "time": "11:00",
+   "pm": "bkash",
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "t10",
+   "type": "expense",
+   "title": [
+    "বাড়িতে টাকা পাঠানো",
+    "Money sent home"
+   ],
+   "cat": "family",
+   "amount": 5000,
+   "date": "2026-11-05",
+   "time": "15:20",
+   "pm": "bkash",
+   "desc": [
+    "মা-বাবার জন্য",
+    "For parents"
+   ],
+   "note": ""
+  },
+  {
+   "id": "t11",
+   "type": "expense",
+   "title": [
+    "মায়ের দোয়া স্টোরে পরিশোধ",
+    "Payment to Mayer Doa Store"
+   ],
+   "cat": "shop",
+   "amount": 500,
+   "date": "2026-11-05",
+   "time": "19:00",
+   "pm": "cash",
+   "desc": "",
+   "note": "",
+   "shop": "s1"
+  },
+  {
+   "id": "t12",
+   "type": "expense",
+   "title": [
+    "দুপুরের খাবার",
+    "Lunch"
+   ],
+   "cat": "food",
+   "amount": 280,
+   "date": "2026-11-06",
+   "time": "13:30",
+   "pm": "cash",
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h0",
+   "type": "income",
+   "cat": "salary",
+   "amount": 38000,
+   "date": "2025-12-01",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "মাসিক বেতন",
+    "Monthly salary"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h1",
+   "type": "income",
+   "cat": "freelance",
+   "amount": 6000,
+   "date": "2025-12-18",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ফ্রিল্যান্স কাজ",
+    "Freelance work"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h2",
+   "type": "expense",
+   "cat": "rent",
+   "amount": 10000,
+   "date": "2025-12-02",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "বাসা ভাড়া",
+    "House rent"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h3",
+   "type": "expense",
+   "cat": "family",
+   "amount": 5000,
+   "date": "2025-12-05",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "বাড়িতে টাকা পাঠানো",
+    "Money sent home"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h4",
+   "type": "expense",
+   "cat": "mobile",
+   "amount": 1200,
+   "date": "2025-12-06",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ইন্টারনেট বিল",
+    "Internet bill"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h5",
+   "type": "expense",
+   "cat": "transport",
+   "amount": 2400,
+   "date": "2025-12-12",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের যাতায়াত",
+    "Monthly commute"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h6",
+   "type": "expense",
+   "cat": "food",
+   "amount": 7260,
+   "date": "2025-12-14",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের বাজার",
+    "Monthly groceries"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h7",
+   "type": "expense",
+   "cat": "shopping",
+   "amount": 3300,
+   "date": "2025-12-20",
+   "time": "12:00",
+   "pm": "card",
+   "title": [
+    "কেনাকাটা",
+    "Shopping"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h8",
+   "type": "expense",
+   "cat": "personal",
+   "amount": 2640,
+   "date": "2025-12-25",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "ব্যক্তিগত খরচ",
+    "Personal spending"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h9",
+   "type": "income",
+   "cat": "salary",
+   "amount": 38000,
+   "date": "2026-01-01",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "মাসিক বেতন",
+    "Monthly salary"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h10",
+   "type": "income",
+   "cat": "freelance",
+   "amount": 4000,
+   "date": "2026-01-18",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ফ্রিল্যান্স কাজ",
+    "Freelance work"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h11",
+   "type": "expense",
+   "cat": "rent",
+   "amount": 10000,
+   "date": "2026-01-02",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "বাসা ভাড়া",
+    "House rent"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h12",
+   "type": "expense",
+   "cat": "family",
+   "amount": 5000,
+   "date": "2026-01-05",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "বাড়িতে টাকা পাঠানো",
+    "Money sent home"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h13",
+   "type": "expense",
+   "cat": "mobile",
+   "amount": 1200,
+   "date": "2026-01-06",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ইন্টারনেট বিল",
+    "Internet bill"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h14",
+   "type": "expense",
+   "cat": "transport",
+   "amount": 2400,
+   "date": "2026-01-12",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের যাতায়াত",
+    "Monthly commute"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h15",
+   "type": "expense",
+   "cat": "food",
+   "amount": 6550,
+   "date": "2026-01-14",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের বাজার",
+    "Monthly groceries"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h16",
+   "type": "expense",
+   "cat": "shopping",
+   "amount": 2980,
+   "date": "2026-01-20",
+   "time": "12:00",
+   "pm": "card",
+   "title": [
+    "কেনাকাটা",
+    "Shopping"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h17",
+   "type": "expense",
+   "cat": "personal",
+   "amount": 2370,
+   "date": "2026-01-25",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "ব্যক্তিগত খরচ",
+    "Personal spending"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h18",
+   "type": "income",
+   "cat": "salary",
+   "amount": 38000,
+   "date": "2026-02-01",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "মাসিক বেতন",
+    "Monthly salary"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h19",
+   "type": "income",
+   "cat": "freelance",
+   "amount": 5500,
+   "date": "2026-02-18",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ফ্রিল্যান্স কাজ",
+    "Freelance work"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h20",
+   "type": "expense",
+   "cat": "rent",
+   "amount": 10000,
+   "date": "2026-02-02",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "বাসা ভাড়া",
+    "House rent"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h21",
+   "type": "expense",
+   "cat": "family",
+   "amount": 5000,
+   "date": "2026-02-05",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "বাড়িতে টাকা পাঠানো",
+    "Money sent home"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h22",
+   "type": "expense",
+   "cat": "mobile",
+   "amount": 1200,
+   "date": "2026-02-06",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ইন্টারনেট বিল",
+    "Internet bill"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h23",
+   "type": "expense",
+   "cat": "transport",
+   "amount": 2400,
+   "date": "2026-02-12",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের যাতায়াত",
+    "Monthly commute"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h24",
+   "type": "expense",
+   "cat": "food",
+   "amount": 7870,
+   "date": "2026-02-14",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের বাজার",
+    "Monthly groceries"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h25",
+   "type": "expense",
+   "cat": "shopping",
+   "amount": 3580,
+   "date": "2026-02-20",
+   "time": "12:00",
+   "pm": "card",
+   "title": [
+    "কেনাকাটা",
+    "Shopping"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h26",
+   "type": "expense",
+   "cat": "personal",
+   "amount": 2850,
+   "date": "2026-02-25",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "ব্যক্তিগত খরচ",
+    "Personal spending"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h27",
+   "type": "income",
+   "cat": "salary",
+   "amount": 38000,
+   "date": "2026-03-01",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "মাসিক বেতন",
+    "Monthly salary"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h28",
+   "type": "income",
+   "cat": "freelance",
+   "amount": 4000,
+   "date": "2026-03-18",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ফ্রিল্যান্স কাজ",
+    "Freelance work"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h29",
+   "type": "expense",
+   "cat": "rent",
+   "amount": 10000,
+   "date": "2026-03-02",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "বাসা ভাড়া",
+    "House rent"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h30",
+   "type": "expense",
+   "cat": "family",
+   "amount": 5000,
+   "date": "2026-03-05",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "বাড়িতে টাকা পাঠানো",
+    "Money sent home"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h31",
+   "type": "expense",
+   "cat": "mobile",
+   "amount": 1200,
+   "date": "2026-03-06",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ইন্টারনেট বিল",
+    "Internet bill"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h32",
+   "type": "expense",
+   "cat": "transport",
+   "amount": 2400,
+   "date": "2026-03-12",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের যাতায়াত",
+    "Monthly commute"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h33",
+   "type": "expense",
+   "cat": "food",
+   "amount": 6160,
+   "date": "2026-03-14",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের বাজার",
+    "Monthly groceries"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h34",
+   "type": "expense",
+   "cat": "shopping",
+   "amount": 2800,
+   "date": "2026-03-20",
+   "time": "12:00",
+   "pm": "card",
+   "title": [
+    "কেনাকাটা",
+    "Shopping"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h35",
+   "type": "expense",
+   "cat": "personal",
+   "amount": 2240,
+   "date": "2026-03-25",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "ব্যক্তিগত খরচ",
+    "Personal spending"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h36",
+   "type": "income",
+   "cat": "salary",
+   "amount": 38000,
+   "date": "2026-04-01",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "মাসিক বেতন",
+    "Monthly salary"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h37",
+   "type": "income",
+   "cat": "freelance",
+   "amount": 13000,
+   "date": "2026-04-18",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ফ্রিল্যান্স কাজ",
+    "Freelance work"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h38",
+   "type": "expense",
+   "cat": "rent",
+   "amount": 10000,
+   "date": "2026-04-02",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "বাসা ভাড়া",
+    "House rent"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h39",
+   "type": "expense",
+   "cat": "family",
+   "amount": 5000,
+   "date": "2026-04-05",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "বাড়িতে টাকা পাঠানো",
+    "Money sent home"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h40",
+   "type": "expense",
+   "cat": "mobile",
+   "amount": 1200,
+   "date": "2026-04-06",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ইন্টারনেট বিল",
+    "Internet bill"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h41",
+   "type": "expense",
+   "cat": "transport",
+   "amount": 2400,
+   "date": "2026-04-12",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের যাতায়াত",
+    "Monthly commute"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h42",
+   "type": "expense",
+   "cat": "food",
+   "amount": 10780,
+   "date": "2026-04-14",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের বাজার",
+    "Monthly groceries"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h43",
+   "type": "expense",
+   "cat": "shopping",
+   "amount": 4900,
+   "date": "2026-04-20",
+   "time": "12:00",
+   "pm": "card",
+   "title": [
+    "কেনাকাটা",
+    "Shopping"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h44",
+   "type": "expense",
+   "cat": "personal",
+   "amount": 3920,
+   "date": "2026-04-25",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "ব্যক্তিগত খরচ",
+    "Personal spending"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h45",
+   "type": "income",
+   "cat": "salary",
+   "amount": 38000,
+   "date": "2026-05-01",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "মাসিক বেতন",
+    "Monthly salary"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h46",
+   "type": "income",
+   "cat": "freelance",
+   "amount": 8000,
+   "date": "2026-05-18",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ফ্রিল্যান্স কাজ",
+    "Freelance work"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h47",
+   "type": "expense",
+   "cat": "rent",
+   "amount": 10000,
+   "date": "2026-05-02",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "বাসা ভাড়া",
+    "House rent"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h48",
+   "type": "expense",
+   "cat": "family",
+   "amount": 5000,
+   "date": "2026-05-05",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "বাড়িতে টাকা পাঠানো",
+    "Money sent home"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h49",
+   "type": "expense",
+   "cat": "mobile",
+   "amount": 1200,
+   "date": "2026-05-06",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ইন্টারনেট বিল",
+    "Internet bill"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h50",
+   "type": "expense",
+   "cat": "transport",
+   "amount": 2400,
+   "date": "2026-05-12",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের যাতায়াত",
+    "Monthly commute"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h51",
+   "type": "expense",
+   "cat": "food",
+   "amount": 6930,
+   "date": "2026-05-14",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের বাজার",
+    "Monthly groceries"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h52",
+   "type": "expense",
+   "cat": "shopping",
+   "amount": 3150,
+   "date": "2026-05-20",
+   "time": "12:00",
+   "pm": "card",
+   "title": [
+    "কেনাকাটা",
+    "Shopping"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h53",
+   "type": "expense",
+   "cat": "personal",
+   "amount": 2520,
+   "date": "2026-05-25",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "ব্যক্তিগত খরচ",
+    "Personal spending"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h54",
+   "type": "income",
+   "cat": "salary",
+   "amount": 38000,
+   "date": "2026-06-01",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "মাসিক বেতন",
+    "Monthly salary"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h55",
+   "type": "income",
+   "cat": "freelance",
+   "amount": 4000,
+   "date": "2026-06-18",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ফ্রিল্যান্স কাজ",
+    "Freelance work"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h56",
+   "type": "expense",
+   "cat": "rent",
+   "amount": 10000,
+   "date": "2026-06-02",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "বাসা ভাড়া",
+    "House rent"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h57",
+   "type": "expense",
+   "cat": "family",
+   "amount": 5000,
+   "date": "2026-06-05",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "বাড়িতে টাকা পাঠানো",
+    "Money sent home"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h58",
+   "type": "expense",
+   "cat": "mobile",
+   "amount": 1200,
+   "date": "2026-06-06",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ইন্টারনেট বিল",
+    "Internet bill"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h59",
+   "type": "expense",
+   "cat": "transport",
+   "amount": 2400,
+   "date": "2026-06-12",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের যাতায়াত",
+    "Monthly commute"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h60",
+   "type": "expense",
+   "cat": "food",
+   "amount": 8360,
+   "date": "2026-06-14",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের বাজার",
+    "Monthly groceries"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h61",
+   "type": "expense",
+   "cat": "shopping",
+   "amount": 3800,
+   "date": "2026-06-20",
+   "time": "12:00",
+   "pm": "card",
+   "title": [
+    "কেনাকাটা",
+    "Shopping"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h62",
+   "type": "expense",
+   "cat": "personal",
+   "amount": 3040,
+   "date": "2026-06-25",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "ব্যক্তিগত খরচ",
+    "Personal spending"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h63",
+   "type": "income",
+   "cat": "salary",
+   "amount": 38000,
+   "date": "2026-07-01",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "মাসিক বেতন",
+    "Monthly salary"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h64",
+   "type": "income",
+   "cat": "freelance",
+   "amount": 10500,
+   "date": "2026-07-18",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ফ্রিল্যান্স কাজ",
+    "Freelance work"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h65",
+   "type": "expense",
+   "cat": "rent",
+   "amount": 10000,
+   "date": "2026-07-02",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "বাসা ভাড়া",
+    "House rent"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h66",
+   "type": "expense",
+   "cat": "family",
+   "amount": 5000,
+   "date": "2026-07-05",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "বাড়িতে টাকা পাঠানো",
+    "Money sent home"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h67",
+   "type": "expense",
+   "cat": "mobile",
+   "amount": 1200,
+   "date": "2026-07-06",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ইন্টারনেট বিল",
+    "Internet bill"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h68",
+   "type": "expense",
+   "cat": "transport",
+   "amount": 2400,
+   "date": "2026-07-12",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের যাতায়াত",
+    "Monthly commute"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h69",
+   "type": "expense",
+   "cat": "food",
+   "amount": 9080,
+   "date": "2026-07-14",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের বাজার",
+    "Monthly groceries"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h70",
+   "type": "expense",
+   "cat": "shopping",
+   "amount": 4130,
+   "date": "2026-07-20",
+   "time": "12:00",
+   "pm": "card",
+   "title": [
+    "কেনাকাটা",
+    "Shopping"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h71",
+   "type": "expense",
+   "cat": "personal",
+   "amount": 3290,
+   "date": "2026-07-25",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "ব্যক্তিগত খরচ",
+    "Personal spending"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h72",
+   "type": "income",
+   "cat": "salary",
+   "amount": 38000,
+   "date": "2026-08-01",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "মাসিক বেতন",
+    "Monthly salary"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h73",
+   "type": "income",
+   "cat": "freelance",
+   "amount": 6000,
+   "date": "2026-08-18",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ফ্রিল্যান্স কাজ",
+    "Freelance work"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h74",
+   "type": "expense",
+   "cat": "rent",
+   "amount": 10000,
+   "date": "2026-08-02",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "বাসা ভাড়া",
+    "House rent"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h75",
+   "type": "expense",
+   "cat": "family",
+   "amount": 5000,
+   "date": "2026-08-05",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "বাড়িতে টাকা পাঠানো",
+    "Money sent home"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h76",
+   "type": "expense",
+   "cat": "mobile",
+   "amount": 1200,
+   "date": "2026-08-06",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ইন্টারনেট বিল",
+    "Internet bill"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h77",
+   "type": "expense",
+   "cat": "transport",
+   "amount": 2400,
+   "date": "2026-08-12",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের যাতায়াত",
+    "Monthly commute"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h78",
+   "type": "expense",
+   "cat": "food",
+   "amount": 6050,
+   "date": "2026-08-14",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের বাজার",
+    "Monthly groceries"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h79",
+   "type": "expense",
+   "cat": "shopping",
+   "amount": 2750,
+   "date": "2026-08-20",
+   "time": "12:00",
+   "pm": "card",
+   "title": [
+    "কেনাকাটা",
+    "Shopping"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h80",
+   "type": "expense",
+   "cat": "personal",
+   "amount": 2200,
+   "date": "2026-08-25",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "ব্যক্তিগত খরচ",
+    "Personal spending"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h81",
+   "type": "income",
+   "cat": "salary",
+   "amount": 40000,
+   "date": "2026-09-01",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "মাসিক বেতন",
+    "Monthly salary"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h82",
+   "type": "income",
+   "cat": "freelance",
+   "amount": 12000,
+   "date": "2026-09-18",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ফ্রিল্যান্স কাজ",
+    "Freelance work"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h83",
+   "type": "expense",
+   "cat": "rent",
+   "amount": 10000,
+   "date": "2026-09-02",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "বাসা ভাড়া",
+    "House rent"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h84",
+   "type": "expense",
+   "cat": "family",
+   "amount": 5000,
+   "date": "2026-09-05",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "বাড়িতে টাকা পাঠানো",
+    "Money sent home"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h85",
+   "type": "expense",
+   "cat": "mobile",
+   "amount": 1200,
+   "date": "2026-09-06",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ইন্টারনেট বিল",
+    "Internet bill"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h86",
+   "type": "expense",
+   "cat": "transport",
+   "amount": 2400,
+   "date": "2026-09-12",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের যাতায়াত",
+    "Monthly commute"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h87",
+   "type": "expense",
+   "cat": "food",
+   "amount": 9790,
+   "date": "2026-09-14",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের বাজার",
+    "Monthly groceries"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h88",
+   "type": "expense",
+   "cat": "shopping",
+   "amount": 4450,
+   "date": "2026-09-20",
+   "time": "12:00",
+   "pm": "card",
+   "title": [
+    "কেনাকাটা",
+    "Shopping"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h89",
+   "type": "expense",
+   "cat": "personal",
+   "amount": 3560,
+   "date": "2026-09-25",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "ব্যক্তিগত খরচ",
+    "Personal spending"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h90",
+   "type": "income",
+   "cat": "salary",
+   "amount": 40000,
+   "date": "2026-10-01",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "মাসিক বেতন",
+    "Monthly salary"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h91",
+   "type": "income",
+   "cat": "freelance",
+   "amount": 7500,
+   "date": "2026-10-18",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ফ্রিল্যান্স কাজ",
+    "Freelance work"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h92",
+   "type": "expense",
+   "cat": "rent",
+   "amount": 10000,
+   "date": "2026-10-02",
+   "time": "12:00",
+   "pm": "bank",
+   "title": [
+    "বাসা ভাড়া",
+    "House rent"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h93",
+   "type": "expense",
+   "cat": "family",
+   "amount": 5000,
+   "date": "2026-10-05",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "বাড়িতে টাকা পাঠানো",
+    "Money sent home"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h94",
+   "type": "expense",
+   "cat": "mobile",
+   "amount": 1200,
+   "date": "2026-10-06",
+   "time": "12:00",
+   "pm": "bkash",
+   "title": [
+    "ইন্টারনেট বিল",
+    "Internet bill"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h95",
+   "type": "expense",
+   "cat": "transport",
+   "amount": 2400,
+   "date": "2026-10-12",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের যাতায়াত",
+    "Monthly commute"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h96",
+   "type": "expense",
+   "cat": "food",
+   "amount": 8580,
+   "date": "2026-10-14",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "মাসের বাজার",
+    "Monthly groceries"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h97",
+   "type": "expense",
+   "cat": "shopping",
+   "amount": 3900,
+   "date": "2026-10-20",
+   "time": "12:00",
+   "pm": "card",
+   "title": [
+    "কেনাকাটা",
+    "Shopping"
+   ],
+   "desc": "",
+   "note": ""
+  },
+  {
+   "id": "h98",
+   "type": "expense",
+   "cat": "personal",
+   "amount": 3120,
+   "date": "2026-10-25",
+   "time": "12:00",
+   "pm": "cash",
+   "title": [
+    "ব্যক্তিগত খরচ",
+    "Personal spending"
+   ],
+   "desc": "",
+   "note": ""
+  }
+ ],
+ "ccats": [],
+ "salary": {
+  "amount": 40000,
+  "next": "2026-12-01",
+  "recs": [
+   {
+    "id": "sl1",
+    "month": "2026-10",
+    "paid": "2026-11-01",
+    "amount": 40000,
+    "pm": "bank"
+   },
+   {
+    "id": "sl2",
+    "month": "2026-09",
+    "paid": "2026-10-01",
+    "amount": 40000,
+    "pm": "bank"
+   },
+   {
+    "id": "sl3",
+    "month": "2026-08",
+    "paid": "2026-09-01",
+    "amount": 40000,
+    "pm": "bank"
+   },
+   {
+    "id": "sl4",
+    "month": "2026-07",
+    "paid": "2026-08-01",
+    "amount": 38000,
+    "pm": "bank"
+   },
+   {
+    "id": "sl5",
+    "month": "2026-06",
+    "paid": "2026-07-02",
+    "amount": 38000,
+    "pm": "bank"
+   },
+   {
+    "id": "sl6",
+    "month": "2026-05",
+    "paid": "2026-06-01",
+    "amount": 38000,
+    "pm": "bank"
+   }
+  ]
+ },
+ "alloc": [
+  {
+   "id": "a1",
+   "name": [
+    "বাসা ভাড়া",
+    "Rent"
+   ],
+   "amount": 10000,
+   "cat": "rent"
+  },
+  {
+   "id": "a2",
+   "name": [
+    "খাবার",
+    "Food"
+   ],
+   "amount": 7000,
+   "cat": "food"
+  },
+  {
+   "id": "a3",
+   "name": [
+    "যাতায়াত",
+    "Transport"
+   ],
+   "amount": 3000,
+   "cat": "transport"
+  },
+  {
+   "id": "a4",
+   "name": [
+    "পরিবার",
+    "Family"
+   ],
+   "amount": 5000,
+   "cat": "family"
+  },
+  {
+   "id": "a5",
+   "name": [
+    "ব্যক্তিগত খরচ",
+    "Personal expenses"
+   ],
+   "amount": 5000,
+   "cat": "personal"
+  },
+  {
+   "id": "a6",
+   "name": [
+    "সঞ্চয়",
+    "Savings"
+   ],
+   "amount": 10000,
+   "cat": "savings"
+  }
+ ],
+ "sav": [
+  {
+   "id": "v1",
+   "type": "in",
+   "amount": 60000,
+   "date": "2026-05-31",
+   "note": [
+    "আগের জমা",
+    "Opening savings"
+   ],
+   "goal": "g2"
+  },
+  {
+   "id": "v2",
+   "type": "in",
+   "amount": 12000,
+   "date": "2026-06-03",
+   "note": [
+    "মাসিক জমা",
+    "Monthly saving"
+   ],
+   "goal": "g1"
+  },
+  {
+   "id": "v3",
+   "type": "in",
+   "amount": 10000,
+   "date": "2026-07-04",
+   "note": [
+    "মাসিক জমা",
+    "Monthly saving"
+   ],
+   "goal": "g1"
+  },
+  {
+   "id": "v4",
+   "type": "out",
+   "amount": 4000,
+   "date": "2026-07-20",
+   "note": [
+    "জরুরি খরচ",
+    "Emergency spend"
+   ],
+   "goal": "g1"
+  },
+  {
+   "id": "v5",
+   "type": "in",
+   "amount": 12000,
+   "date": "2026-08-02",
+   "note": [
+    "মাসিক জমা",
+    "Monthly saving"
+   ],
+   "goal": "g1"
+  },
+  {
+   "id": "v6",
+   "type": "in",
+   "amount": 11000,
+   "date": "2026-09-02",
+   "note": [
+    "ভ্রমণের জন্য",
+    "For the trip"
+   ],
+   "goal": "g3"
+  },
+  {
+   "id": "v7",
+   "type": "in",
+   "amount": 14000,
+   "date": "2026-10-02",
+   "note": [
+    "মাসিক জমা",
+    "Monthly saving"
+   ],
+   "goal": "g1"
+  },
+  {
+   "id": "v8",
+   "type": "in",
+   "amount": 10000,
+   "date": "2026-11-02",
+   "note": [
+    "মাসিক জমা",
+    "Monthly saving"
+   ],
+   "goal": "g1"
+  }
+ ],
+ "sgoals": [
+  {
+   "id": "g1",
+   "name": [
+    "নতুন ল্যাপটপ",
+    "New laptop"
+   ],
+   "target": 120000,
+   "date": "2027-06-30"
+  },
+  {
+   "id": "g2",
+   "name": [
+    "জরুরি তহবিল",
+    "Emergency fund"
+   ],
+   "target": 200000,
+   "date": "2027-12-31"
+  },
+  {
+   "id": "g3",
+   "name": [
+    "কক্সবাজার ভ্রমণ",
+    "Cox's Bazar trip"
+   ],
+   "target": 25000,
+   "date": "2026-12-20"
+  }
+ ],
+ "shops": [
+  {
+   "id": "s1",
+   "name": [
+    "মায়ের দোয়া স্টোর",
+    "Mayer Doa Store"
+   ],
+   "ent": [
+    {
+     "id": "e1",
+     "type": "buy",
+     "amount": 1200,
+     "date": "2026-10-20",
+     "item": [
+      "মাসিক মুদি বাজার",
+      "Monthly groceries"
+     ]
+    },
+    {
+     "id": "e2",
+     "type": "buy",
+     "amount": 300,
+     "date": "2026-11-03",
+     "item": [
+      "ডিম ও রুটি",
+      "Eggs and bread"
+     ]
+    },
+    {
+     "id": "e3",
+     "type": "pay",
+     "amount": 500,
+     "date": "2026-11-05",
+     "item": ""
+    }
+   ]
+  },
+  {
+   "id": "s2",
+   "name": [
+    "রহিম ফার্মেসি",
+    "Rahim Pharmacy"
+   ],
+   "ent": [
+    {
+     "id": "e4",
+     "type": "buy",
+     "amount": 650,
+     "date": "2026-10-28",
+     "item": [
+      "মায়ের ওষুধ",
+      "Medicine for mum"
+     ]
+    },
+    {
+     "id": "e5",
+     "type": "buy",
+     "amount": 200,
+     "date": "2026-11-04",
+     "item": [
+      "স্যানিটাইজার",
+      "Hand sanitiser"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s3",
+   "name": [
+    "সালাম টি স্টল",
+    "Salam Tea Stall"
+   ],
+   "ent": [
+    {
+     "id": "e6",
+     "type": "buy",
+     "amount": 420,
+     "date": "2026-10-15",
+     "item": [
+      "অক্টোবরের চা-নাশতা",
+      "October tea & snacks"
+     ]
+    },
+    {
+     "id": "e7",
+     "type": "pay",
+     "amount": 420,
+     "date": "2026-10-31",
+     "item": ""
+    }
+   ]
+  }
+ ],
+ "projects": [
+  {
+   "id": "p1",
+   "name": "Baselinq",
+   "desc": [
+    "নির্মাণ প্রকল্প ব্যবস্থাপনা প্ল্যাটফর্ম",
+    "Construction project management platform"
+   ]
+  },
+  {
+   "id": "p2",
+   "name": "Truckwise",
+   "desc": [
+    "লজিস্টিকস ও ট্রাকিং",
+    "Logistics & trucking"
+   ]
+  },
+  {
+   "id": "p3",
+   "name": "Hitec",
+   "desc": [
+    "স্টিল ইন্ডাস্ট্রির ওয়েব অ্যাপ",
+    "Steel-industry web app"
+   ]
+  }
+ ],
+ "tasks": [
+  {
+   "id": "k1",
+   "title": [
+    "পেমেন্ট সার্টিফিকেট API রিভিউ",
+    "Review payment certificate API"
+   ],
+   "proj": "p1",
+   "desc": [
+    "রোল অনুযায়ী অনুমোদন প্রবাহ যাচাই",
+    "Verify approval flow per role"
+   ],
+   "date": "2026-11-06",
+   "start": "09:30",
+   "end": "11:00",
+   "status": "done",
+   "pri": "high",
+   "note": "",
+   "spent": 90
+  },
+  {
+   "id": "k2",
+   "title": [
+    "রোল-ভিত্তিক পারমিশন টেস্ট",
+    "Test role-based permissions"
+   ],
+   "proj": "p1",
+   "desc": "",
+   "date": "2026-11-06",
+   "start": "11:30",
+   "end": "13:00",
+   "status": "prog",
+   "pri": "high",
+   "note": "",
+   "spent": 45
+  },
+  {
+   "id": "k3",
+   "title": [
+    "বিলিং ইন্টিগ্রেশন",
+    "Billing integration"
+   ],
+   "proj": "p2",
+   "desc": [
+    "পেমেন্ট গেটওয়ে যুক্ত করা",
+    "Connect payment gateway"
+   ],
+   "date": "2026-11-06",
+   "start": "14:00",
+   "end": "16:00",
+   "status": "todo",
+   "pri": "medium",
+   "note": "",
+   "spent": 0
+  },
+  {
+   "id": "k4",
+   "title": [
+    "ড্যাশবোর্ড বাগ ফিক্স",
+    "Fix dashboard bug"
+   ],
+   "proj": "p3",
+   "desc": "",
+   "date": "2026-11-06",
+   "start": "16:30",
+   "end": "17:30",
+   "status": "hold",
+   "pri": "low",
+   "note": [
+    "ক্লায়েন্টের উত্তরের অপেক্ষা",
+    "Waiting on client reply"
+   ],
+   "spent": 0
+  },
+  {
+   "id": "k5",
+   "title": [
+    "JBCC কমপ্লায়েন্স চেকলিস্ট",
+    "JBCC compliance checklist"
+   ],
+   "proj": "p1",
+   "desc": "",
+   "date": "2026-11-05",
+   "start": "10:00",
+   "end": "13:00",
+   "status": "done",
+   "pri": "high",
+   "note": "",
+   "spent": 180
+  },
+  {
+   "id": "k6",
+   "title": [
+    "ডেটাবেস মাইগ্রেশন",
+    "Database migration"
+   ],
+   "proj": "p2",
+   "desc": "",
+   "date": "2026-11-05",
+   "start": "14:00",
+   "end": "17:30",
+   "status": "done",
+   "pri": "medium",
+   "note": "",
+   "spent": 210
+  },
+  {
+   "id": "k7",
+   "title": [
+    "স্প্রিন্ট প্ল্যানিং",
+    "Sprint planning"
+   ],
+   "proj": "p1",
+   "desc": "",
+   "date": "2026-11-04",
+   "start": "10:00",
+   "end": "11:00",
+   "status": "done",
+   "pri": "medium",
+   "note": "",
+   "spent": 60
+  },
+  {
+   "id": "k8",
+   "title": [
+    "রিপোর্ট এক্সপোর্ট ফিচার",
+    "Report export feature"
+   ],
+   "proj": "p3",
+   "desc": "",
+   "date": "2026-11-04",
+   "start": "11:30",
+   "end": "17:00",
+   "status": "done",
+   "pri": "medium",
+   "note": "",
+   "spent": 300
+  },
+  {
+   "id": "k9",
+   "title": [
+    "কোড রিভিউ",
+    "Code review"
+   ],
+   "proj": "p2",
+   "desc": "",
+   "date": "2026-11-03",
+   "start": "09:30",
+   "end": "16:30",
+   "status": "done",
+   "pri": "low",
+   "note": "",
+   "spent": 390
+  },
+  {
+   "id": "k10",
+   "title": [
+    "গভর্ন্যান্স মডিউল ডিজাইন",
+    "Governance module design"
+   ],
+   "proj": "p1",
+   "desc": "",
+   "date": "2026-11-02",
+   "start": "09:00",
+   "end": "17:00",
+   "status": "done",
+   "pri": "high",
+   "note": "",
+   "spent": 450
+  },
+  {
+   "id": "k11",
+   "title": [
+    "ক্লায়েন্ট ডেমো প্রস্তুতি",
+    "Client demo prep"
+   ],
+   "proj": "p1",
+   "desc": "",
+   "date": "2026-11-07",
+   "start": "10:00",
+   "end": "12:00",
+   "status": "todo",
+   "pri": "high",
+   "note": "",
+   "spent": 0
+  }
+ ],
+ "timer": {
+  "st": "idle",
+  "acc": 0,
+  "t0": 0,
+  "task": "k2"
+ },
+ "events": [
+  {
+   "id": "ev1",
+   "title": [
+    "টিম স্ট্যান্ডআপ",
+    "Team standup"
+   ],
+   "cat": "meeting",
+   "date": "2026-11-06",
+   "end": "2026-11-06",
+   "start": "10:00",
+   "fin": "10:30",
+   "loc": [
+    "গুগল মিট",
+    "Google Meet"
+   ],
+   "rem": "10",
+   "rep": "weekly",
+   "desc": ""
+  },
+  {
+   "id": "ev2",
+   "title": [
+    "পরিবারের সাথে রাতের খাবার",
+    "Family dinner"
+   ],
+   "cat": "family",
+   "date": "2026-11-06",
+   "end": "2026-11-06",
+   "start": "19:30",
+   "fin": "21:00",
+   "loc": [
+    "মিরপুর",
+    "Mirpur"
+   ],
+   "rem": "60",
+   "rep": "once",
+   "desc": ""
+  },
+  {
+   "id": "ev3",
+   "title": [
+    "বেতন দিবস",
+    "Payday"
+   ],
+   "cat": "important",
+   "date": "2026-11-01",
+   "end": "2026-11-01",
+   "start": "",
+   "fin": "",
+   "loc": "",
+   "rem": "0",
+   "rep": "monthly",
+   "desc": ""
+  },
+  {
+   "id": "ev4",
+   "title": [
+    "ক্লায়েন্ট ডেমো — Baselinq",
+    "Client demo — Baselinq"
+   ],
+   "cat": "office",
+   "date": "2026-11-08",
+   "end": "2026-11-08",
+   "start": "11:00",
+   "fin": "12:30",
+   "loc": [
+    "মিরপুর অফিস",
+    "Mirpur office"
+   ],
+   "rem": "30",
+   "rep": "once",
+   "desc": [
+    "নতুন পেমেন্ট সার্টিফিকেট প্রবাহ দেখানো",
+    "Demo the new payment certificate flow"
+   ]
+  },
+  {
+   "id": "ev5",
+   "title": [
+    "বিদ্যুৎ বিলের শেষ দিন",
+    "Electricity bill due"
+   ],
+   "cat": "important",
+   "date": "2026-11-10",
+   "end": "2026-11-10",
+   "start": "",
+   "fin": "",
+   "loc": "",
+   "rem": "1440",
+   "rep": "monthly",
+   "desc": ""
+  },
+  {
+   "id": "ev6",
+   "title": [
+    "বন্ধুর বিয়ে",
+    "Friend's wedding"
+   ],
+   "cat": "personal",
+   "date": "2026-11-14",
+   "end": "2026-11-14",
+   "start": "19:00",
+   "fin": "23:00",
+   "loc": [
+    "ধানমন্ডি",
+    "Dhanmondi"
+   ],
+   "rem": "60",
+   "rep": "once",
+   "desc": ""
+  },
+  {
+   "id": "ev7",
+   "title": [
+    "জিম মেম্বারশিপ নবায়ন",
+    "Gym membership renewal"
+   ],
+   "cat": "other",
+   "date": "2026-11-21",
+   "end": "2026-11-21",
+   "start": "18:00",
+   "fin": "18:30",
+   "loc": "",
+   "rem": "1440",
+   "rep": "once",
+   "desc": ""
+  },
+  {
+   "id": "ev8",
+   "title": [
+    "মাসিক রিভিউ মিটিং",
+    "Monthly review meeting"
+   ],
+   "cat": "meeting",
+   "date": "2026-11-27",
+   "end": "2026-11-27",
+   "start": "15:00",
+   "fin": "16:00",
+   "loc": [
+    "মিরপুর অফিস",
+    "Mirpur office"
+   ],
+   "rem": "30",
+   "rep": "monthly",
+   "desc": ""
+  },
+  {
+   "id": "ev9",
+   "title": [
+    "স্প্রিন্ট রেট্রো",
+    "Sprint retro"
+   ],
+   "cat": "meeting",
+   "date": "2026-11-12",
+   "end": "2026-11-12",
+   "start": "16:00",
+   "fin": "17:00",
+   "loc": [
+    "গুগল মিট",
+    "Google Meet"
+   ],
+   "rem": "10",
+   "rep": "once",
+   "desc": ""
+  }
+ ],
+ "rems": [
+  {
+   "id": "r1",
+   "title": [
+    "মায়ের ওষুধ কিনুন",
+    "Buy mum's medicine"
+   ],
+   "desc": [
+    "রহিম ফার্মেসি থেকে",
+    "From Rahim Pharmacy"
+   ],
+   "date": "2026-11-06",
+   "time": "18:00",
+   "pri": "high",
+   "cat": "personal",
+   "rep": "once",
+   "on": true,
+   "done": false
+  },
+  {
+   "id": "r2",
+   "title": [
+    "সাপ্তাহিক রিপোর্ট জমা দিন",
+    "Submit weekly report"
+   ],
+   "desc": "",
+   "date": "2026-11-06",
+   "time": "17:00",
+   "pri": "medium",
+   "cat": "office",
+   "rep": "weekly",
+   "on": true,
+   "done": false
+  },
+  {
+   "id": "r3",
+   "title": [
+    "২০ পৃষ্ঠা বই পড়ুন",
+    "Read 20 pages"
+   ],
+   "desc": "",
+   "date": "2026-11-06",
+   "time": "22:00",
+   "pri": "low",
+   "cat": "personal",
+   "rep": "daily",
+   "on": true,
+   "done": false
+  },
+  {
+   "id": "r4",
+   "title": [
+    "বিদ্যুৎ বিল পরিশোধ করুন",
+    "Pay electricity bill"
+   ],
+   "desc": [
+    "বিকাশ দিয়ে পরিশোধ",
+    "Pay via bKash"
+   ],
+   "date": "2026-11-10",
+   "time": "10:00",
+   "pri": "high",
+   "cat": "bill",
+   "rep": "monthly",
+   "on": true,
+   "done": false
+  },
+  {
+   "id": "r5",
+   "title": [
+    "ক্লায়েন্ট ডেমোর স্লাইড",
+    "Slides for client demo"
+   ],
+   "desc": "",
+   "date": "2026-11-07",
+   "time": "21:00",
+   "pri": "medium",
+   "cat": "office",
+   "rep": "once",
+   "on": true,
+   "done": false
+  },
+  {
+   "id": "r6",
+   "title": [
+    "ইন্টারনেট বিল দিন",
+    "Pay internet bill"
+   ],
+   "desc": "",
+   "date": "2026-11-05",
+   "time": "11:00",
+   "pri": "medium",
+   "cat": "bill",
+   "rep": "monthly",
+   "on": true,
+   "done": true
+  },
+  {
+   "id": "r7",
+   "title": [
+    "সকালে হাঁটা",
+    "Morning walk"
+   ],
+   "desc": "",
+   "date": "2026-11-06",
+   "time": "06:30",
+   "pri": "low",
+   "cat": "health",
+   "rep": "daily",
+   "on": true,
+   "done": true
+  }
+ ],
+ "notes": [
+  {
+   "id": "n1",
+   "title": [
+    "ডিসেম্বরের বাজেট পরিকল্পনা",
+    "December budget plan"
+   ],
+   "body": [
+    "ভাড়া ১০,০০০, খাবার ৭,০০০। ঈদের আগে ৫,০০০ আলাদা রাখতে হবে। ল্যাপটপের জন্য অন্তত ১২,০০০ জমা।",
+    "Rent 10,000, food 7,000. Keep 5,000 aside for the holidays. Save at least 12,000 for the laptop."
+   ],
+   "cat": "personal",
+   "pin": true,
+   "arch": false,
+   "created": "2026-11-01",
+   "updated": "2026-11-05"
+  },
+  {
+   "id": "n2",
+   "title": [
+    "ক্লায়েন্ট ডেমোর পয়েন্ট",
+    "Client demo talking points"
+   ],
+   "body": [
+    "১. পেমেন্ট সার্টিফিকেট প্রবাহ ২. রোল-ভিত্তিক অনুমোদন ৩. JBCC কমপ্লায়েন্স রিপোর্ট",
+    "1. Payment certificate flow 2. Role-based approvals 3. JBCC compliance report"
+   ],
+   "cat": "office",
+   "pin": true,
+   "arch": false,
+   "created": "2026-11-04",
+   "updated": "2026-11-06"
+  },
+  {
+   "id": "n3",
+   "title": [
+    "অ্যাপের নতুন আইডিয়া",
+    "New app idea"
+   ],
+   "body": [
+    "দোকানের বাকির জন্য এসএমএস রিমাইন্ডার পাঠানোর ফিচার।",
+    "A feature to send SMS reminders for shop dues."
+   ],
+   "cat": "ideas",
+   "pin": false,
+   "arch": false,
+   "created": "2026-10-28",
+   "updated": "2026-10-28"
+  },
+  {
+   "id": "n4",
+   "title": [
+    "পড়ার তালিকা",
+    "Reading list"
+   ],
+   "body": [
+    "ক্লিন আর্কিটেকচার, ডিজাইনিং ডেটা-ইনটেনসিভ অ্যাপ্লিকেশন",
+    "Clean Architecture, Designing Data-Intensive Applications"
+   ],
+   "cat": "personal",
+   "pin": false,
+   "arch": false,
+   "created": "2026-10-20",
+   "updated": "2026-11-02"
+  },
+  {
+   "id": "n5",
+   "title": [
+    "ভিসা কাগজপত্রের তালিকা",
+    "Travel document checklist"
+   ],
+   "body": [
+    "পাসপোর্ট, ছবি, ব্যাংক স্টেটমেন্ট, অফিসের চিঠি।",
+    "Passport, photos, bank statement, office letter."
+   ],
+   "cat": "important",
+   "pin": false,
+   "arch": false,
+   "created": "2026-10-12",
+   "updated": "2026-10-15"
+  },
+  {
+   "id": "n6",
+   "title": [
+    "পুরনো মিটিং নোট",
+    "Old meeting notes"
+   ],
+   "body": [
+    "সেপ্টেম্বরের রেট্রো থেকে কাজগুলো শেষ।",
+    "Action items from the September retro are done."
+   ],
+   "cat": "office",
+   "pin": false,
+   "arch": true,
+   "created": "2026-09-28",
+   "updated": "2026-10-01"
+  }
+ ],
+ "wTarget": 3000,
+ "water": [
+  {
+   "id": "w1",
+   "t": "07:30",
+   "ml": 250
+  },
+  {
+   "id": "w2",
+   "t": "09:15",
+   "ml": 500
+  },
+  {
+   "id": "w3",
+   "t": "11:00",
+   "ml": 250
+  },
+  {
+   "id": "w4",
+   "t": "13:40",
+   "ml": 500
+  }
+ ],
+ "wHist": [
+  2400,
+  3000,
+  2750,
+  3200,
+  1900,
+  3000,
+  0
+ ],
+ "meals": [
+  {
+   "id": "m1",
+   "type": "breakfast",
+   "date": "2026-11-06",
+   "time": "08:00",
+   "desc": [
+    "রুটি, ডিম ভাজি ও চা",
+    "Roti, fried egg and tea"
+   ],
+   "note": ""
+  },
+  {
+   "id": "m2",
+   "type": "lunch",
+   "date": "2026-11-06",
+   "time": "13:30",
+   "desc": [
+    "ভাত, রুই মাছ, ডাল",
+    "Rice, rui fish curry, lentils"
+   ],
+   "note": ""
+  },
+  {
+   "id": "m3",
+   "type": "breakfast",
+   "date": "2026-11-05",
+   "time": "08:15",
+   "desc": [
+    "পরোটা ও সবজি",
+    "Paratha and vegetables"
+   ],
+   "note": ""
+  },
+  {
+   "id": "m4",
+   "type": "lunch",
+   "date": "2026-11-05",
+   "time": "13:15",
+   "desc": [
+    "খিচুড়ি ও ডিম",
+    "Khichuri with egg"
+   ],
+   "note": ""
+  },
+  {
+   "id": "m5",
+   "type": "snack",
+   "date": "2026-11-05",
+   "time": "17:00",
+   "desc": [
+    "চা ও বিস্কুট",
+    "Tea and biscuits"
+   ],
+   "note": ""
+  },
+  {
+   "id": "m6",
+   "type": "dinner",
+   "date": "2026-11-05",
+   "time": "21:00",
+   "desc": [
+    "ভাত, মুরগির মাংস, সালাদ",
+    "Rice, chicken curry, salad"
+   ],
+   "note": ""
+  }
+ ],
+ "habits": [
+  {
+   "id": "h1",
+   "name": "h_read",
+   "icon": "book",
+   "days": [
+    "2026-11-01",
+    "2026-11-02",
+    "2026-11-03",
+    "2026-11-04",
+    "2026-11-05",
+    "2026-10-31",
+    "2026-10-30",
+    "2026-10-29",
+    "2026-10-27",
+    "2026-10-26"
+   ],
+   "time": "22:00"
+  },
+  {
+   "id": "h2",
+   "name": "h_ex",
+   "icon": "pulse",
+   "days": [
+    "2026-11-01",
+    "2026-11-03",
+    "2026-11-05",
+    "2026-10-30",
+    "2026-10-28",
+    "2026-10-26"
+   ],
+   "time": "07:00"
+  },
+  {
+   "id": "h3",
+   "name": "h_learn",
+   "icon": "grad",
+   "days": [
+    "2026-11-02",
+    "2026-11-03",
+    "2026-11-04",
+    "2026-11-05",
+    "2026-11-06",
+    "2026-11-01",
+    "2026-10-31"
+   ],
+   "time": "21:00"
+  },
+  {
+   "id": "h4",
+   "name": "h_walk",
+   "icon": "walk",
+   "days": [
+    "2026-11-06",
+    "2026-11-05",
+    "2026-11-04",
+    "2026-11-02",
+    "2026-10-31",
+    "2026-10-30"
+   ],
+   "time": "06:30"
+  },
+  {
+   "id": "h5",
+   "name": "h_sleep",
+   "icon": "moon",
+   "days": [
+    "2026-11-05",
+    "2026-11-04",
+    "2026-11-01"
+   ],
+   "time": "23:00"
+  },
+  {
+   "id": "h6",
+   "name": "h_wake",
+   "icon": "sunrise",
+   "days": [
+    "2026-11-06",
+    "2026-11-05",
+    "2026-11-04",
+    "2026-11-03"
+   ],
+   "time": "06:00"
+  }
+ ],
+ "goals": [
+  {
+   "id": "gl1",
+   "title": [
+    "AWS সার্টিফিকেশন",
+    "AWS certification"
+   ],
+   "cat": "learning",
+   "desc": [
+    "সলিউশনস আর্কিটেক্ট অ্যাসোসিয়েট",
+    "Solutions Architect Associate"
+   ],
+   "date": "2027-02-28",
+   "done": false,
+   "ms": [
+    {
+     "id": "x1",
+     "t": [
+      "কোর্স শেষ করা",
+      "Finish the course"
+     ],
+     "d": true
+    },
+    {
+     "id": "x2",
+     "t": [
+      "৩টি মক টেস্ট",
+      "3 mock tests"
+     ],
+     "d": true
+    },
+    {
+     "id": "x3",
+     "t": [
+      "পরীক্ষার তারিখ বুক",
+      "Book the exam"
+     ],
+     "d": false
+    },
+    {
+     "id": "x4",
+     "t": [
+      "পরীক্ষায় পাস",
+      "Pass the exam"
+     ],
+     "d": false
+    }
+   ]
+  },
+  {
+   "id": "gl2",
+   "title": [
+    "সিনিয়র ইঞ্জিনিয়ার পদ",
+    "Senior engineer role"
+   ],
+   "cat": "career",
+   "desc": [
+    "পরের রিভিউ সাইকেলে পদোন্নতি",
+    "Promotion in the next review cycle"
+   ],
+   "date": "2027-06-30",
+   "done": false,
+   "ms": [
+    {
+     "id": "x5",
+     "t": [
+      "একটি মডিউলের নেতৃত্ব",
+      "Lead one module"
+     ],
+     "d": true
+    },
+    {
+     "id": "x6",
+     "t": [
+      "জুনিয়রদের মেন্টরিং",
+      "Mentor juniors"
+     ],
+     "d": false
+    },
+    {
+     "id": "x7",
+     "t": [
+      "সিস্টেম ডিজাইন ডক",
+      "System design doc"
+     ],
+     "d": false
+    }
+   ]
+  },
+  {
+   "id": "gl3",
+   "title": [
+    "ল্যাপটপের টাকা জমানো",
+    "Save for a laptop"
+   ],
+   "cat": "financial",
+   "desc": [
+    "১,২০,০০০ টাকা লক্ষ্য",
+    "Target ৳120,000"
+   ],
+   "date": "2027-06-30",
+   "done": false,
+   "ms": [
+    {
+     "id": "x8",
+     "t": [
+      "৩০,০০০ জমা",
+      "Save 30,000"
+     ],
+     "d": true
+    },
+    {
+     "id": "x9",
+     "t": [
+      "৬০,০০০ জমা",
+      "Save 60,000"
+     ],
+     "d": false
+    },
+    {
+     "id": "x10",
+     "t": [
+      "১,২০,০০০ জমা",
+      "Save 120,000"
+     ],
+     "d": false
+    }
+   ]
+  },
+  {
+   "id": "gl4",
+   "title": [
+    "প্রতিদিন ৮,০০০ কদম",
+    "8,000 steps a day"
+   ],
+   "cat": "health",
+   "desc": "",
+   "date": "2026-12-31",
+   "done": false,
+   "ms": [
+    {
+     "id": "x11",
+     "t": [
+      "এক সপ্তাহ টানা",
+      "One full week"
+     ],
+     "d": true
+    },
+    {
+     "id": "x12",
+     "t": [
+      "এক মাস টানা",
+      "One full month"
+     ],
+     "d": false
+    }
+   ]
+  },
+  {
+   "id": "gl5",
+   "title": [
+    "মা-বাবাকে নিয়ে ভ্রমণ",
+    "Trip with parents"
+   ],
+   "cat": "personal",
+   "desc": "",
+   "date": "2026-10-20",
+   "done": true,
+   "ms": [
+    {
+     "id": "x13",
+     "t": [
+      "জায়গা ঠিক করা",
+      "Pick a place"
+     ],
+     "d": true
+    },
+    {
+     "id": "x14",
+     "t": [
+      "টিকিট কাটা",
+      "Book tickets"
+     ],
+     "d": true
+    }
+   ]
+  }
+ ],
+ "docs": [
+  {
+   "id": "d1",
+   "title": [
+    "অফার লেটার — Intelleqt",
+    "Offer letter — Intelleqt"
+   ],
+   "cat": "office",
+   "kind": "pdf",
+   "desc": [
+    "ব্যাকএন্ড এআই ইঞ্জিনিয়ার পদ",
+    "Backend AI Engineer role"
+   ],
+   "date": "2026-02-03",
+   "size": "240 KB",
+   "pages": 3
+  },
+  {
+   "id": "d2",
+   "title": [
+    "B.Sc. সার্টিফিকেট",
+    "B.Sc. certificate"
+   ],
+   "cat": "edu",
+   "kind": "pdf",
+   "desc": [
+    "বিইউবিটি, সিএসই",
+    "BUBT, CSE"
+   ],
+   "date": "2025-09-14",
+   "size": "1.2 MB",
+   "pages": 1
+  },
+  {
+   "id": "d3",
+   "title": [
+    "বাসা ভাড়ার চুক্তি",
+    "Rental agreement"
+   ],
+   "cat": "fin",
+   "kind": "pdf",
+   "desc": [
+    "২০২৬ সালের চুক্তি",
+    "2026 agreement"
+   ],
+   "date": "2026-01-05",
+   "size": "860 KB",
+   "pages": 4
+  },
+  {
+   "id": "d4",
+   "title": [
+    "অক্টোবরের ব্যাংক স্টেটমেন্ট",
+    "October bank statement"
+   ],
+   "cat": "fin",
+   "kind": "pdf",
+   "desc": "",
+   "date": "2026-11-02",
+   "size": "310 KB",
+   "pages": 2
+  },
+  {
+   "id": "d5",
+   "title": [
+    "পাসপোর্ট সাইজ ছবি",
+    "Passport-size photo"
+   ],
+   "cat": "personal",
+   "kind": "img",
+   "desc": "",
+   "date": "2026-08-21",
+   "size": "420 KB",
+   "pages": 1
+  },
+  {
+   "id": "d6",
+   "title": [
+    "মেডিকেল ইন্স্যুরেন্স কার্ড",
+    "Health insurance card"
+   ],
+   "cat": "personal",
+   "kind": "img",
+   "desc": "",
+   "date": "2026-03-11",
+   "size": "510 KB",
+   "pages": 1
+  }
+ ],
+ "notifs": [
+  {
+   "id": "nt1",
+   "icon": "bell",
+   "tone": "t-wa",
+   "title": [
+    "মায়ের ওষুধ কিনুন",
+    "Buy mum's medicine"
+   ],
+   "sub": [
+    "আজ সন্ধ্যা ৬:০০",
+    "Today 6:00 PM"
+   ],
+   "read": false,
+   "to": "reminders"
+  },
+  {
+   "id": "nt2",
+   "icon": "users",
+   "tone": "t-ac",
+   "title": [
+    "টিম স্ট্যান্ডআপ ১০ মিনিট পর",
+    "Team standup in 10 minutes"
+   ],
+   "sub": [
+    "গুগল মিট",
+    "Google Meet"
+   ],
+   "read": false,
+   "to": "calendar"
+  },
+  {
+   "id": "nt3",
+   "icon": "drop",
+   "tone": "t-ac",
+   "title": [
+    "পানি পান করার সময়",
+    "Time for a glass of water"
+   ],
+   "sub": [
+    "আজ ১,৫০০ মিলি হয়েছে",
+    "1,500 ml so far today"
+   ],
+   "read": false,
+   "to": "health"
+  },
+  {
+   "id": "nt4",
+   "icon": "store",
+   "tone": "t-da",
+   "title": [
+    "মায়ের দোয়া স্টোরে বাকি ৳১,০০০",
+    "৳1,000 due at Mayer Doa Store"
+   ],
+   "sub": [
+    "গতকাল",
+    "Yesterday"
+   ],
+   "read": true,
+   "to": "shops"
+  }
+ ]
+}
