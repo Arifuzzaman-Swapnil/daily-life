@@ -1460,5 +1460,9 @@
         "type": "String"
       }
     }
+  },
+  "noProjects": "No projects yet",
+  "@noProjects": {
+    "description": "Projects screen empty state (the prototype had none)."
   }
 }

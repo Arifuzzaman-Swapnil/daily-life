@@ -25,7 +25,7 @@ void main() {
     // Go to the Work tab, then open Settings on top of it.
     await tester.tap(navLabel('কাজ'));
     await tester.pumpAndSettle();
-    expect(titleBar('কাজ'), findsOneWidget);
+    expect(titleBar('অফিস ও কাজ'), findsOneWidget);
     containerOf(tester).read(routerProvider).push(Routes.settings);
     await tester.pumpAndSettle();
     expect(find.text('সেটিংস'), findsOneWidget);
@@ -43,7 +43,7 @@ void main() {
     // Back to the shell: same tab (Work), all nav labels in English.
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
-    expect(titleBar('Work'), findsOneWidget);
+    expect(titleBar('Office & work'), findsOneWidget);
     for (final label in ['Home', 'Finance', 'Calendar', 'Work', 'More']) {
       expect(navLabel(label), findsOneWidget, reason: label);
     }
@@ -51,7 +51,7 @@ void main() {
       expect(find.text(label), findsNothing, reason: label);
     }
     expect(find.text('Friday, 6 November'), findsOneWidget);
-    expect(find.text('21 Kartik 1433'), findsOneWidget);
+    expect(find.text('No tasks for today.'), findsOneWidget);
   });
 
   testWidgets('digit style can be overridden independently of the language', (tester) async {

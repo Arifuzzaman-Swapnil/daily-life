@@ -636,5 +636,6 @@
   "tasksN2": "কাজ",
   "streak2": "বর্তমান ধারা",
   "changeStatus": "অবস্থা বদলান",
-  "savMonthTag": "{a} এ মাসে"
+  "savMonthTag": "{a} এ মাসে",
+  "noProjects": "এখনো কোনো প্রজেক্ট নেই"
 }

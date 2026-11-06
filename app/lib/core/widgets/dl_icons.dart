@@ -67,6 +67,17 @@ abstract final class DLIcons {
   static const IconData film = LucideIcons.film;
   static const IconData wifi = LucideIcons.wifi;
 
+  // Work.
+  static const IconData folder = LucideIcons.folder;
+  static const IconData play = LucideIcons.play;
+  static const IconData pause = LucideIcons.pause;
+
+  /// Stop (prototype `stop`): a square.
+  static const IconData stop = LucideIcons.square;
+
+  /// Priority (prototype `flag`).
+  static const IconData flag = LucideIcons.flag;
+
   /// A stored icon key (prototype `I` name, e.g. `food`, `cash`) → icon.
   /// Unknown keys fall back to [tag], the custom-category icon.
   static IconData byKey(String key) => switch (key) {

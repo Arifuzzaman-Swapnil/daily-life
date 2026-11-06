@@ -39,12 +39,14 @@ AppDatabase memoryDatabase() {
 /// Pumps the whole app on a phone ([size], default 393×852) with fresh
 /// preferences, an in-memory database and a pinned clock. With [sampleData]
 /// the database first gets the prototype's sample data, in the language of
-/// [prefs] (Bengali by default). Returns the database.
+/// [prefs] (Bengali by default). [clock] replaces the pinned clock, e.g. a
+/// [TestClock] for the work timer. Returns the database.
 Future<AppDatabase> pumpApp(
   WidgetTester tester, {
   Map<String, Object> prefs = const {},
   bool sampleData = false,
   Size size = const Size(393, 852),
+  DateTime Function()? clock,
 }) async {
   tester.view.physicalSize = size * 3;
   tester.view.devicePixelRatio = 3;
@@ -65,13 +67,22 @@ Future<AppDatabase> pumpApp(
       overrides: [
         sharedPrefsProvider.overrideWithValue(sp),
         appDatabaseProvider.overrideWithValue(db),
-        clockProvider.overrideWithValue(() => kToday),
+        clockProvider.overrideWithValue(clock ?? (() => kToday)),
       ],
       child: const DailyLifeApp(),
     ),
   );
   await tester.pumpAndSettle();
   return db;
+}
+
+/// A clock that starts at [kToday] and moves only when told to.
+class TestClock {
+  DateTime now = kToday;
+
+  void advance(Duration d) => now = now.add(d);
+
+  DateTime call() => now;
 }
 
 ProviderContainer containerOf(WidgetTester tester) => ProviderScope.containerOf(tester.element(find.byType(DailyLifeApp)));

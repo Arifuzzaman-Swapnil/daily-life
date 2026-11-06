@@ -233,7 +233,7 @@ void main() {
     await tester.pumpAndSettle();
 
     await tapOn(tester, tile('সম্পন্ন কাজ'));
-    expect(titleBar('কাজ'), findsOneWidget);
+    expect(titleBar('অফিস ও কাজ'), findsOneWidget);
     await tester.tap(navLabel('হোম'));
     await tester.pumpAndSettle();
 

@@ -20,6 +20,12 @@ import 'features/shell/app_shell.dart';
 import 'features/shell/tab_placeholder.dart';
 import 'features/shop_credit/shop_detail_screen.dart';
 import 'features/shop_credit/shops_screen.dart';
+import 'features/work/projects_screen.dart';
+import 'features/work/task_detail_screen.dart';
+import 'features/work/task_form_screen.dart';
+import 'features/work/timer_screen.dart';
+import 'features/work/work_history_screen.dart';
+import 'features/work/work_screen.dart';
 import 'l10n/app_localizations.dart';
 
 abstract final class Routes {
@@ -48,6 +54,16 @@ abstract final class Routes {
   static const shops = '/shops';
   static String shop(String id) => '/shops/$id';
   static const reports = '/reports';
+
+  // Work.
+  /// New task, optionally in [projectId].
+  static String newTask({String? projectId}) => projectId == null ? '/tasks/new' : '/tasks/new?project=$projectId';
+  static String task(String id) => '/tasks/$id';
+  static String editTask(String id) => '/tasks/edit/$id';
+  static const timer = '/timer';
+  static const workHistory = '/work-history';
+  static const projects = '/projects';
+  static String project(String id) => '/projects/$id';
 }
 
 /// Built once for the app's lifetime, so locale/theme changes never reset navigation.
@@ -72,7 +88,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             GoRoute(path: Routes.calendar, builder: (context, state) => TabPlaceholder(title: AppLocalizations.of(context).calendar)),
           ]),
           StatefulShellBranch(routes: [
-            GoRoute(path: Routes.work, builder: (context, state) => TabPlaceholder(title: AppLocalizations.of(context).work)),
+            GoRoute(path: Routes.work, builder: (context, state) => const WorkScreen()),
           ]),
           StatefulShellBranch(routes: [
             GoRoute(path: Routes.more, builder: (context, state) => const MoreScreen()),
@@ -93,6 +109,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       page('/shops/:id', (s) => ShopDetailScreen(id: s.pathParameters['id']!)),
       page(Routes.shops, (_) => const ShopsScreen()),
       page(Routes.reports, (_) => const ReportsScreen()),
+      // `/tasks/new` and `/tasks/edit/:id` come before `/tasks/:id`.
+      page('/tasks/new', (s) => TaskFormScreen(projectId: s.uri.queryParameters['project'])),
+      page('/tasks/edit/:id', (s) => TaskFormScreen.edit(id: s.pathParameters['id']!)),
+      page('/tasks/:id', (s) => TaskDetailScreen(id: s.pathParameters['id']!)),
+      page(Routes.timer, (_) => const TimerScreen()),
+      page(Routes.workHistory, (_) => const WorkHistoryScreen()),
+      page('/projects/:id', (s) => ProjectDetailScreen(id: s.pathParameters['id']!)),
+      page(Routes.projects, (_) => const ProjectsScreen()),
     ],
   );
   ref.onDispose(router.dispose);

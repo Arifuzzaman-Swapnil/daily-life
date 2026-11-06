@@ -1,4 +1,5 @@
 import 'package:dailylife/core/format/dl_format.dart';
+import 'package:dailylife/core/format/dl_format_more.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -156,6 +157,37 @@ void main() {
         expect(last.month, 11, reason: 'year starting $y');
         expect(last.day, 30, reason: 'year starting $y');
       }
+    });
+  });
+
+  group('work formats (step 6)', () {
+    test('durations: hours and minutes, as the prototype writes them', () {
+      expect(bn.duration(135), '২ ঘ ১৫ মি');
+      expect(en.duration(135), '2h 15m');
+      expect(bn.duration(45), '৪৫ মি');
+      expect(en.duration(120), '2h');
+      expect(en.duration(0), '0m');
+      expect(bn.duration(1725), '২৮ ঘ ৪৫ মি');
+    });
+
+    test('one decimal, short dates and weekdays, stopwatch', () {
+      expect(bn.oneDecimal(7.5), '৭.৫');
+      expect(en.oneDecimal(6), '6');
+      expect(en.oneDecimal(2.25), '2.3');
+      expect(bn.dateShort(today), '৬ নভে');
+      expect(en.dateShort(today), '6 Nov');
+      expect(bn.weekdayShort(today), 'শুক্র');
+      expect(en.weekdayShort(DateTime(2026, 10, 31)), 'Sat');
+      expect(bn.stopwatch(2723), '০০:৪৫:২৩');
+      expect(en.stopwatch(3600 * 10 + 61), '10:01:01');
+    });
+
+    test('weeks start on Saturday; minutes between HH:mm times', () {
+      expect(weekStartOf(today), DateTime(2026, 10, 31));
+      expect(weekStartOf(DateTime(2026, 10, 31)), DateTime(2026, 10, 31));
+      expect(weekStartOf(DateTime(2026, 11, 1)), DateTime(2026, 10, 31));
+      expect(minutesBetween('10:00', '11:30'), 90);
+      expect(minutesBetween('11:00', '10:00'), -60);
     });
   });
 }

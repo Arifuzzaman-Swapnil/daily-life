@@ -600,7 +600,7 @@ class _QuickSection extends StatelessWidget {
     final actions = [
       (DLIcons.income, DLTone.success, t.addIncome, () => context.push(Routes.newTx(TxType.income))),
       (DLIcons.expense, DLTone.danger, t.addExpense, () => context.push(Routes.newTx(TxType.expense))),
-      (DLIcons.briefcase, DLTone.accent, t.addWork, () => context.go(Routes.work)),
+      (DLIcons.briefcase, DLTone.accent, t.addWork, () => context.push(Routes.newTask())),
       (DLIcons.edit, DLTone.teal, t.writeNote, () => context.go(Routes.more)),
       (DLIcons.bell, DLTone.warning, t.addReminder, () => context.go(Routes.more)),
     ];

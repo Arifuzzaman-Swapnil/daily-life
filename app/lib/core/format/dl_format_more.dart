@@ -25,6 +25,48 @@ extension DLFormatMore on DLFormat {
 
   /// A whole number in the selected digits, e.g. a count.
   String count(int n) => digitsOf(n);
+
+  /// Logged time (prototype `F.dur`): 135 → `২ ঘ ১৫ মি` / `2h 15m`, 45 → `৪৫ মি` / `45m`,
+  /// 120 → `২ ঘ` / `2h`.
+  String duration(num minutes) {
+    final total = minutes.round();
+    final h = total ~/ 60, m = total % 60;
+    if (lang == AppLang.en) return h > 0 ? '${digitsOf(h)}h${m > 0 ? ' ${digitsOf(m)}m' : ''}' : '${digitsOf(m)}m';
+    return h > 0 ? '${digitsOf(h)} ঘ${m > 0 ? ' ${digitsOf(m)} মি' : ''}' : '${digitsOf(m)} মি';
+  }
+
+  /// A number with at most one decimal (prototype week-hours labels): 7.5 → `৭.৫`, 6.0 → `৬`.
+  String oneDecimal(num v) {
+    final r = (v * 10).round() / 10;
+    return digitsOf(r == r.truncateToDouble() ? r.toInt() : r);
+  }
+
+  /// Short date (prototype `short`): `৬ নভে` / `6 Nov`, or `০৬/১১` with numeric dates.
+  String dateShort(DateTime d) => dateStyle == DateStyle.numeric
+      ? digitsOf('${d.day.toString().padLeft(2, '0')}/${d.month.toString().padLeft(2, '0')}')
+      : '${digitsOf(d.day)} ${monthShort(d)}';
+
+  /// Short weekday (prototype `wd`): শুক্র / Fri.
+  String weekdayShort(DateTime d) => (lang == AppLang.en ? DLFormat.weekdaysEnShort : DLFormat.weekdaysBnShort)[d.weekday % 7];
+
+  /// A stopwatch reading: 2723 s → `০০:৪৫:২৩`.
+  String stopwatch(int seconds) {
+    String two(int n) => n.toString().padLeft(2, '0');
+    return digitsOf('${two(seconds ~/ 3600)}:${two(seconds ~/ 60 % 60)}:${two(seconds % 60)}');
+  }
+}
+
+/// The Saturday that starts [d]'s week (the week starts on Saturday everywhere).
+DateTime weekStartOf(DateTime d) => DateTime(d.year, d.month, d.day - (d.weekday % 7 + 1) % 7);
+
+/// Minutes from `HH:mm` [a] to `HH:mm` [b] (negative when [b] is earlier).
+int minutesBetween(String a, String b) {
+  int m(String hm) {
+    final p = hm.split(':').map(int.parse).toList();
+    return p[0] * 60 + (p.length > 1 ? p[1] : 0);
+  }
+
+  return m(b) - m(a);
 }
 
 /// Localized payment method name (`pm_*`).
