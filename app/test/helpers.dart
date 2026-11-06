@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dailylife/app.dart';
+import 'package:dailylife/core/app_info.dart';
 import 'package:dailylife/core/db/app_database.dart';
 import 'package:dailylife/core/db/db_providers.dart';
 import 'package:dailylife/core/db/sample/sample_data.dart';
@@ -77,6 +78,10 @@ Future<AppDatabase> pumpApp(
         notificationSchedulerProvider.overrideWithValue(FakeNotificationScheduler()),
         fileServiceProvider.overrideWithValue(FakeFileService()),
         biometricServiceProvider.overrideWithValue(FakeBiometricService()),
+        // The bundled asset can't load under fake async: the sample-data switch
+        // reads the JSON read above instead.
+        sampleDataProvider.overrideWith((ref) => SampleDataService(ref.watch(appDatabaseProvider), loadJson: () async => sampleJson)),
+        appVersionProvider.overrideWith((ref) => '0.1.0'),
       ],
       child: const DailyLifeApp(),
     ),
@@ -104,7 +109,8 @@ FakeNotificationScheduler notificationsOf(WidgetTester tester) =>
     containerOf(tester).read(notificationSchedulerProvider) as FakeNotificationScheduler;
 
 /// Stands in for the device's files: the picker returns [next] (a file per
-/// kind by default), storing and sharing are recorded.
+/// kind by default), storing and sharing are recorded. The latest backup is
+/// kept in [backup]; picking a text file returns [nextText].
 class FakeFileService implements FileService {
   PickedFile? Function(DocKind kind) next = (kind) => kind == DocKind.pdf
       ? const PickedFile(path: '/picked/scan.pdf', name: 'scan_2026-11-06.pdf', size: 798720)
@@ -129,7 +135,24 @@ class FakeFileService implements FileService {
   Future<void> share({String? path, required String text}) async => shared.add(text);
 
   @override
-  Future<void> shareTextFile(String fileName, String content, {required String subject}) async => shared.add('$fileName: $content');
+  Future<void> shareTextFile(String fileName, String content, {required String subject, String mimeType = 'text/csv'}) async =>
+      shared.add('$fileName: $content');
+
+  /// Files this fake stored exist; anything else doesn't.
+  @override
+  Future<bool> exists(String path) async => path.startsWith('/app/documents/');
+
+  String? backup;
+  String? Function() nextText = () => null;
+
+  @override
+  Future<void> saveBackup(String content) async => backup = content;
+
+  @override
+  Future<String?> readBackup() async => backup;
+
+  @override
+  Future<String?> pickTextFile() async => nextText();
 }
 
 /// The fake file service [pumpApp] installs.

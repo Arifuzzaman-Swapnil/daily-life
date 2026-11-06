@@ -1508,5 +1508,33 @@
   "deleteDigit": "Delete last digit",
   "@deleteDigit": {
     "description": "PIN keypad: the backspace key's label for screen readers."
+  },
+  "noBackup": "No backup yet",
+  "@noBackup": {
+    "description": "Settings → Back up: no backup was made on this phone yet (the prototype always had one)."
+  },
+  "backupFailed": "Couldn't back up. Try again.",
+  "@backupFailed": {
+    "description": "Settings → Back up failed."
+  },
+  "errBackupFile": "This file isn't a Daily Life backup",
+  "@errBackupFile": {
+    "description": "Restore or import: the file can't be read as a backup."
+  },
+  "sampleOffQ": "Remove the sample data?",
+  "@sampleOffQ": {
+    "description": "Confirm before the sample-data switch removes all records."
+  },
+  "sampleOffB": "All records on this phone will be removed. Categories and settings stay.",
+  "@sampleOffB": {
+    "description": "Body of the sampleOffQ dialog."
+  },
+  "sampleOnQ": "Show the sample data?",
+  "@sampleOnQ": {
+    "description": "Confirm before the sample-data switch replaces the person's own records."
+  },
+  "sampleOnB": "The data on this phone will be replaced with the sample data.",
+  "@sampleOnB": {
+    "description": "Body of the sampleOnQ dialog."
   }
 }

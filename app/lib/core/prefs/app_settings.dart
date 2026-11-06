@@ -118,6 +118,12 @@ abstract final class PrefKeys {
 
   /// Security settings stay on this device: backups never include them.
   static const deviceOnly = {appLock, biometric, pinHash, pinSalt};
+
+  /// When this phone last made a backup (ISO timestamp).
+  static const lastBackup = 'pref.lastBackup';
+
+  /// Preferences a backup leaves out, and a restore leaves as they are.
+  static const notBackedUp = {...deviceOnly, lastBackup};
 }
 
 class SettingsController extends Notifier<AppSettings> {

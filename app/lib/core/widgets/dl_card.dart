@@ -96,10 +96,14 @@ class DLListRow extends StatelessWidget {
     this.onTap,
     this.minHeight = 64,
     this.titleStyle,
+    this.subtitleMaxLines = 1,
   });
 
   final String title;
   final String? subtitle;
+
+  /// Lines the subtitle may wrap to before it is cut with an ellipsis.
+  final int subtitleMaxLines;
   final Widget? leading;
   final Widget? trailing;
   final VoidCallback? onTap;
@@ -132,7 +136,7 @@ class DLListRow extends StatelessWidget {
                   if (subtitle != null)
                     Text(
                       subtitle!,
-                      maxLines: 1,
+                      maxLines: subtitleMaxLines,
                       overflow: TextOverflow.ellipsis,
                       style: DLText.textBodySm.copyWith(color: c.textSecondary),
                     ),

@@ -16,6 +16,28 @@ const kSampleDataBuild = bool.fromEnvironment('DL_SAMPLE_DATA');
 
 final sampleDataProvider = Provider<SampleDataService>((ref) => SampleDataService(ref.watch(appDatabaseProvider)));
 
+/// Settings → "Show sample data": on while the sample data is loaded. Off
+/// removes all records (categories and settings stay), which shows every
+/// screen's empty state; on replaces the data with the sample data.
+final sampleDataSwitchProvider = NotifierProvider<SampleDataSwitch, bool>(SampleDataSwitch.new);
+
+class SampleDataSwitch extends Notifier<bool> {
+  @override
+  bool build() => ref.watch(sharedPrefsProvider).getBool(PrefKeys.sampleData) ?? false;
+
+  Future<void> turnOn(AppLang lang) async {
+    await ref.read(sampleDataProvider).load(lang);
+    await ref.read(sharedPrefsProvider).setBool(PrefKeys.sampleData, true);
+    state = true;
+  }
+
+  Future<void> turnOff() async {
+    await ref.read(sampleDataProvider).clear();
+    await ref.read(sharedPrefsProvider).setBool(PrefKeys.sampleData, false);
+    state = false;
+  }
+}
+
 class SampleDataService {
   /// [loadJson] reads the sample JSON; tests pass a file reader.
   SampleDataService(this.db, {Future<String> Function()? loadJson}) : _loadJson = loadJson ?? (() => rootBundle.loadString(asset));

@@ -14,10 +14,11 @@ import '../../l10n/app_localizations.dart';
 import '../../router.dart';
 import '../privacy/pin_sheet.dart';
 import 'appearance_cards.dart';
+import 'data_section.dart';
 
 /// Settings (prototype `settings`, screenshots 80–81): profile, "Language &
-/// region", "Appearance", "Notifications", "Privacy & security"; data
-/// management and about follow in step 7.3.
+/// region", "Appearance", "Notifications", "Privacy & security", "Data
+/// management" and "About".
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
@@ -126,6 +127,10 @@ class SettingsScreen extends ConsumerWidget {
           ),
           DLSectionHeader(t.privacy),
           const _PrivacySection(),
+          DLSectionHeader(t.dataMgmt),
+          const DataSection(),
+          DLSectionHeader(t.about),
+          const AboutSection(),
         ],
       ),
     );

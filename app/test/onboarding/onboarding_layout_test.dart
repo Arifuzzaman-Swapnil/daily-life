@@ -1,4 +1,4 @@
-// Welcome, the onboarding steps and Settings on a small 360dp phone, in
+// Welcome, the onboarding steps and the whole of Settings on a 360dp phone, in
 // English + Dark and Bengali + Light. Any overflow fails the test.
 import 'package:dailylife/core/prefs/app_settings.dart';
 import 'package:dailylife/router.dart';
@@ -27,8 +27,15 @@ void main() {
     });
 
     testWidgets('Settings lays out on a 360dp phone ($name)', (tester) async {
-      await pumpApp(tester, prefs: {...prefs, PrefKeys.displayName: 'Swapnil'}, size: const Size(360, 3000));
+      // Tall enough to build every section, down to About.
+      await pumpApp(
+        tester,
+        prefs: {...prefs, PrefKeys.displayName: 'Swapnil', PrefKeys.lastBackup: kToday.toIso8601String()},
+        size: const Size(360, 4000),
+      );
       await openRoute(tester, Routes.settings);
+      expect(find.text(en ? 'Last backup: Today' : 'সর্বশেষ ব্যাকআপ: আজ'), findsOneWidget);
+      expect(find.text(en ? 'Privacy information' : 'গোপনীয়তা তথ্য'), findsOneWidget);
       expect(tester.takeException(), isNull);
       // The name error under the field with the Save button beside it.
       await typeInto(tester, en ? 'Display name' : 'প্রদর্শিত নাম', '');

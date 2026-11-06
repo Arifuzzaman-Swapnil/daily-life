@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/db/app_database.dart';
+import '../../core/files/csv.dart';
 import '../../core/files/file_service.dart';
 import '../../core/format/dl_format.dart';
 import '../../core/format/dl_format_more.dart';
@@ -89,8 +90,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
         for (final k in exportKpis) [k.label, k.value],
         ...exportCsv,
       ];
-      String cell(String s) => s.contains(RegExp('[",\n]')) ? '"${s.replaceAll('"', '""')}"' : s;
-      final content = rows.map((r) => r.map(cell).join(',')).join('\n');
+      final content = toCsv(rows);
       final name = 'daily-life-${_tab.name}-${_yearly ? _year : monthKey(_month)}.csv';
       await ref.read(fileServiceProvider).shareTextFile(name, content, subject: t.reportsT);
       if (context.mounted) DLToast.show(context, t.exportDone);

@@ -38,8 +38,23 @@ abstract class FileService {
   /// The system share sheet with a file, or just [text] when there is none.
   Future<void> share({String? path, required String text});
 
-  /// Writes [content] to a temporary [fileName] and shares it (CSV exports).
-  Future<void> shareTextFile(String fileName, String content, {required String subject});
+  /// Writes [content] to a temporary [fileName] and shares it (CSV exports,
+  /// backups).
+  Future<void> shareTextFile(String fileName, String content, {required String subject, String mimeType = 'text/csv'});
+
+  /// Whether a stored file is on this phone (a restored document's copy may
+  /// not be).
+  Future<bool> exists(String path);
+
+  /// Keeps [content] as the latest backup in the app's private storage.
+  Future<void> saveBackup(String content);
+
+  /// The latest backup kept by [saveBackup]; null when there is none.
+  Future<String?> readBackup();
+
+  /// Opens the system picker for any file and reads it as text; null when
+  /// cancelled. Throws [FormatException] for a file too big to be a backup.
+  Future<String?> pickTextFile();
 }
 
 final fileServiceProvider = Provider<FileService>((ref) => DeviceFileService(outside: ref.read(appLockProvider.notifier).whileOutside));
@@ -98,9 +113,44 @@ class DeviceFileService implements FileService {
   }
 
   @override
-  Future<void> shareTextFile(String fileName, String content, {required String subject}) async {
+  Future<void> shareTextFile(String fileName, String content, {required String subject, String mimeType = 'text/csv'}) async {
     final file = File(p.join((await getTemporaryDirectory()).path, fileName));
-    await file.writeAsString(content);
-    await outside(() => SharePlus.instance.share(ShareParams(files: [XFile(file.path, mimeType: 'text/csv')], subject: subject)));
+    // A byte-order mark, so spreadsheet apps read Bengali CSV text as UTF-8.
+    await file.writeAsString(mimeType == 'text/csv' ? '\uFEFF$content' : content);
+    await outside(() => SharePlus.instance.share(ShareParams(files: [XFile(file.path, mimeType: mimeType)], subject: subject)));
+  }
+
+  @override
+  Future<bool> exists(String path) => File(path).exists();
+
+  Future<File> _backupFile() async => File(p.join((await getApplicationDocumentsDirectory()).path, 'backups', 'latest.json'));
+
+  @override
+  Future<void> saveBackup(String content) async {
+    final file = await _backupFile();
+    await file.parent.create(recursive: true);
+    // Written next to it first, so a failed write never leaves half a backup.
+    final temp = File('${file.path}.tmp');
+    await temp.writeAsString(content, flush: true);
+    await temp.rename(file.path);
+  }
+
+  @override
+  Future<String?> readBackup() async {
+    final file = await _backupFile();
+    return await file.exists() ? file.readAsString() : null;
+  }
+
+  /// Larger than any backup this app makes (records only, no document files).
+  static const _maxBackupBytes = 50 << 20;
+
+  @override
+  Future<String?> pickTextFile() async {
+    final f = await outside(() => FilePicker.pickFile(type: FileType.any));
+    final path = f?.path;
+    if (f == null || path == null) return null;
+    final file = File(path);
+    if (await file.length() > _maxBackupBytes) throw const FormatException('File too large');
+    return file.readAsString();
   }
 }

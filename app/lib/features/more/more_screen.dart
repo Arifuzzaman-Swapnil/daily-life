@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/app_info.dart';
 import '../../core/db/db_providers.dart';
 import '../../core/format/dl_format_more.dart';
 import '../../core/format/format_provider.dart';
@@ -12,9 +13,6 @@ import '../../l10n/app_localizations.dart';
 import '../../router.dart';
 import '../notes/notes_providers.dart';
 import '../reminders/reminders_providers.dart';
-
-/// The app's version, as in pubspec.yaml (keep the two in step).
-const appVersion = '0.1.0';
 
 /// Goals not yet achieved (More's subtitle).
 final _activeGoalsProvider = StreamProvider<int>(
@@ -127,7 +125,7 @@ class MoreScreen extends ConsumerWidget {
               ],
               const SizedBox(height: DLSpace.s6),
               Text(
-                'Daily Life · ${t.version} ${f.digitsOf(appVersion)}',
+                'Daily Life · ${t.version} ${f.digitsOf(ref.watch(appVersionProvider).value ?? '')}',
                 textAlign: TextAlign.center,
                 style: DLText.textCaption.copyWith(color: c.textSecondary),
               ),
