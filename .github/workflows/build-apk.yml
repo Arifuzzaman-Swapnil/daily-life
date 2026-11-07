@@ -131,6 +131,23 @@ jobs:
           if-no-files-found: ignore
           retention-days: 14
 
+      # Step 8.3 prototype tour: render every kit screen at 393-wide (full
+      # page) and 360-wide (one phone's height), both in bn-light and en-dark.
+      # The PNGs come back as the `prototype-tour` artifact to lay side by
+      # side with daily-life-kit/screenshots/. Never committed.
+      - name: Prototype tour (render every kit screen)
+        if: ${{ inputs.tour == true }}
+        run: flutter test --tags tour --update-goldens
+
+      - name: Upload prototype tour renders
+        if: ${{ always() && inputs.tour == true }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: prototype-tour
+          path: app/test/goldens/_tour/
+          if-no-files-found: error
+          retention-days: 14
+
       # DL_SAMPLE_DATA seeds the prototype's sample data on first launch of this
       # test build. A real release builds without it and starts empty.
       - name: Build release APK (signed with the debug key)
