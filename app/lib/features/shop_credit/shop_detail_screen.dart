@@ -117,32 +117,38 @@ class _ShopDetailScreenState extends ConsumerState<ShopDetailScreen> {
             ),
           ),
           const SizedBox(height: DLSpace.s3),
-          Row(
-            children: [
-              Expanded(
-                child: DLButton(
-                  label: t.addPurchase,
-                  icon: DLIcons.bag,
-                  variant: DLButtonVariant.secondary,
-                  onPressed: () => showDLSheet<void>(context, title: t.addPurchase, builder: (_) => _PurchaseSheet(shopId: d.shop.id)),
+          // "কেনাকাটা যোগ করুন" doesn't fit on one line on a 360dp phone:
+          // IntrinsicHeight keeps both buttons the same tall as the wrapped one.
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: DLButton(
+                    label: t.addPurchase,
+                    icon: DLIcons.bag,
+                    variant: DLButtonVariant.secondary,
+                    maxLines: 2,
+                    onPressed: () => showDLSheet<void>(context, title: t.addPurchase, builder: (_) => _PurchaseSheet(shopId: d.shop.id)),
+                  ),
                 ),
-              ),
-              const SizedBox(width: DLSpace.s2),
-              Expanded(
-                child: DLButton(
-                  label: t.payment,
-                  icon: DLIcons.cash,
-                  onPressed: owes
-                      ? () => showDLSheet<void>(
-                            context,
-                            title: t.makePayment,
-                            subtitle: '${t.nowDue}: ${f.taka(d.balance)}',
-                            builder: (_) => _PaymentSheet(shopId: d.shop.id),
-                          )
-                      : null,
+                const SizedBox(width: DLSpace.s2),
+                Expanded(
+                  child: DLButton(
+                    label: t.payment,
+                    icon: DLIcons.cash,
+                    onPressed: owes
+                        ? () => showDLSheet<void>(
+                              context,
+                              title: t.makePayment,
+                              subtitle: '${t.nowDue}: ${f.taka(d.balance)}',
+                              builder: (_) => _PaymentSheet(shopId: d.shop.id),
+                            )
+                        : null,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           if (owes) ...[
             const SizedBox(height: DLSpace.s2),

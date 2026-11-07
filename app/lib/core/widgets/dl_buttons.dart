@@ -23,6 +23,7 @@ class DLButton extends StatelessWidget {
     this.variant = DLButtonVariant.primary,
     this.size = DLButtonSize.lg,
     this.expand,
+    this.maxLines = 1,
   });
 
   final String label;
@@ -36,6 +37,12 @@ class DLButton extends StatelessWidget {
 
   /// Defaults to true for lg/md, false for sm.
   final bool? expand;
+
+  /// Lets a label wrap when a narrow phone can't fit it on one line (e.g.
+  /// "কেনাকাটা যোগ করুন" beside "পরিশোধ" on the shop detail). The button
+  /// grows vertically to fit; its row keeps every neighbour the same height
+  /// by wrapping the row in IntrinsicHeight. Defaults to 1 (single-line).
+  final int maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +73,7 @@ class DLButton extends StatelessWidget {
           const SizedBox(width: DLSpace.s2),
         ],
         Flexible(
-          child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, style: style),
+          child: Text(label, maxLines: maxLines, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, style: style),
         ),
         if (trailingIcon != null) ...[
           const SizedBox(width: DLSpace.s2),
@@ -83,11 +90,11 @@ class DLButton extends StatelessWidget {
         borderRadius: shape,
         border: border == null ? null : Border.all(color: border),
       ),
-      child: SizedBox(
+      child: ConstrainedBox(
         // The 1px outline sits inside the height, like the prototype's border-box.
-        height: border == null ? height : height - 2,
+        constraints: BoxConstraints(minHeight: border == null ? height : height - 2),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: hPad),
+          padding: EdgeInsets.symmetric(horizontal: hPad, vertical: maxLines > 1 ? DLSpace.s2 : 0),
           child: Center(widthFactor: 1, child: content),
         ),
       ),
