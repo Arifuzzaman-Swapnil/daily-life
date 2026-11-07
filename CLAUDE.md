@@ -238,6 +238,34 @@ The build brief, covering stack, design rules, data model, business rules, scree
   - The sample-data switch clears or loads real records, and asks first.
   - Toasts let taps through.
 
+## Conventions established in step 8 (acceptance journeys, goldens, prototype comparison, small-screen fixes)
+- Acceptance journeys 1–12 all have tests:
+  - 1 is `onboarding/onboarding_test.dart`; 2–5 `finance/finance_journeys_test.dart`; 6 `work/work_journey_test.dart`; 7 `calendar/calendar_screens_test.dart`; 8 `reminders/reminders_test.dart`; 9 `notes/notes_test.dart`.
+  - 10–12 are in `test/journeys/switching_journeys_test.dart`, with the sample data loaded, so `relocalize` runs. Each walks the whole app via a shared `tour.dart`: ~60 stops (5 tabs, pages, 4 sheets, 1 dialog). The journeys check for Bengali text left after a switch to English, colours that belong to the other theme, and that a round trip leaves every row of every table unchanged.
+  - Tab stops scroll back to the top first, so a stop looks the same each time it is visited.
+- Goldens live in `test/goldens/`:
+  - `flutter_test_config.dart` loads the real fonts and sets a tolerant comparator. Hind Siliguri is read from `assets/fonts/`; Lucide is resolved via `.dart_tool/package_config.json` (the main glyph file `lucide.ttf` maps to the family `Lucide`, and the variable weights keep their filenames).
+  - `screens.dart` holds the `Screen` type, `push`/`go` helpers, `keyScreens` (13 stops for the goldens) and `prototypeScreens` (51 stops for the tour; reuses the goldens list and adds the rest).
+  - `key_screens_golden_test.dart` renders the key screens at 393×852 in 4 variants (bn/en × light/dark), tagged `golden`. Baselines live in `_baselines/`.
+  - `prototype_tour_test.dart` renders every kit screen at 393×full-page and 360×852, in bn-light and en-dark, tagged `tour`. Not committed; uploaded as the `prototype-tour` artifact.
+  - Both tag definitions live in `dart_test.yaml` (no skip) and the workflow uses `--exclude-tags "golden,tour"` on push, `--tags golden` / `--tags tour` for the on-demand steps.
+  - The comparator `_TolerantComparator` accepts up to 0.5 % drift, so a Flutter release that moves an anti-aliased pixel doesn't fail CI.
+  - Flutter resolves relative golden paths against `test/` (not the test file's own folder); hence the `goldens/_baselines/…` prefix so baselines land next to the test file.
+- CI workflow (`.github/workflows/build-apk.yml`) has two `workflow_dispatch` inputs:
+  - `goldens`: `off` (default push), `check` (compare), `update` (regenerate; PNGs come back as the `goldens` artifact to commit).
+  - `tour`: `false`/`true`; the tour renders every kit screen and uploads them as the `prototype-tour` artifact.
+  - Check-mode failures upload under `app/**/failures/**` as `golden-failures`.
+  - To refresh baselines after an intentional layout change: `gh workflow run build-apk.yml --ref main -f goldens=update -f tour=false`, then `gh run download <id> -n goldens -D app/test/goldens/_baselines`, commit the PNGs.
+- `DLButton` gained a `maxLines` parameter (default 1). The `SizedBox(height:)` became `ConstrainedBox(minHeight:)` so a wrapping label grows the button vertically (`maxLines > 1` also adds 8 px vertical padding).
+  - The shop detail's `Add purchase` button sets `maxLines: 2` and the row is wrapped in `IntrinsicHeight`, so `Payment` beside it stays the same height. This fixes the one real narrow-screen bug the prototype tour turned up ("কেনাকাটা যোগ করুন" was truncated at 360 dp).
+- Prototype tour findings worth keeping as documented differences from the kit:
+  - The event form's reminder chips scroll horizontally in both (kit and app); more options than fit one line.
+  - The kit shows native browser date/time inputs (`11/06/2026`, `10:00 AM`); the app uses `DLFormat` (`৬ নভে ২০২৬`, `সকাল ১০:০০`).
+  - The kit's allocation rows have a plain-text category name; the app also uses a plain `TextField` with `InputDecoration.collapsed` — the surrounding `DLCard` frames the whole row, which can look like a boxed input but matches the design.
+- Follow-ups out of step 8's scope:
+  - Editing a shop payment's amount doesn't update the shop entry.
+  - The fingerprint prompt, share sheet, and the lock-on-resume path have never run on a real phone. Install the CI APK, turn on the lock + fingerprint, and check: the prompt opens by itself; after the share sheet or the file picker the app does not lock again.
+
 ## Build-order progress
 - [x] 1. Setup, fonts, theme, l10n, DLFormat + tests, router shell + bottom nav, language/digit/theme settings (done 2026-11-06)
 - [x] 2. Shared DL widgets (done 2026-11-06)
@@ -246,4 +274,4 @@ The build brief, covering stack, design rules, data model, business rules, scree
 - [x] 5. Home dashboard (done 2026-11-06)
 - [x] 6. Work/timer → Calendar → Reminders → Notes → Health → Goals → Documents → Reports (done 2026-11-06)
 - [x] 7. Privacy, backup/restore/export, onboarding (done 2026-11-07)
-- [ ] 8. Journeys, goldens, prototype comparison, small-screen fixes
+- [x] 8. Journeys, goldens, prototype comparison, small-screen fixes (done 2026-11-07)
